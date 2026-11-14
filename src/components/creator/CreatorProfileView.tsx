@@ -97,7 +97,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
         {/* ── Cover / header area ── */}
         <div className="relative">
           {/* Cover gradient */}
-          <div className="h-28 sm:h-36 bg-gradient-to-br from-rose-500/30 via-pink-500/20 to-purple-500/30" />
+          <div className="h-28 sm:h-36 bg-gradient-to-br from-orange-500/30 via-amber-500/20 to-neutral-900" />
 
           {/* Avatar + info */}
           <div className="px-4 sm:px-6 -mt-12 sm:-mt-14">
@@ -125,7 +125,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                 </span>
               )}
               {profile.website && (
-                <a href={profile.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-rose-400 hover:underline">
+                <a href={profile.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-orange-400 hover:underline">
                   <Globe className="w-3 h-3" /> Website
                 </a>
               )}
@@ -152,7 +152,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                 className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold min-h-[44px] transition-all ${
                   isFollowing
                     ? 'bg-neutral-800 text-white border border-neutral-700'
-                    : 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg shadow-rose-500/20'
+                    : 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20'
                 }`}
               >
                 <UserPlus className="w-4 h-4" />
@@ -179,7 +179,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
               {[
                 { label: 'Rating', value: `${details.ratingAvg.toFixed(1)}`, sub: `${details.ratingCount} reviews`, icon: <Star className="w-4 h-4 text-amber-400" /> },
                 { label: 'Projects', value: String(details.completedProjectsCount), sub: `${Math.round(details.onTimeDeliveryRate * 100)}% on time`, icon: <CheckCircle className="w-4 h-4 text-emerald-400" /> },
-                { label: 'Starting at', value: formatPrice(details.startingPriceCents), sub: 'per project', icon: <DollarSign className="w-4 h-4 text-rose-400" /> },
+                { label: 'Starting at', value: formatPrice(details.startingPriceCents), sub: 'per project', icon: <DollarSign className="w-4 h-4 text-orange-400" /> },
                 { label: 'Social Reach', value: formatCount(details.totalSocialViews || 0), sub: 'total views', icon: <TrendingUp className="w-4 h-4 text-blue-400" /> },
               ].map((stat) => (
                 <div key={stat.label} className="bg-neutral-900 rounded-xl border border-neutral-800 p-3">
@@ -229,13 +229,13 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                 onClick={() => setActiveTab(tab.key)}
                 className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium border-b-2 transition-all min-h-[44px] ${
                   activeTab === tab.key
-                    ? 'border-rose-500 text-white'
+                    ? 'border-orange-500 text-white'
                     : 'border-transparent text-neutral-500 hover:text-neutral-300'
                 }`}
               >
                 {tab.label}
                 <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
-                  activeTab === tab.key ? 'bg-rose-500/20 text-rose-400' : 'bg-neutral-800 text-neutral-500'
+                  activeTab === tab.key ? 'bg-orange-500/20 text-orange-400' : 'bg-neutral-800 text-neutral-500'
                 }`}>
                   {tab.count}
                 </span>
@@ -260,7 +260,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                     <button
                       key={post.id}
                       onClick={() => onSelectPost(post)}
-                      className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800/50 hover:border-rose-500/30 transition-all"
+                      className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800/50 hover:border-orange-500/30 transition-all"
                     >
                       <img src={post.thumbnailUrl} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -299,7 +299,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="px-2 py-0.5 rounded-full bg-rose-500/10 text-[10px] font-medium text-rose-400 border border-rose-500/20">
+                        <span className="px-2 py-0.5 rounded-full bg-orange-500/10 text-[10px] font-medium text-orange-400 border border-orange-500/20">
                           {service.formatTag}
                         </span>
                       </div>
@@ -320,7 +320,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                       <p className="text-lg font-bold text-white">{formatPrice(service.priceCents, service.currency)}</p>
                       <button
                         onClick={() => onBookService(service, profile.id)}
-                        className="mt-2 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-semibold shadow-lg shadow-rose-500/20 min-h-[40px] hover:shadow-rose-500/40 transition-shadow"
+                        className="mt-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-semibold shadow-lg shadow-orange-500/20 min-h-[40px] hover:shadow-orange-500/40 transition-shadow"
                       >
                         Book Now
                       </button>

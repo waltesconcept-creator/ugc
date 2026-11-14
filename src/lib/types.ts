@@ -44,6 +44,31 @@ export interface BusinessDetails {
   verified: boolean;
 }
 
+export interface PostComment {
+  id: string;
+  authorName: string;
+  authorUsername: string;
+  authorAvatar: string;
+  authorRole: UserRole;
+  text: string;
+  createdAt: string;
+  likesCount: number;
+}
+
+export interface Story {
+  id: string;
+  creatorId: string;
+  creatorName: string;
+  creatorUsername: string;
+  creatorAvatar: string;
+  thumbnailUrl: string;
+  mediaUrl: string;
+  mediaType: 'video' | 'photo';
+  caption: string;
+  hasUnseenStory: boolean;
+  createdAt: string;
+}
+
 export interface Post {
   id: string;
   creatorId: string;
@@ -58,6 +83,10 @@ export interface Post {
   likesCount: number;
   savesCount: number;
   sharesCount: number;
+  commentsCount?: number;
+  comments?: PostComment[];
+  mediaType?: 'video' | 'photo';
+  photoUrls?: string[];
   isLiked?: boolean;
   isSaved?: boolean;
   isPortfolioPinned?: boolean;

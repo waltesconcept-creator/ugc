@@ -13,7 +13,10 @@ import {
   ChevronRight,
   BadgeCheck,
   Eye,
+  Sparkles,
+  Camera,
 } from 'lucide-react';
+import { CommentsDrawer } from './CommentsDrawer';
 
 interface VideoCardProps {
   post: Post;
@@ -45,12 +48,18 @@ const VideoCard: React.FC<VideoCardProps> = ({
   const [showHeart, setShowHeart] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showPause, setShowPause] = useState(false);
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [copiedToast, setCopiedToast] = useState(false);
+
   const lastTapRef = useRef(0);
   const heartTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const pauseTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
+  const isPhotoPost = post.mediaType === 'photo';
+
   // Play / pause based on isActive
   useEffect(() => {
+    if (isPhotoPost) return;
     const vid = videoRef.current;
     if (!vid) return;
     if (isActive) {
@@ -58,220 +67,313 @@ const VideoCard: React.FC<VideoCardProps> = ({
       setIsPlaying(true);
     } else {
       vid.pause();
+      vid.currentTime = 0;
       setIsPlaying(false);
+      setProgress(0);
     }
-  }, [isActive]);
+  }, [isActive, isPhotoPost]);
 
-  // Mute sync
-  useEffect(() => {
-    if (videoRef.current) videoRef.current.muted = isMuted;
-  }, [isMuted]);
-
-  // Progress bar
-  useEffect(() => {
+  // Update progress bar
+  const handleTimeUpdate = useCallback(() => {
     const vid = videoRef.current;
-    if (!vid) return;
-    const onTime = () => {
-      if (vid.duration) setProgress((vid.currentTime / vid.duration) * 100);
-    };
-    vid.addEventListener('timeupdate', onTime);
-    return () => vid.removeEventListener('timeupdate', onTime);
+    if (!vid || !vid.duration) return;
+    setProgress((vid.currentTime / vid.duration) * 100);
   }, []);
 
-  const handleDoubleTap = useCallback(() => {
-    if (!liked) {
-      setLiked(true);
-      setLikeCount((c) => c + 1);
-    }
-    setShowHeart(true);
-    if (heartTimeoutRef.current) clearTimeout(heartTimeoutRef.current);
-    heartTimeoutRef.current = setTimeout(() => setShowHeart(false), 900);
-  }, [liked]);
-
-  const handleTap = useCallback(() => {
+  // Toggle play/pause on single tap
+  const handleVideoClick = () => {
+    if (isPhotoPost) return;
     const now = Date.now();
-    if (now - lastTapRef.current < 300) {
-      handleDoubleTap();
+    const DOUBLE_TAP_DELAY = 300;
+
+    if (now - lastTapRef.current < DOUBLE_TAP_DELAY) {
+      // Double tap -> Like
+      triggerDoubleTapLike();
       lastTapRef.current = 0;
       return;
     }
     lastTapRef.current = now;
 
-    // Single tap – toggle play/pause
-    setTimeout(() => {
-      if (lastTapRef.current === 0) return; // was double-tap
-      const vid = videoRef.current;
-      if (!vid) return;
-      if (vid.paused) {
-        vid.play().catch(() => {});
-        setIsPlaying(true);
-      } else {
-        vid.pause();
-        setIsPlaying(false);
-        setShowPause(true);
-        if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
-        pauseTimeoutRef.current = setTimeout(() => setShowPause(false), 1200);
-      }
-    }, 310);
-  }, [handleDoubleTap]);
+    // Single tap toggle
+    const vid = videoRef.current;
+    if (!vid) return;
+    if (vid.paused) {
+      vid.play().catch(() => {});
+      setIsPlaying(true);
+      setShowPause(false);
+    } else {
+      vid.pause();
+      setIsPlaying(false);
+      setShowPause(true);
+      clearTimeout(pauseTimeoutRef.current);
+      pauseTimeoutRef.current = setTimeout(() => setShowPause(false), 800);
+    }
+  };
 
-  const toggleLike = () => {
+  const triggerDoubleTapLike = () => {
+    if (!liked) {
+      setLiked(true);
+      setLikeCount((c) => c + 1);
+    }
+    setShowHeart(true);
+    clearTimeout(heartTimeoutRef.current);
+    heartTimeoutRef.current = setTimeout(() => setShowHeart(false), 800);
+  };
+
+  const toggleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setLiked((prev) => {
       setLikeCount((c) => (prev ? c - 1 : c + 1));
       return !prev;
     });
   };
 
-  const toggleSave = () => {
+  const toggleSave = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setSaved((prev) => {
       setSaveCount((c) => (prev ? c - 1 : c + 1));
       return !prev;
     });
   };
 
+  const handleShare = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard?.writeText(window.location.href);
+    setCopiedToast(true);
+    setTimeout(() => setCopiedToast(false), 2000);
+  };
+
   return (
-    <div className="relative w-full h-full bg-black overflow-hidden select-none">
-      {/* Video */}
-      <video
-        ref={videoRef}
-        src={post.videoUrl}
-        poster={post.thumbnailUrl}
-        loop
-        muted={isMuted}
-        playsInline
-        preload="metadata"
-        className="absolute inset-0 w-full h-full object-cover"
-        onClick={handleTap}
-      />
+    <>
+      <div
+        className="relative w-full h-full bg-black select-none overflow-hidden flex items-center justify-center cursor-pointer"
+        onClick={handleVideoClick}
+      >
+        {/* Media: Video or High-Res Photo Post */}
+        {isPhotoPost ? (
+          <div className="relative w-full h-full flex items-center justify-center bg-neutral-950">
+            <img
+              src={post.thumbnailUrl}
+              alt={post.caption}
+              className="w-full h-full object-cover"
+            />
+            {/* Tag badge for photo */}
+            <div className="absolute top-16 left-4 z-10 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center gap-1.5 text-[10px] text-white">
+              <Camera className="w-3 h-3 text-orange-400" />
+              <span>UGC Photo Showcase</span>
+            </div>
+          </div>
+        ) : (
+          <video
+            ref={videoRef}
+            src={post.videoUrl}
+            poster={post.thumbnailUrl}
+            loop
+            muted={isMuted}
+            playsInline
+            preload="metadata"
+            onTimeUpdate={handleTimeUpdate}
+            className="w-full h-full object-cover"
+          />
+        )}
 
-      {/* Double-tap heart animation */}
-      {showHeart && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-          <Heart className="w-24 h-24 text-rose-500 fill-rose-500 animate-ping opacity-80" />
+        {/* Ambient top and bottom dark gradient shadows */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 pointer-events-none" />
+
+        {/* Heart animation on double-tap (Electric Orange) */}
+        {showHeart && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+            <Heart className="w-24 h-24 text-orange-500 fill-orange-500 animate-ping opacity-90 drop-shadow-2xl" />
+          </div>
+        )}
+
+        {/* Pause icon */}
+        {showPause && !isPlaying && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+            <div className="w-16 h-16 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-2xl">
+              <Play className="w-8 h-8 text-white ml-1 fill-white" />
+            </div>
+          </div>
+        )}
+
+        {/* Top category pill */}
+        <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
+          <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[11px] font-semibold text-white border border-white/15 flex items-center gap-1.5 shadow-sm">
+            <Sparkles className="w-3 h-3 text-orange-400" />
+            {post.category}
+          </span>
+          <span className="px-2 py-0.5 rounded-full bg-neutral-900/70 backdrop-blur-md text-[10px] font-medium text-neutral-300 border border-neutral-700/60 hidden sm:inline-block">
+            {post.contentFormat}
+          </span>
         </div>
-      )}
 
-      {/* Pause icon */}
-      {showPause && !isPlaying && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-          <div className="w-16 h-16 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-            <Play className="w-8 h-8 text-white ml-1" />
+        {/* ── Right action rail (Orange & White accents, thumb ergonomic) ── */}
+        <div className="absolute right-3 top-20 sm:top-24 z-20 flex flex-col items-center gap-4">
+          {/* Creator Avatar with Follow button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenProfile(post.creatorId);
+            }}
+            className="relative group min-w-[44px] min-h-[44px] flex items-center justify-center"
+          >
+            <div className="w-11 h-11 rounded-full border-2 border-orange-500 overflow-hidden shadow-lg shadow-orange-500/30 group-hover:scale-105 transition-transform">
+              <img
+                src={post.creator.avatarUrl}
+                alt={post.creator.username}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white flex items-center justify-center shadow-md">
+              <span className="text-[11px] font-extrabold leading-none">+</span>
+            </div>
+          </button>
+
+          {/* Like */}
+          <button
+            onClick={toggleLike}
+            className="flex flex-col items-center min-w-[44px] min-h-[44px] justify-center group"
+          >
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-all ${
+              liked ? 'bg-orange-500/20 text-orange-500 scale-110' : 'bg-black/50 text-white hover:bg-black/70'
+            }`}>
+              <Heart
+                className={`w-5 h-5 transition-transform duration-200 ${
+                  liked ? 'text-orange-500 fill-orange-500' : 'text-white'
+                }`}
+              />
+            </div>
+            <span className="text-[11px] text-white font-bold mt-1 drop-shadow-md">
+              {formatCount(likeCount)}
+            </span>
+          </button>
+
+          {/* Comment Bubble */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setCommentsOpen(true);
+            }}
+            className="flex flex-col items-center min-w-[44px] min-h-[44px] justify-center group"
+          >
+            <div className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/70 transition-colors">
+              <MessageCircle className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-[11px] text-white font-bold mt-1 drop-shadow-md">
+              {formatCount(post.sharesCount || 42)}
+            </span>
+          </button>
+
+          {/* Save */}
+          <button
+            onClick={toggleSave}
+            className="flex flex-col items-center min-w-[44px] min-h-[44px] justify-center group"
+          >
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-all ${
+              saved ? 'bg-amber-500/20 text-amber-400 scale-110' : 'bg-black/50 text-white hover:bg-black/70'
+            }`}>
+              <Bookmark
+                className={`w-5 h-5 transition-transform duration-200 ${
+                  saved ? 'text-amber-400 fill-amber-400' : 'text-white'
+                }`}
+              />
+            </div>
+            <span className="text-[11px] text-white font-bold mt-1 drop-shadow-md">
+              {formatCount(saveCount)}
+            </span>
+          </button>
+
+          {/* Share */}
+          <button
+            onClick={handleShare}
+            className="flex flex-col items-center min-w-[44px] min-h-[44px] justify-center group"
+          >
+            <div className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/70 transition-colors">
+              <Share2 className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-[10px] text-white font-semibold mt-1 drop-shadow-md">Share</span>
+          </button>
+
+          {/* Mute/unmute */}
+          {!isPhotoPost && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMute();
+              }}
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-black/50 backdrop-blur-md text-white hover:bg-black/70 transition-colors"
+            >
+              {isMuted ? <VolumeX className="w-4 h-4 text-neutral-300" /> : <Volume2 className="w-4 h-4 text-orange-400" />}
+            </button>
+          )}
+        </div>
+
+        {/* Share Copied Toast */}
+        {copiedToast && (
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 bg-neutral-900/90 text-white px-4 py-2 rounded-xl border border-neutral-700 text-xs font-semibold backdrop-blur-md shadow-2xl">
+            ✓ Link copied to clipboard
+          </div>
+        )}
+
+        {/* ── Bottom overlay: creator info & rates CTA ── */}
+        <div className="absolute bottom-0 left-0 right-16 z-20 p-4 pb-6 text-left">
+          {/* Creator handle */}
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenProfile(post.creatorId);
+            }}
+            className="inline-flex items-center gap-1.5 cursor-pointer group mb-1.5"
+          >
+            <span className="font-extrabold text-sm sm:text-base text-white group-hover:text-orange-400 transition-colors drop-shadow">
+              @{post.creator.username}
+            </span>
+            <BadgeCheck className="w-4 h-4 text-orange-400 fill-orange-400/20" />
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 font-bold border border-orange-500/30">
+              UGC Creator
+            </span>
+          </div>
+
+          {/* Caption */}
+          <p className="text-xs sm:text-sm text-white/95 line-clamp-2 leading-relaxed mb-3 drop-shadow font-normal max-w-md">
+            {post.caption}
+          </p>
+
+          {/* Action Link: View Creator Portfolio & Rates */}
+          <div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenProfile(post.creatorId);
+              }}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-white/10 hover:bg-orange-500 backdrop-blur-md border border-white/20 hover:border-orange-500 px-3.5 py-1.5 rounded-full transition-all group shadow-lg"
+            >
+              <span>View Creator Portfolio & Rates</span>
+              <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform text-orange-400 group-hover:text-white" />
+            </button>
           </div>
         </div>
-      )}
 
-      {/* ── Top overlay: category badge ── */}
-      <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
-        <span className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm text-[11px] font-medium text-white border border-white/10">
-          {post.category}
-        </span>
-        {post.isSponsored && (
-          <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-[11px] font-medium text-amber-400 border border-amber-500/30">
-            Sponsored
-          </span>
+        {/* Progress bar */}
+        {!isPhotoPost && (
+          <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/10 z-20">
+            <div
+              className="h-full bg-gradient-to-r from-orange-500 to-amber-400 transition-[width] duration-100 ease-linear"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         )}
       </div>
 
-      {/* ── Right action rail ── */}
-      <div className="absolute right-3 bottom-44 sm:bottom-36 z-10 flex flex-col items-center gap-5">
-        {/* Avatar */}
-        <button
-          onClick={() => onOpenProfile(post.creatorId)}
-          className="relative"
-        >
-          <div className="w-11 h-11 rounded-full border-2 border-rose-500 overflow-hidden shadow-lg shadow-rose-500/20">
-            <img
-              src={post.creator.avatarUrl}
-              alt={post.creator.username}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 flex items-center justify-center">
-            <span className="text-white text-[10px] font-bold">+</span>
-          </div>
-        </button>
-
-        {/* Like */}
-        <button onClick={toggleLike} className="flex flex-col items-center min-w-[44px] min-h-[44px] justify-center">
-          <Heart
-            className={`w-7 h-7 transition-all duration-200 ${
-              liked ? 'text-rose-500 fill-rose-500 scale-110' : 'text-white drop-shadow-lg'
-            }`}
-          />
-          <span className="text-[11px] text-white font-medium mt-0.5 drop-shadow">{formatCount(likeCount)}</span>
-        </button>
-
-        {/* Comment */}
-        <button className="flex flex-col items-center min-w-[44px] min-h-[44px] justify-center">
-          <MessageCircle className="w-6 h-6 text-white drop-shadow-lg" />
-          <span className="text-[11px] text-white font-medium mt-0.5 drop-shadow">{formatCount(post.sharesCount)}</span>
-        </button>
-
-        {/* Save */}
-        <button onClick={toggleSave} className="flex flex-col items-center min-w-[44px] min-h-[44px] justify-center">
-          <Bookmark
-            className={`w-6 h-6 transition-all duration-200 ${
-              saved ? 'text-amber-400 fill-amber-400' : 'text-white drop-shadow-lg'
-            }`}
-          />
-          <span className="text-[11px] text-white font-medium mt-0.5 drop-shadow">{formatCount(saveCount)}</span>
-        </button>
-
-        {/* Share */}
-        <button className="flex flex-col items-center min-w-[44px] min-h-[44px] justify-center">
-          <Share2 className="w-6 h-6 text-white drop-shadow-lg" />
-          <span className="text-[11px] text-white font-medium mt-0.5 drop-shadow">Share</span>
-        </button>
-
-        {/* Mute/unmute */}
-        <button onClick={toggleMute} className="flex items-center justify-center w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm min-w-[44px] min-h-[44px]">
-          {isMuted ? (
-            <VolumeX className="w-4 h-4 text-white" />
-          ) : (
-            <Volume2 className="w-4 h-4 text-white" />
-          )}
-        </button>
-      </div>
-
-      {/* ── Bottom overlay: creator info ── */}
-      <div className="absolute bottom-0 left-0 right-16 z-10 p-4 pb-5">
-        {/* Creator handle */}
-        <button
-          onClick={() => onOpenProfile(post.creatorId)}
-          className="flex items-center gap-1.5 mb-2"
-        >
-          <span className="text-sm font-bold text-white drop-shadow-lg">
-            @{post.creator.username}
-          </span>
-          {post.creator.isVerified && (
-            <BadgeCheck className="w-4 h-4 text-blue-400 fill-blue-400/20" />
-          )}
-        </button>
-
-        {/* Caption */}
-        <p className="text-[13px] text-white/90 leading-snug line-clamp-2 mb-3 drop-shadow">
-          {post.caption}
-        </p>
-
-        {/* View portfolio pill */}
-        <button
-          onClick={() => onOpenProfile(post.creatorId)}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/10 hover:bg-white/25 transition-colors"
-        >
-          <Eye className="w-3.5 h-3.5 text-white" />
-          <span className="text-xs font-semibold text-white">View Portfolio &amp; Rates</span>
-          <ChevronRight className="w-3.5 h-3.5 text-white/60" />
-        </button>
-      </div>
-
-      {/* ── Progress bar ── */}
-      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/10 z-20">
-        <div
-          className="h-full bg-gradient-to-r from-rose-500 to-pink-500 transition-[width] duration-100 ease-linear"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-    </div>
+      {/* Slide-Up Comments Drawer */}
+      <CommentsDrawer
+        isOpen={commentsOpen}
+        onClose={() => setCommentsOpen(false)}
+        postCaption={post.caption}
+        creatorUsername={post.creator.username}
+        currentRole="guest"
+      />
+    </>
   );
 };
 
