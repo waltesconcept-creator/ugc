@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior: none;
+}
+
+body {
+  background: #0a0a0a;
+  color: #ededed;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide scrollbars for clean social UI */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Snap scroll for vertical video feed */
+.snap-y-mandatory {
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+.snap-start {
+  scroll-snap-align: start;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes heartBurst {
+  0% { transform: scale(0); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@keyframes progressPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-fade-in-scale {
+  animation: fadeInScale 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-slide-up {
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-heart-burst {
+  animation: heartBurst 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Progress bar animation */
+.animate-progress-pulse {
+  animation: progressPulse 2s ease-in-out infinite;
+}
+
+/* Safe area for modern phones with notches */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Range input styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 4px;
+  border-radius: 9999px;
+  background: #404040;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f43f5e;
+  cursor: pointer;
+}
+
+/* Video progress bar */
+.video-progress {
+  transition: width 0.1s linear;
+}

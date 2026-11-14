@@ -1,0 +1,168 @@
+export type UserRole = 'creator' | 'business' | 'admin' | 'guest';
+
+export interface Profile {
+  id: string;
+  role: UserRole;
+  username: string;
+  displayName: string;
+  avatarUrl: string;
+  bio: string;
+  location: string;
+  country: string;
+  website?: string;
+  isVerified: boolean;
+  createdAt: string;
+}
+
+export interface CreatorDetails {
+  creatorId: string;
+  categories: string[];
+  contentFormats: string[];
+  languages: string[];
+  instagramHandle?: string;
+  instagramFollowers?: number;
+  tiktokHandle?: string;
+  tiktokFollowers?: number;
+  youtubeHandle?: string;
+  youtubeSubscribers?: number;
+  totalSocialViews?: number;
+  ratingAvg: number;
+  ratingCount: number;
+  completedProjectsCount: number;
+  onTimeDeliveryRate: number;
+  isAvailable: boolean;
+  startingPriceCents: number;
+}
+
+export interface BusinessDetails {
+  businessId: string;
+  companyName: string;
+  industry: string;
+  teamSize?: string;
+  logoUrl: string;
+  companyWebsite: string;
+  verified: boolean;
+}
+
+export interface Post {
+  id: string;
+  creatorId: string;
+  creator: Profile;
+  videoUrl: string;
+  thumbnailUrl: string;
+  caption: string;
+  category: string;
+  contentFormat: string;
+  durationSeconds: number;
+  viewsCount: number;
+  likesCount: number;
+  savesCount: number;
+  sharesCount: number;
+  isLiked?: boolean;
+  isSaved?: boolean;
+  isPortfolioPinned?: boolean;
+  isSponsored?: boolean;
+  createdAt: string;
+}
+
+export interface ServicePackage {
+  id: string;
+  creatorId: string;
+  title: string;
+  description: string;
+  priceCents: number;
+  currency: string;
+  deliveryDays: number;
+  revisionsAllowed: number;
+  formatTag: string;
+  isActive: boolean;
+}
+
+export type BookingStatus =
+  | 'pending'
+  | 'awaiting_acceptance'
+  | 'in_progress'
+  | 'submitted'
+  | 'revision_requested'
+  | 'approved'
+  | 'completed'
+  | 'cancelled';
+
+export interface Booking {
+  id: string;
+  businessId: string;
+  businessName: string;
+  creatorId: string;
+  creatorName: string;
+  serviceId?: string;
+  serviceTitle: string;
+  briefTitle: string;
+  briefDescription: string;
+  targetPlatform: string;
+  referenceUrls: string[];
+  totalAmountCents: number;
+  currency: string;
+  status: BookingStatus;
+  deliveryDeadline: string;
+  deliverables?: Deliverable[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Deliverable {
+  id: string;
+  bookingId: string;
+  videoUrl: string;
+  thumbnailUrl?: string;
+  notes: string;
+  versionNumber: number;
+  createdAt: string;
+}
+
+export interface Review {
+  id: string;
+  bookingId: string;
+  reviewerName: string;
+  reviewerAvatar: string;
+  reviewerRole: 'business' | 'creator';
+  overallRating: number;
+  ratingQuality: number;
+  ratingCommunication: number;
+  ratingTimeliness: number;
+  reviewText: string;
+  isVerifiedBooking: boolean;
+  createdAt: string;
+}
+
+export interface Message {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  senderName: string;
+  senderAvatar: string;
+  content: string;
+  attachmentUrl?: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface Conversation {
+  id: string;
+  participantId: string;
+  participantName: string;
+  participantAvatar: string;
+  participantRole: UserRole;
+  lastMessage: string;
+  lastMessageTime: string;
+  unreadCount: number;
+  bookingContextId?: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  iconName: string;
+  description: string;
+  videoCount: number;
+}
