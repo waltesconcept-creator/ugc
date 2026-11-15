@@ -9,6 +9,7 @@ import {
   MOCK_BOOKINGS,
   MOCK_CREATORS,
 } from './mock-data';
+import { supabaseAdmin, isSupabaseConfigured } from './supabase';
 
 export interface UserAccount {
   id: string;
@@ -109,6 +110,19 @@ export async function findUserById(id: string): Promise<UserAccount | undefined>
   return db.users.find((u) => u.id === id);
 }
 
+// Safe background Supabase sync helper
+async function syncToSupabase(table: string, data: Record<string, any>) {
+  if (!isSupabaseConfigured || !supabaseAdmin) return;
+  try {
+    const { error } = await supabaseAdmin.from(table).upsert(data);
+    if (error) {
+      console.warn(`Supabase ${table} sync:`, error.message);
+    }
+  } catch (err: any) {
+    console.warn(`Supabase ${table} error:`, err?.message || err);
+  }
+}
+
 export async function createUser(user: UserAccount): Promise<UserAccount> {
   const db = await getDb();
   // Check if already exists
@@ -119,6 +133,21 @@ export async function createUser(user: UserAccount): Promise<UserAccount> {
     db.users.unshift(user);
   }
   await saveDb(db);
+
+  // Cloud Supabase sync
+  syncToSupabase('users', {
+    id: user.id,
+    email: user.email,
+    phone: user.phone,
+    role: user.role,
+    profile: user.profile,
+    details: user.details,
+    services: user.services,
+    country: user.country,
+    categories: user.categories,
+    created_at: user.createdAt,
+  });
+
   return user;
 }
 
@@ -147,6 +176,19 @@ export async function updateUser(
   };
 
   await saveDb(db);
+
+  syncToSupabase('users', {
+    id: db.users[index].id,
+    email: db.users[index].email,
+    phone: db.users[index].phone,
+    role: db.users[index].role,
+    profile: db.users[index].profile,
+    details: db.users[index].details,
+    services: db.users[index].services,
+    country: db.users[index].country,
+    categories: db.users[index].categories,
+  });
+
   return db.users[index];
 }
 
@@ -160,6 +202,25 @@ export async function createPost(post: Post): Promise<Post> {
   const db = await getDb();
   db.posts.unshift(post);
   await saveDb(db);
+
+  // Cloud Supabase sync
+  syncToSupabase('posts', {
+    id: post.id,
+    creator_id: post.creatorId,
+    caption: post.caption,
+    media_type: post.mediaType || 'video',
+    media_url: post.videoUrl,
+    thumbnail_url: post.thumbnailUrl,
+    likes_count: post.likesCount,
+    saves_count: post.savesCount,
+    comments_count: post.commentsCount || 0,
+    views_count: post.viewsCount,
+    category: post.category,
+    content_format: post.contentFormat,
+    creator: post.creator,
+    created_at: post.createdAt,
+  });
+
   return post;
 }
 
@@ -173,6 +234,19 @@ export async function createStory(story: Story): Promise<Story> {
   const db = await getDb();
   db.stories.unshift(story);
   await saveDb(db);
+
+  // Cloud Supabase sync
+  syncToSupabase('stories', {
+    id: story.id,
+    creator_id: story.creatorId,
+    creator_name: story.creatorName,
+    creator_avatar: story.creatorAvatar,
+    video_url: story.mediaUrl,
+    thumbnail_url: story.thumbnailUrl,
+    caption: story.caption,
+    created_at: story.createdAt,
+  });
+
   return story;
 }
 
@@ -230,5 +304,24 @@ export async function createReview(review: Review): Promise<Review> {
   }
 
   await saveDb(db);
+
+  // Cloud Supabase sync
+  syncToSupabase('reviews', {
+    id: review.id,
+    creator_id: review.creatorId,
+    booking_id: review.bookingId,
+    project_title: review.projectTitle,
+    reviewer_name: review.reviewerName,
+    reviewer_avatar: review.reviewerAvatar,
+    reviewer_role: review.reviewerRole,
+    overall_rating: review.overallRating,
+    rating_quality: review.ratingQuality,
+    rating_communication: review.ratingCommunication,
+    rating_timeliness: review.ratingTimeliness,
+    review_text: review.reviewText,
+    is_verified_booking: review.isVerifiedBooking,
+    created_at: review.createdAt,
+  });
+
   return review;
 }
