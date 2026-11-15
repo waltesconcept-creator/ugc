@@ -121,7 +121,7 @@ const ChatView: React.FC<ChatViewProps> = ({ onOpenProject, activeCreatorId }) =
             placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-rose-500/50 transition-colors"
+            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500/50 transition-colors"
           />
         </div>
       </div>
@@ -158,7 +158,7 @@ const ChatView: React.FC<ChatViewProps> = ({ onOpenProject, activeCreatorId }) =
                 <div className="flex items-center justify-between gap-2 mt-0.5">
                   <p className="text-xs text-neutral-400 truncate">{conv.lastMessage}</p>
                   {conv.unreadCount > 0 && (
-                    <span className="shrink-0 min-w-[20px] h-5 flex items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white px-1">
+                    <span className="shrink-0 min-w-[20px] h-5 flex items-center justify-center rounded-full bg-orange-500 text-[10px] font-bold text-white px-1">
                       {conv.unreadCount}
                     </span>
                   )}
@@ -240,7 +240,7 @@ const ChatView: React.FC<ChatViewProps> = ({ onOpenProject, activeCreatorId }) =
                   <div
                     className={`px-3.5 py-2.5 text-[13px] leading-relaxed ${
                       isMe
-                        ? 'bg-gradient-to-br from-rose-500 to-pink-500 text-white rounded-2xl rounded-br-md'
+                        ? 'bg-gradient-to-br from-orange-500 to-amber-500 text-white rounded-2xl rounded-br-md shadow-md shadow-orange-500/20'
                         : 'bg-neutral-800 text-neutral-200 rounded-2xl rounded-bl-md border border-neutral-700/50'
                     }`}
                   >
@@ -278,7 +278,7 @@ const ChatView: React.FC<ChatViewProps> = ({ onOpenProject, activeCreatorId }) =
                 onChange={(e) => setMessageInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Type a message..."
-                className="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-rose-500/50 transition-colors pr-10 min-h-[44px]"
+                className="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500/50 transition-colors pr-10 min-h-[44px]"
               />
               <button className="absolute right-3 top-1/2 -translate-y-1/2">
                 <Smile className="w-4 h-4 text-neutral-500" />
@@ -287,7 +287,7 @@ const ChatView: React.FC<ChatViewProps> = ({ onOpenProject, activeCreatorId }) =
             <button
               onClick={handleSend}
               disabled={!messageInput.trim()}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg shadow-rose-500/20 disabled:opacity-40 disabled:shadow-none transition-all min-w-[44px] min-h-[44px]"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20 disabled:opacity-40 disabled:shadow-none transition-all min-w-[44px] min-h-[44px]"
             >
               <Send className="w-4 h-4 ml-0.5" />
             </button>

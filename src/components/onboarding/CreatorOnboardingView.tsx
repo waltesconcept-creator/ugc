@@ -57,7 +57,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
         <div className="mb-8">
           <div className="flex items-center justify-between text-xs text-neutral-400 font-semibold mb-2">
             <span>Step {step} of {totalSteps}</span>
-            <span className="text-rose-400">
+            <span className="text-orange-400 font-bold">
               {step === 1 && 'Basic Profile'}
               {step === 2 && 'Niches & Content Formats'}
               {step === 3 && 'Social Proof & External Reach'}
@@ -66,7 +66,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
           </div>
           <div className="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-rose-500 to-pink-500 transition-all duration-300"
+              className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-all duration-300"
               style={{ width: `${(step / totalSteps) * 100}%` }}
             />
           </div>
@@ -83,7 +83,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
             </div>
 
             <div className="flex items-center gap-4 pt-2">
-              <div className="w-16 h-16 rounded-full bg-neutral-800 border-2 border-dashed border-neutral-600 flex flex-col items-center justify-center text-neutral-400 cursor-pointer hover:border-rose-500 transition-colors">
+              <div className="w-16 h-16 rounded-full bg-neutral-800 border-2 border-dashed border-neutral-600 flex flex-col items-center justify-center text-neutral-400 cursor-pointer hover:border-orange-500 transition-colors">
                 <UploadCloud className="w-5 h-5 text-neutral-400" />
                 <span className="text-[9px] mt-0.5">Avatar</span>
               </div>
@@ -102,7 +102,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
                   value={displayName}
                   onChange={e => setDisplayName(e.target.value)}
                   placeholder="e.g. Jessica Taylor"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-rose-500"
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-orange-500"
                 />
               </div>
 
@@ -116,7 +116,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
                     value={username}
                     onChange={e => setUsername(e.target.value)}
                     placeholder="jessicaugc"
-                    className="w-full bg-neutral-800 border border-neutral-700 rounded-xl pl-8 pr-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-rose-500"
+                    className="w-full bg-neutral-800 border border-neutral-700 rounded-xl pl-8 pr-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-orange-500"
                   />
                 </div>
               </div>
@@ -168,7 +168,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
                       onClick={() => toggleCategory(cat.name)}
                       className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
                         isSelected
-                          ? 'bg-rose-500 text-white shadow-md shadow-rose-500/20'
+                          ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/20'
                           : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
                       }`}
                     >
@@ -192,7 +192,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
                       onClick={() => toggleFormat(fmt)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                         isSelected
-                          ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 font-semibold'
+                          ? 'bg-orange-500/20 text-orange-400 border border-orange-500/40 font-semibold'
                           : 'bg-neutral-800/80 text-neutral-400 hover:text-white'
                       }`}
                     >
@@ -224,14 +224,14 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
                     value={tiktokHandle}
                     onChange={e => setTiktokHandle(e.target.value)}
                     placeholder="@yourtiktok"
-                    className="bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-rose-500"
+                    className="bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-orange-500"
                   />
                   <input
                     type="text"
                     value={tiktokFollowers}
                     onChange={e => setTiktokFollowers(e.target.value)}
                     placeholder="Approx follower count (e.g. 5,000)"
-                    className="bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-rose-500"
+                    className="bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-orange-500"
                   />
                 </div>
               </div>
@@ -243,7 +243,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
                   value={instagramHandle}
                   onChange={e => setInstagramHandle(e.target.value)}
                   placeholder="@yourinstagram"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-rose-500"
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-orange-500"
                 />
               </div>
             </div>
@@ -267,7 +267,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
                   type="text"
                   value={serviceTitle}
                   onChange={e => setServiceTitle(e.target.value)}
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-rose-500"
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-orange-500"
                 />
               </div>
 
@@ -279,7 +279,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
                     type="number"
                     value={startingRate}
                     onChange={e => setStartingRate(e.target.value)}
-                    className="w-full bg-neutral-800 border border-neutral-700 rounded-xl pl-8 pr-3.5 py-2 text-white font-bold text-sm focus:outline-none focus:border-rose-500"
+                    className="w-full bg-neutral-800 border border-neutral-700 rounded-xl pl-8 pr-3.5 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500"
                   />
                 </div>
                 <span className="text-[10px] text-neutral-500 mt-1 block">
@@ -288,7 +288,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl border border-dashed border-neutral-700 bg-neutral-900/40 text-center space-y-2 cursor-pointer hover:border-rose-500 transition-colors">
+            <div className="p-4 rounded-2xl border border-dashed border-neutral-700 bg-neutral-900/40 text-center space-y-2 cursor-pointer hover:border-orange-500 transition-colors">
               <UploadCloud className="w-8 h-8 text-neutral-500 mx-auto" />
               <div className="text-neutral-300 font-medium">Upload 1-3 Sample Videos to Your Portfolio</div>
               <p className="text-[10px] text-neutral-500">Supports MP4, MOV up to 100MB (will appear on your profile)</p>
@@ -313,7 +313,7 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
             <button
               type="button"
               onClick={() => setStep(prev => prev + 1)}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-bold text-xs shadow-lg shadow-rose-500/20 flex items-center gap-1.5 transition-all"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-xs shadow-lg shadow-orange-500/20 flex items-center gap-1.5 transition-all"
             >
               Next Step
               <ArrowRight className="w-4 h-4" />

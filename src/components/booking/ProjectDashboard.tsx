@@ -115,7 +115,7 @@ const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
             onClick={() => setStatusFilter('all')}
             className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium transition-all min-h-[40px] ${
               statusFilter === 'all'
-                ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg shadow-rose-500/20'
+                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20 font-bold'
                 : 'bg-neutral-900 text-neutral-400 border border-neutral-800'
             }`}
           >
@@ -203,7 +203,7 @@ const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
                               <div key={ms.key} className="flex flex-col items-center text-center">
                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 ${
                                   isCurrent
-                                    ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg shadow-rose-500/20'
+                                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20'
                                     : isCompleted
                                     ? 'bg-emerald-500/20 text-emerald-400'
                                     : 'bg-neutral-800 text-neutral-600'
@@ -316,7 +316,7 @@ const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
               onChange={(e) => setRevisionNotes(e.target.value)}
               placeholder="Describe what changes you need..."
               rows={4}
-              className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-rose-500/50 resize-none mb-4"
+              className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-orange-500/50 resize-none mb-4"
             />
             <button
               onClick={() => handleRevisionSubmit(revisionModalId)}

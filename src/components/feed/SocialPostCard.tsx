@@ -173,7 +173,7 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
   return (
     <article
       ref={cardRef}
-      className="w-full max-w-lg mx-auto bg-neutral-900/90 border border-neutral-800 rounded-3xl overflow-hidden mb-6 shadow-xl transition-all"
+      className="w-full max-w-lg mx-auto bg-neutral-900/90 border border-neutral-800/90 hover:border-orange-500/40 rounded-3xl overflow-hidden mb-6 shadow-xl hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-300"
     >
       {/* ── 1. Creator Header ── */}
       <div className="flex items-center justify-between p-3.5 sm:p-4">

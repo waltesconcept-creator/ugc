@@ -171,7 +171,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white text-sm font-semibold shadow-lg shadow-rose-500/20 disabled:opacity-50 min-h-[48px] flex items-center justify-center gap-2"
+                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-sm font-semibold shadow-lg shadow-orange-500/20 disabled:opacity-50 min-h-[48px] flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -191,7 +191,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               <div className="bg-neutral-800/50 rounded-xl p-4 border border-neutral-700">
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="px-2 py-0.5 rounded-full bg-rose-500/10 text-[10px] font-medium text-rose-400 border border-rose-500/20">
+                    <span className="px-2 py-0.5 rounded-full bg-orange-500/10 text-[10px] font-medium text-orange-400 border border-orange-500/20">
                       {service.formatTag}
                     </span>
                     <h3 className="text-sm font-semibold text-white mt-2">{service.title}</h3>
@@ -218,7 +218,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   value={briefTitle}
                   onChange={(e) => setBriefTitle(e.target.value)}
                   placeholder="e.g., Product Demo for Spring Collection"
-                  className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-rose-500/50 focus:ring-1 focus:ring-rose-500/20 transition-colors min-h-[48px]"
+                  className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-colors min-h-[48px]"
                 />
               </div>
 
@@ -233,7 +233,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   onChange={(e) => setBriefDescription(e.target.value)}
                   placeholder="Describe what you need, key messages, tone of voice, specific requirements..."
                   rows={4}
-                  className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-rose-500/50 focus:ring-1 focus:ring-rose-500/20 transition-colors resize-none"
+                  className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-colors resize-none"
                 />
                 <p className="text-[10px] text-neutral-600 mt-1">Minimum 10 characters</p>
               </div>
@@ -251,7 +251,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                       onClick={() => setTargetPlatform(p)}
                       className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all min-h-[44px] ${
                         targetPlatform === p
-                          ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                          ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30'
                           : 'bg-neutral-800 text-neutral-400 border border-neutral-700 hover:text-white'
                       }`}
                     >
@@ -275,7 +275,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                         value={url}
                         onChange={(e) => updateReferenceUrl(idx, e.target.value)}
                         placeholder="https://example.com/reference"
-                        className="flex-1 px-4 py-2.5 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-rose-500/50 min-h-[44px]"
+                        className="flex-1 px-4 py-2.5 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-orange-500/50 min-h-[44px]"
                       />
                       {referenceUrls.length > 1 && (
                         <button
@@ -289,7 +289,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   ))}
                   <button
                     onClick={addReferenceUrl}
-                    className="flex items-center gap-1.5 text-xs text-rose-400 hover:text-rose-300 transition-colors py-1 min-h-[36px]"
+                    className="flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 transition-colors py-1 min-h-[36px]"
                   >
                     <Plus className="w-3 h-3" />
                     Add another reference
@@ -301,7 +301,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               <button
                 onClick={() => setStep('review')}
                 disabled={!isFormValid}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold text-sm shadow-lg shadow-rose-500/20 disabled:opacity-40 disabled:shadow-none min-h-[52px] flex items-center justify-center gap-2 transition-all"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold text-sm shadow-lg shadow-orange-500/20 disabled:opacity-40 disabled:shadow-none min-h-[52px] flex items-center justify-center gap-2 transition-all"
               >
                 <ShoppingBag className="w-4 h-4" />
                 Review Booking · {formatPrice(service.priceCents, service.currency)}
