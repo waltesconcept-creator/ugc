@@ -21,6 +21,7 @@ import {
   LogIn,
   LogOut,
   UserCheck,
+  X,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -71,13 +72,18 @@ const Navbar: React.FC<NavbarProps> = ({
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const mobileDrawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setRoleDropdownOpen(false);
       }
-      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target as Node) &&
+        (!mobileDrawerRef.current || !mobileDrawerRef.current.contains(e.target as Node))
+      ) {
         setUserMenuOpen(false);
       }
     };
@@ -163,100 +169,43 @@ const Navbar: React.FC<NavbarProps> = ({
                 </button>
 
                 {userMenuOpen && (
-                  <>
-                    {/* Desktop Dropdown */}
-                    <div className="hidden sm:block absolute right-0 top-full mt-2 w-52 bg-neutral-950 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden py-1.5 z-[60] animate-fade-in text-xs">
-                      <div className="px-3 py-2 border-b border-neutral-850">
-                        <p className="font-bold text-white truncate">{currentUser.profile.displayName || 'Creator'}</p>
-                        <p className="text-[10px] text-orange-400 truncate">@{currentUser.profile.username || 'user'}</p>
-                      </div>
-                      <button
-                        onClick={() => {
-                          setActiveTab('profile');
-                          setUserMenuOpen(false);
-                        }}
-                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
-                      >
-                        <User className="w-3.5 h-3.5 text-neutral-400" />
-                        <span>My Profile & Rates</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          if (onOpenCreate) onOpenCreate();
-                          setUserMenuOpen(false);
-                        }}
-                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
-                      >
-                        <Plus className="w-3.5 h-3.5 text-orange-400" />
-                        <span>Upload Video / Post</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          logout();
-                          setUserMenuOpen(false);
-                        }}
-                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-rose-400 hover:bg-neutral-900 text-left font-medium border-t border-neutral-850"
-                      >
-                        <LogOut className="w-3.5 h-3.5 text-rose-500" />
-                        <span>Sign Out</span>
-                      </button>
+                  /* Desktop Dropdown (sm and above) */
+                  <div className="hidden sm:block absolute right-0 top-full mt-2 w-52 bg-neutral-950 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden py-1.5 z-[60] animate-fade-in text-xs">
+                    <div className="px-3 py-2 border-b border-neutral-850">
+                      <p className="font-bold text-white truncate">{currentUser.profile.displayName || 'Creator'}</p>
+                      <p className="text-[10px] text-orange-400 truncate">@{currentUser.profile.username || 'user'}</p>
                     </div>
-
-                    {/* Mobile Native Bottom Sheet */}
-                    <div className="sm:hidden fixed inset-0 z-[100] flex items-end justify-center">
-                      <div
-                        className="fixed inset-0 bg-black/75 backdrop-blur-sm animate-fade-in"
-                        onClick={() => setUserMenuOpen(false)}
-                      />
-                      <div className="relative w-full bg-neutral-900 border-t border-neutral-800 rounded-t-3xl p-5 pb-8 z-10 shadow-2xl animate-fade-in">
-                        <div className="w-12 h-1.5 bg-neutral-700 rounded-full mx-auto mb-4" />
-                        <div className="flex items-center gap-3 pb-4 mb-3 border-b border-neutral-800">
-                          <img
-                            src={currentUser.profile.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face'}
-                            alt=""
-                            className="w-12 h-12 rounded-full object-cover border-2 border-orange-500"
-                          />
-                          <div className="overflow-hidden">
-                            <p className="text-sm font-bold text-white truncate">{currentUser.profile.displayName || 'Creator'}</p>
-                            <p className="text-xs text-orange-400 truncate">@{currentUser.profile.username || 'user'}</p>
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <button
-                            onClick={() => {
-                              setActiveTab('profile');
-                              setUserMenuOpen(false);
-                            }}
-                            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-800/70 hover:bg-neutral-800 text-white text-xs font-semibold transition-colors"
-                          >
-                            <User className="w-4 h-4 text-orange-400" />
-                            <span>My Profile & Packages</span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              if (onOpenCreate) onOpenCreate();
-                              setUserMenuOpen(false);
-                            }}
-                            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-800/70 hover:bg-neutral-800 text-white text-xs font-semibold transition-colors"
-                          >
-                            <Plus className="w-4 h-4 text-orange-400" />
-                            <span>Upload Video / Post</span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              logout();
-                              setUserMenuOpen(false);
-                            }}
-                            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold transition-colors mt-2"
-                          >
-                            <LogOut className="w-4 h-4 text-rose-500" />
-                            <span>Sign Out</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </>
+                    <button
+                      onClick={() => {
+                        setActiveTab('profile');
+                        setUserMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
+                    >
+                      <User className="w-3.5 h-3.5 text-neutral-400" />
+                      <span>My Profile & Rates</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (onOpenCreate) onOpenCreate();
+                        setUserMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
+                    >
+                      <Plus className="w-3.5 h-3.5 text-orange-400" />
+                      <span>Upload Video / Post</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setUserMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2 text-rose-400 hover:bg-neutral-900 text-left font-medium border-t border-neutral-850"
+                    >
+                      <LogOut className="w-3.5 h-3.5 text-rose-500" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
                 )}
               </div>
             ) : (
@@ -381,6 +330,75 @@ const Navbar: React.FC<NavbarProps> = ({
           })}
         </div>
       </nav>
+
+      {/* ───── Mobile User Profile Drawer (Rendered at Root Viewport to Avoid Header backdrop-filter Clipping) ───── */}
+      {userMenuOpen && currentUser && currentUser.profile && (
+        <div className="sm:hidden fixed inset-0 z-[120] flex items-end justify-center">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm animate-fade-in"
+            onClick={() => setUserMenuOpen(false)}
+          />
+          {/* Bottom Drawer */}
+          <div ref={mobileDrawerRef} className="relative w-full max-w-md bg-neutral-900 border-t border-neutral-800 rounded-t-3xl p-5 pb-9 z-10 shadow-2xl animate-fade-in">
+            {/* Drag Handle */}
+            <div className="w-12 h-1.5 bg-neutral-700 rounded-full mx-auto mb-4" />
+
+            <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-neutral-800">
+              <div className="flex items-center gap-3 overflow-hidden">
+                <img
+                  src={currentUser.profile.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face'}
+                  alt=""
+                  className="w-12 h-12 rounded-full object-cover border-2 border-orange-500 shrink-0"
+                />
+                <div className="overflow-hidden">
+                  <p className="text-sm font-bold text-white truncate">{currentUser.profile.displayName || 'Creator'}</p>
+                  <p className="text-xs text-orange-400 truncate">@{currentUser.profile.username || 'user'}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setUserMenuOpen(false)}
+                className="w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={() => {
+                  setActiveTab('profile');
+                  setUserMenuOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-800/80 hover:bg-neutral-800 text-white text-xs font-semibold transition-colors"
+              >
+                <User className="w-4 h-4 text-orange-400" />
+                <span>My Profile & Packages</span>
+              </button>
+              <button
+                onClick={() => {
+                  if (onOpenCreate) onOpenCreate();
+                  setUserMenuOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-800/80 hover:bg-neutral-800 text-white text-xs font-semibold transition-colors"
+              >
+                <Plus className="w-4 h-4 text-orange-400" />
+                <span>Upload Video / Post</span>
+              </button>
+              <button
+                onClick={() => {
+                  logout();
+                  setUserMenuOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold transition-colors mt-2"
+              >
+                <LogOut className="w-4 h-4 text-rose-500" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Spacer for fixed top header */}
       <div className="h-14" />
