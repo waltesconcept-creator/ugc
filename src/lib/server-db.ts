@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import type { Profile, CreatorDetails, Post, Story, Booking } from './types';
+import type { Profile, CreatorDetails, Post, Story, Booking, ServicePackage } from './types';
 import {
   MOCK_PROFILES,
   MOCK_CREATOR_DETAILS,
@@ -18,6 +18,7 @@ export interface UserAccount {
   role: 'creator' | 'business' | 'guest';
   profile: Profile;
   details?: CreatorDetails;
+  services?: ServicePackage[];
   country: string;
   categories?: string[];
   createdAt: string;
@@ -118,6 +119,34 @@ export async function createUser(user: UserAccount): Promise<UserAccount> {
   }
   await saveDb(db);
   return user;
+}
+
+export async function updateUser(
+  userId: string,
+  partial: Partial<UserAccount>
+): Promise<UserAccount | null> {
+  const db = await getDb();
+  const index = db.users.findIndex((u) => u.id === userId);
+  if (index === -1) return null;
+
+  db.users[index] = {
+    ...db.users[index],
+    ...partial,
+    profile: {
+      ...db.users[index].profile,
+      ...(partial.profile || {}),
+    },
+    details: db.users[index].details
+      ? {
+          ...db.users[index].details!,
+          ...(partial.details || {}),
+        }
+      : partial.details,
+    services: partial.services !== undefined ? partial.services : db.users[index].services,
+  };
+
+  await saveDb(db);
+  return db.users[index];
 }
 
 // Post helpers

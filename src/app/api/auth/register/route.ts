@@ -56,24 +56,43 @@ export async function POST(request: Request) {
       createdAt: new Date().toISOString(),
     };
 
+    const startingCents = Math.round(Number(startingPrice || 50) * 100);
+
     const newDetails: CreatorDetails = {
       creatorId: userId,
       categories: Array.isArray(categories) && categories.length > 0 ? categories : ['Lifestyle'],
-      contentFormats: ['UGC Ad', 'Product Review', 'Unboxing'],
+      contentFormats: ['UGC Video', 'Product Review', 'Unboxing'],
       languages: ['English'],
-      ratingAvg: 5.0,
-      ratingCount: 1,
+      ratingAvg: 0,
+      ratingCount: 0,
       completedProjectsCount: 0,
       onTimeDeliveryRate: 100,
       repeatBookingRate: 0,
-      qualityScore: 5.0,
-      communicationScore: 5.0,
-      timelinessScore: 5.0,
+      qualityScore: 0,
+      communicationScore: 0,
+      timelinessScore: 0,
       verifiedTransactionsCount: 0,
       isAvailable: true,
-      startingPriceCents: Math.round(Number(startingPrice || 50) * 100),
-      totalSocialViews: 1200,
+      startingPriceCents: startingCents,
+      totalSocialViews: 0,
     };
+
+    // Initialize with creator's starting rate package
+    const initialServices = [
+      {
+        id: `svc-${Date.now()}-1`,
+        creatorId: userId,
+        title: 'Authentic Short-Form UGC Video',
+        description:
+          'High-converting organic UGC video tailored for TikTok, Instagram Reels, or Ads. Includes 1 revision & fast turnaround.',
+        priceCents: startingCents,
+        currency: 'USD',
+        deliveryDays: 3,
+        revisionsAllowed: 1,
+        formatTag: 'UGC Video',
+        isActive: true,
+      },
+    ];
 
     const newAccount: UserAccount = {
       id: userId,
@@ -82,6 +101,7 @@ export async function POST(request: Request) {
       role: role as 'creator' | 'business' | 'guest',
       profile: newProfile,
       details: role === 'creator' ? newDetails : undefined,
+      services: role === 'creator' ? initialServices : undefined,
       country,
       categories: Array.isArray(categories) ? categories : ['Lifestyle'],
       createdAt: new Date().toISOString(),

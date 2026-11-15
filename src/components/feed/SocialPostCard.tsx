@@ -20,6 +20,7 @@ import {
   ExternalLink,
   Ban,
   TrendingUp,
+  Maximize2,
 } from 'lucide-react';
 import { CommentsDrawer } from './CommentsDrawer';
 import { recommendationEngine } from '@/lib/recommendation-engine';
@@ -30,6 +31,7 @@ interface SocialPostCardProps {
   toggleMute: () => void;
   onOpenProfile: (creatorId: string) => void;
   onNotInterested?: (postId: string) => void;
+  onExpandPost?: (post: Post) => void;
 }
 
 function formatCount(n: number): string {
@@ -44,6 +46,7 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
   toggleMute,
   onOpenProfile,
   onNotInterested,
+  onExpandPost,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -105,6 +108,12 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
       return;
     }
     lastTapRef.current = now;
+
+    // Single tap on media opens immersive fullscreen viewer
+    if (onExpandPost) {
+      onExpandPost(post);
+      return;
+    }
 
     if (isPhotoPost) return;
 
@@ -293,6 +302,20 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
               <Play className="w-6 h-6 text-white ml-0.5 fill-white" />
             </div>
           </div>
+        )}
+
+        {/* Top-Right: Fullscreen / Immersive Expand Pill */}
+        {onExpandPost && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onExpandPost(post);
+            }}
+            className="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white flex items-center gap-1.5 text-[10px] font-semibold hover:bg-orange-500 hover:border-orange-500 transition-colors shadow-lg"
+          >
+            <Maximize2 className="w-3 h-3 text-orange-400" />
+            <span>Full View</span>
+          </button>
         )}
 
         {/* Bottom Format Badge */}

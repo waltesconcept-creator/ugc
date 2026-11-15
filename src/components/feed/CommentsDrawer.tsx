@@ -8,17 +8,19 @@ import { DEFAULT_SAMPLE_COMMENTS } from '@/lib/mock-data';
 interface CommentsDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  postCaption: string;
-  creatorUsername: string;
-  currentRole: UserRole;
+  postCaption?: string;
+  creatorUsername?: string;
+  currentRole?: UserRole;
+  postId?: string;
 }
 
 export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
   isOpen,
   onClose,
-  postCaption,
-  creatorUsername,
-  currentRole,
+  postCaption = '',
+  creatorUsername = 'creator',
+  currentRole = 'creator',
+  postId,
 }) => {
   const [comments, setComments] = useState<PostComment[]>(DEFAULT_SAMPLE_COMMENTS);
   const [inputText, setInputText] = useState('');

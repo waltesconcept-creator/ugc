@@ -13,6 +13,7 @@ import { CreatorOnboardingView } from '@/components/onboarding/CreatorOnboarding
 import { AdminDashboardView } from '@/components/admin/AdminDashboardView';
 import { NotificationsDrawer } from '@/components/notifications/NotificationsDrawer';
 import { CreatePostModal } from '@/components/create/CreatePostModal';
+import { ImmersiveMediaViewer } from '@/components/feed/ImmersiveMediaViewer';
 import {
   MOCK_POSTS,
   MOCK_CREATORS,
@@ -43,6 +44,7 @@ export default function Home() {
   const [bookingCreatorName, setBookingCreatorName] = useState<string>('');
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [expandedPost, setExpandedPost] = useState<Post | null>(null);
 
   // Live Server Database Synchronization
   useEffect(() => {
@@ -88,9 +90,9 @@ export default function Home() {
     setActiveTab('profile');
   };
 
-  // Handle selecting a post to watch from explore or portfolio
+  // Handle selecting a post to watch from explore or portfolio (opens full immersive viewer)
   const handleSelectPost = (post: Post) => {
-    setActiveTab('feed');
+    setExpandedPost(post);
   };
 
   // Handle booking request
@@ -339,6 +341,20 @@ export default function Home() {
         onPublishStory={handlePublishStory}
         currentCreator={activeCreatorProfile}
       />
+
+      {/* Immersive Media Viewer (opens uncropped from Portfolio / Explore / Search) */}
+      {expandedPost && (
+        <ImmersiveMediaViewer
+          isOpen={!!expandedPost}
+          initialPostIndex={Math.max(
+            0,
+            posts.findIndex((p) => p.id === expandedPost.id)
+          )}
+          posts={posts}
+          onClose={() => setExpandedPost(null)}
+          onOpenProfile={handleOpenProfile}
+        />
+      )}
     </div>
   );
 }

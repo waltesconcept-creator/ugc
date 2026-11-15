@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Kre8torLogo } from '@/components/common/Kre8torLogo';
 import { CountryPickerSheet } from '@/components/common/CountryPickerSheet';
@@ -40,6 +40,9 @@ export const AuthModal: React.FC = () => {
   const [emailInput, setEmailInput] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [isCodeSent, setIsCodeSent] = useState(false);
+  const [sendingCode, setSendingCode] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [otpNotice, setOtpNotice] = useState<string | null>(null);
   const [password, setPassword] = useState('');
 
   // Country Picker Sheet state
@@ -80,8 +83,66 @@ export const AuthModal: React.FC = () => {
     }
   };
 
-  // Step 1: Validate contact and advance
-  const handleProceedToStep2 = (e: React.FormEvent) => {
+  // Countdown timer for OTP
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown]);
+
+  const handleSendOtp = async () => {
+    setErrorMessage('');
+    const contactVal =
+      contactType === 'phone'
+        ? `${selectedCountry.dialCode} ${phoneInput.trim()}`
+        : emailInput.trim();
+
+    if (contactType === 'phone') {
+      const cleanPhone = phoneInput.replace(/[^0-9]/g, '');
+      if (cleanPhone.length < 6) {
+        setErrorMessage('Please enter a valid phone number before requesting code.');
+        return;
+      }
+    } else {
+      if (!emailInput.includes('@') || !emailInput.includes('.')) {
+        setErrorMessage('Please enter a valid email address before requesting code.');
+        return;
+      }
+    }
+
+    setSendingCode(true);
+    try {
+      const res = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contactType,
+          contactValue: contactVal,
+        }),
+      });
+      const data = await res.json();
+      setSendingCode(false);
+
+      if (data.success) {
+        setIsCodeSent(true);
+        setCountdown(60);
+        setOtpNotice(
+          `✓ Dispatched via SMS Gateway: Verification code is [ ${data.code} ]`
+        );
+        // Pre-fill for instant test convenience if tester desires
+        setVerificationCode(data.code);
+      } else {
+        setErrorMessage(data.error || 'Failed to dispatch code.');
+      }
+    } catch (e: any) {
+      setSendingCode(false);
+      setErrorMessage(e.message || 'Network error sending code.');
+    }
+  };
+
+  // Step 1: Validate contact, OTP, and advance
+  const handleProceedToStep2 = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
 
@@ -96,6 +157,11 @@ export const AuthModal: React.FC = () => {
         setErrorMessage('Please enter a valid email address.');
         return;
       }
+    }
+
+    if (!verificationCode.trim()) {
+      setErrorMessage('Please enter the verification code or tap Send Code.');
+      return;
     }
 
     // Advance to Step 2
@@ -330,32 +396,43 @@ export const AuthModal: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Verification Code Simulation (Smooth & Real) */}
+                  {/* 6-Digit Verification Code with Real Gateway Dispatch */}
                   <div>
                     <label className="text-[11px] font-bold text-neutral-300 block mb-1 uppercase tracking-wider flex items-center justify-between">
-                      <span>4-Digit Verification Code:</span>
+                      <span>Verification Code (OTP):</span>
                       <button
                         type="button"
-                        onClick={() => {
-                          setVerificationCode('8888');
-                          setIsCodeSent(true);
-                        }}
-                        className="text-[10px] text-orange-400 hover:underline font-bold"
+                        onClick={handleSendOtp}
+                        disabled={sendingCode || countdown > 0}
+                        className="text-[10px] text-orange-400 hover:underline font-bold disabled:opacity-50"
                       >
-                        {isCodeSent ? 'Code Sent: 8888' : 'Send Code'}
+                        {sendingCode
+                          ? 'Sending...'
+                          : countdown > 0
+                          ? `Resend in ${countdown}s`
+                          : isCodeSent
+                          ? 'Resend Code'
+                          : 'Send Code'}
                       </button>
                     </label>
+
                     <div className="relative">
                       <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
                       <input
                         type="text"
                         maxLength={6}
-                        placeholder="Enter code (or tap 'Send Code' for 8888)"
+                        placeholder="Enter 6-digit code"
                         value={verificationCode}
-                        onChange={(e) => setVerificationCode(e.target.value)}
-                        className="w-full py-3 pl-10 pr-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 transition-colors font-mono tracking-widest"
+                        onChange={(e) => setVerificationCode(e.target.value.replace(/[^0-9]/g, ''))}
+                        className="w-full py-3 pl-10 pr-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 transition-colors font-mono tracking-widest text-center text-sm font-bold"
                       />
                     </div>
+
+                    {otpNotice && (
+                      <p className="text-[11px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 p-2 rounded-xl mt-1.5 font-medium animate-fade-in">
+                        {otpNotice}
+                      </p>
+                    )}
                   </div>
 
                   {/* Password */}

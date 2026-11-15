@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import type { Profile, CreatorDetails, UserRole } from '@/lib/types';
+import type { Profile, CreatorDetails, UserRole, ServicePackage } from '@/lib/types';
 
 export interface UserAccount {
   id: string;
@@ -10,6 +10,7 @@ export interface UserAccount {
   role: 'creator' | 'business' | 'guest';
   profile: Profile;
   details?: CreatorDetails;
+  services?: ServicePackage[];
   country: string;
   categories?: string[];
   createdAt: string;
@@ -38,6 +39,15 @@ interface AuthContextType {
   closeAuth: () => void;
   login: (identifier: string) => Promise<{ success: boolean; error?: string }>;
   register: (payload: RegisterPayload) => Promise<{ success: boolean; error?: string }>;
+  updateUserProfile: (data: Partial<{
+    displayName: string;
+    bio: string;
+    location: string;
+    country: string;
+    startingPrice: number;
+    categories: string[];
+    services: ServicePackage[];
+  }>) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
 
@@ -124,6 +134,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const updateUserProfile = async (data: Partial<{
+    displayName: string;
+    bio: string;
+    location: string;
+    country: string;
+    startingPrice: number;
+    categories: string[];
+    services: ServicePackage[];
+  }>): Promise<{ success: boolean; error?: string }> => {
+    if (!currentUser) return { success: false, error: 'Not authenticated' };
+
+    try {
+      const res = await fetch('/api/profile/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: currentUser.id,
+          ...data,
+        }),
+      });
+      const resData = await res.json();
+
+      if (!res.ok || !resData.success) {
+        return { success: false, error: resData.error || 'Failed to update profile' };
+      }
+
+      setCurrentUser(resData.user);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(resData.user));
+      return { success: true };
+    } catch (e: any) {
+      return { success: false, error: e?.message || 'Network error updating profile' };
+    }
+  };
+
   const logout = () => {
     setCurrentUser(null);
     localStorage.removeItem(STORAGE_KEY);
@@ -140,6 +184,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         closeAuth,
         login,
         register,
+        updateUserProfile,
         logout,
       }}
     >

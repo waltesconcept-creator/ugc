@@ -5,6 +5,7 @@ import type { Post, Story } from '@/lib/types';
 import { StoryTray } from '@/components/stories/StoryTray';
 import { SocialPostCard } from './SocialPostCard';
 import { VideoFeed } from './VideoFeed';
+import { ImmersiveMediaViewer } from './ImmersiveMediaViewer';
 import { recommendationEngine } from '@/lib/recommendation-engine';
 import { Sparkles, Users, Flame, Clapperboard, LayoutList } from 'lucide-react';
 
@@ -35,6 +36,9 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
   // Global audio mute state shared across cards
   const [isMuted, setIsMuted] = useState(true);
   const toggleMute = useCallback(() => setIsMuted((m) => !m), []);
+
+  // Immersive Fullscreen Media Viewer state
+  const [expandedPostIndex, setExpandedPostIndex] = useState<number | null>(null);
 
   // Set of following creator IDs (default to following 4 top creators for testing)
   const [followingIds] = useState<Set<string>>(
@@ -147,7 +151,7 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
                 </button>
               </div>
             ) : (
-              displayedPosts.map((post) => (
+              displayedPosts.map((post, idx) => (
                 <SocialPostCard
                   key={post.id}
                   post={post}
@@ -155,6 +159,7 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
                   toggleMute={toggleMute}
                   onOpenProfile={onOpenProfile}
                   onNotInterested={handleNotInterested}
+                  onExpandPost={() => setExpandedPostIndex(idx)}
                 />
               ))
             )}
@@ -170,6 +175,17 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
             onOpenProfile={onOpenProfile}
           />
         </div>
+      )}
+
+      {/* ── Immersive Media Viewer (opens uncropped when any video/photo is tapped!) ── */}
+      {expandedPostIndex !== null && (
+        <ImmersiveMediaViewer
+          isOpen={expandedPostIndex !== null}
+          initialPostIndex={expandedPostIndex}
+          posts={displayedPosts}
+          onClose={() => setExpandedPostIndex(null)}
+          onOpenProfile={onOpenProfile}
+        />
       )}
     </div>
   );
