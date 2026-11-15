@@ -77,8 +77,20 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
     if (found) return found;
 
     // Check if it's the currently authenticated real user
-    if (currentUser && (currentUser.id === id || currentUser.profile.id === id)) {
-      const p = currentUser.profile;
+    if (currentUser && (currentUser.id === id || currentUser.profile?.id === id)) {
+      const p = currentUser.profile || {
+        id: currentUser.id,
+        role: currentUser.role || 'creator',
+        username: 'creator',
+        displayName: 'Creator',
+        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face',
+        bio: 'UGC Creator on KRE8TOR',
+        location: currentUser.country || '',
+        country: currentUser.country || '',
+        website: '',
+        isVerified: false,
+        createdAt: new Date().toISOString(),
+      };
       const d: CreatorDetails = currentUser.details || {
         creatorId: p.id,
         categories: currentUser.categories || ['Lifestyle'],
@@ -195,7 +207,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
             </div>
 
             {/* ── Action buttons (Own Profile vs Viewing Other Creator) ── */}
-            {currentUser && (currentUser.id === profile.id || currentUser.profile.id === profile.id) ? (
+            {currentUser && (currentUser.id === profile.id || currentUser.profile?.id === profile.id) ? (
               <div className="flex gap-2 mt-4">
                 <button
                   onClick={() => alert(`Profile settings: You are signed in as @${profile.username}. Your rates and portfolio are active.`)}

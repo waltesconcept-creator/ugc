@@ -56,12 +56,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed && parsed.id) {
+        if (parsed && parsed.id && parsed.profile && parsed.profile.displayName) {
           setCurrentUser(parsed);
+        } else {
+          // Clean up legacy or invalid session
+          localStorage.removeItem(STORAGE_KEY);
         }
       }
     } catch (e) {
       console.warn('Failed to parse saved auth session:', e);
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {}
     }
   }, []);
 

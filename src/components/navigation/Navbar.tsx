@@ -143,19 +143,19 @@ const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             {/* Real User Account Button or Sign Up Pill */}
-            {isAuthenticated && currentUser ? (
+            {isAuthenticated && currentUser && currentUser.profile ? (
               <div ref={userMenuRef} className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center gap-2 p-1 pr-2.5 rounded-full bg-neutral-900 border border-neutral-800 hover:border-orange-500 transition-colors text-xs font-semibold"
                 >
                   <img
-                    src={currentUser.profile.avatarUrl}
-                    alt={currentUser.profile.displayName}
+                    src={currentUser.profile.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face'}
+                    alt={currentUser.profile.displayName || 'User'}
                     className="w-7 h-7 rounded-full object-cover border border-orange-500/50"
                   />
                   <span className="text-white max-w-[80px] sm:max-w-[110px] truncate hidden sm:inline">
-                    {currentUser.profile.displayName}
+                    {currentUser.profile.displayName || 'My Profile'}
                   </span>
                   <ChevronDown className="w-3 h-3 text-neutral-400" />
                 </button>
@@ -163,8 +163,8 @@ const Navbar: React.FC<NavbarProps> = ({
                 {userMenuOpen && (
                   <div className="absolute right-0 top-full mt-2 w-48 bg-neutral-950 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden py-1.5 z-[60] animate-fade-in text-xs">
                     <div className="px-3 py-2 border-b border-neutral-850">
-                      <p className="font-bold text-white truncate">{currentUser.profile.displayName}</p>
-                      <p className="text-[10px] text-orange-400 truncate">@{currentUser.profile.username}</p>
+                      <p className="font-bold text-white truncate">{currentUser.profile.displayName || 'Creator'}</p>
+                      <p className="text-[10px] text-orange-400 truncate">@{currentUser.profile.username || 'user'}</p>
                     </div>
                     <button
                       onClick={() => {
