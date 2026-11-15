@@ -54,7 +54,7 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-end sm:items-center p-0 sm:p-4 animate-fade-in">
+    <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex justify-center items-end sm:items-center p-0 sm:p-4 animate-fade-in">
       <div className="w-full max-w-lg bg-neutral-900 border border-neutral-800 rounded-t-3xl sm:rounded-3xl max-h-[80vh] flex flex-col shadow-2xl text-white overflow-hidden animate-slide-up">
         
         {/* Header */}

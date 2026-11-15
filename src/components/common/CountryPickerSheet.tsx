@@ -28,7 +28,7 @@ export const CountryPickerSheet: React.FC<CountryPickerSheetProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-[120] flex items-end sm:items-center justify-center">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity"

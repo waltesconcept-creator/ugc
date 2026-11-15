@@ -232,7 +232,7 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
 
           {/* Menu Mobile Bottom Sheet Drawer */}
           {showMenu && (
-            <div className="fixed inset-0 z-50 flex items-end justify-center">
+            <div className="fixed inset-0 z-[100] flex items-end justify-center">
               {/* Dim Backdrop */}
               <div
                 className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"

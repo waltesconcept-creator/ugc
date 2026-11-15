@@ -75,7 +75,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg flex items-center justify-center animate-fade-in select-none">
+    <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-lg flex items-center justify-center animate-fade-in select-none">
       {/* Background ambient glow */}
       <div
         className="absolute inset-0 opacity-20 filter blur-3xl scale-125 pointer-events-none"

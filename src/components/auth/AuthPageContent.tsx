@@ -759,7 +759,7 @@ export const AuthPageContent: React.FC<AuthPageContentProps> = ({ initialMode = 
         isOpen={isPickerOpen}
         onClose={() => setIsPickerOpen(false)}
         onSelect={handleCountrySelected}
-        selectedCode={pickerTarget === 'dialCode' ? selectedCountry.code : locationCountry.code}
+        selectedCode={pickerTarget === 'dialCode' ? selectedCountry?.code || 'NG' : locationCountry?.code || 'NG'}
         title={pickerTarget === 'dialCode' ? 'Select Country Dial Code' : 'Select Your Country'}
       />
     </div>

@@ -299,7 +299,7 @@ const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
 
       {/* ── Revision modal ── */}
       {revisionModalId && (
-        <div className="fixed inset-0 z-[70] flex items-end lg:items-center justify-center">
+        <div className="fixed inset-0 z-[100] flex items-end lg:items-center justify-center">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setRevisionModalId(null)} />
           <div className="relative w-full lg:max-w-md lg:mx-4 bg-neutral-900 rounded-t-3xl lg:rounded-2xl border-t lg:border border-neutral-800 p-5 pb-[env(safe-area-inset-bottom)] z-10">
             <div className="flex justify-center lg:hidden mb-3">

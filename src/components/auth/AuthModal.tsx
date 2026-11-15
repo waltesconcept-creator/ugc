@@ -241,7 +241,7 @@ export const AuthModal: React.FC = () => {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4">
         {/* Backdrop */}
         <div
           className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
@@ -747,7 +747,7 @@ export const AuthModal: React.FC = () => {
         isOpen={isPickerOpen}
         onClose={() => setIsPickerOpen(false)}
         onSelect={handleCountrySelected}
-        selectedCode={pickerTarget === 'dialCode' ? selectedCountry.code : locationCountry.code}
+        selectedCode={pickerTarget === 'dialCode' ? selectedCountry?.code || 'NG' : locationCountry?.code || 'NG'}
         title={pickerTarget === 'dialCode' ? 'Select Country Dial Code' : 'Select Your Country'}
       />
     </>

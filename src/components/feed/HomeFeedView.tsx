@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useCallback } from 'react';
+import Link from 'next/link';
 import type { Post, Story } from '@/lib/types';
 import { StoryTray } from '@/components/stories/StoryTray';
 import { SocialPostCard } from './SocialPostCard';
@@ -239,27 +240,19 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
                 <div className="flex flex-wrap items-center gap-2 mt-4">
                   {!isAuthenticated ? (
                     <>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          openAuth('register');
-                        }}
+                      <Link
+                        href="/join"
                         className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-lg shadow-orange-500/25 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                       >
                         <span>Join as Creator Free</span>
                         <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          openAuth('login');
-                        }}
+                      </Link>
+                      <Link
+                        href="/login"
                         className="px-3.5 py-2 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-neutral-600 text-neutral-300 hover:text-white text-xs font-bold transition-colors cursor-pointer"
                       >
                         Sign In
-                      </button>
+                      </Link>
                     </>
                   ) : (
                     <>

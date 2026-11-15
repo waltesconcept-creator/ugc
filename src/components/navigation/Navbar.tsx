@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { UserRole } from '@/lib/types';
 import { Kre8torLogo } from '@/components/common/Kre8torLogo';
@@ -259,17 +260,13 @@ const Navbar: React.FC<NavbarProps> = ({
                 )}
               </div>
             ) : (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  openAuth('register');
-                }}
+              <Link
+                href="/join"
                 className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span>Join / Sign In</span>
-              </button>
+              </Link>
             )}
 
             {/* Role Switcher Pill */}

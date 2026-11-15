@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { Navbar } from '@/components/navigation/Navbar';
 import { HomeFeedView } from '@/components/feed/HomeFeedView';
@@ -253,26 +254,18 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex gap-2 w-full sm:w-auto">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openAuth('register');
-                    }}
+                  <Link
+                    href="/join"
                     className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all text-center cursor-pointer"
                   >
                     Sign Up Free
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openAuth('login');
-                    }}
+                  </Link>
+                  <Link
+                    href="/login"
                     className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 text-xs font-bold transition-all text-center cursor-pointer"
                   >
                     Sign In
-                  </button>
+                  </Link>
                 </div>
               </div>
             )}
