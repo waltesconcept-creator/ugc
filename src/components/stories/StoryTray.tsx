@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Plus, Sparkles } from 'lucide-react';
 import type { Story } from '@/lib/types';
 import { StoryModal } from './StoryModal';
+import { useAuth } from '@/context/AuthContext';
 
 interface StoryTrayProps {
   stories: Story[];
@@ -18,6 +19,7 @@ export const StoryTray: React.FC<StoryTrayProps> = ({
   onStartChat,
   onCreateStory,
 }) => {
+  const { currentUser } = useAuth();
   const [selectedStoryIndex, setSelectedStoryIndex] = useState<number | null>(null);
 
   return (
@@ -46,8 +48,23 @@ export const StoryTray: React.FC<StoryTrayProps> = ({
                 <span className="text-[9px] px-1 rounded bg-orange-500/20 text-orange-400 font-bold">YOU</span>
               </div>
 
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white flex items-center justify-center shadow-md shadow-orange-500/30 group-hover:scale-110 transition-transform">
-                <Plus className="w-4 h-4 stroke-[3]" />
+              <div className="relative">
+                {currentUser?.profile?.avatarUrl ? (
+                  <div className="relative">
+                    <img
+                      src={currentUser.profile.avatarUrl}
+                      alt=""
+                      className="w-8 h-8 rounded-full object-cover border border-orange-500"
+                    />
+                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-orange-500 text-white flex items-center justify-center text-[10px] font-bold shadow">
+                      +
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white flex items-center justify-center shadow-md shadow-orange-500/30 group-hover:scale-110 transition-transform">
+                    <Plus className="w-4 h-4 stroke-[3]" />
+                  </div>
+                )}
               </div>
 
               <span className="text-[10px] font-semibold text-neutral-300 group-hover:text-white text-center leading-tight">

@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import type { Post, Story, Profile } from '@/lib/types';
 import { SAMPLE_VIDEOS, MOCK_CATEGORIES, MOCK_PROFILES } from '@/lib/mock-data';
+import { useAuth } from '@/context/AuthContext';
 import {
   X,
   Upload,
@@ -14,6 +15,8 @@ import {
   Plus,
   Play,
   Bookmark,
+  FolderOpen,
+  AlertCircle,
 } from 'lucide-react';
 
 interface CreatePostModalProps {
@@ -49,47 +52,114 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   onPublishStory,
   currentCreator,
 }) => {
+  const { currentUser, openAuth } = useAuth();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [createType, setCreateType] = useState<'post' | 'story'>('post');
+  const [sourceMode, setSourceMode] = useState<'upload' | 'preset'>('upload');
   const [mediaType, setMediaType] = useState<'video' | 'photo'>('video');
+
+  // Real uploaded file state
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string>('');
+
+  // Preset fallback
   const [selectedVideoUrl, setSelectedVideoUrl] = useState(SAMPLE_VIDEOS[0]);
   const [selectedThumbnailUrl, setSelectedThumbnailUrl] = useState(SAMPLE_POST_THUMBNAILS[0]);
+
+  // Form inputs
   const [caption, setCaption] = useState('');
   const [category, setCategory] = useState(MOCK_CATEGORIES[0]?.name || 'Beauty & Skincare');
   const [contentFormat, setContentFormat] = useState(FORMAT_OPTIONS[0]);
   const [isPortfolioPinned, setIsPortfolioPinned] = useState(true);
-  const [isPublishing, setIsPublishing] = useState(false);
+
+  // Status
+  const [isUploading, setIsUploading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   if (!isOpen) return null;
 
-  const author = currentCreator || MOCK_PROFILES[0];
+  // Author priority: Logged in real user -> Passed creator -> Default seeded
+  const author: Profile = currentUser?.profile || currentCreator || MOCK_PROFILES[0];
 
-  const handlePublish = (e: React.FormEvent) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+    const isImg = file.type.startsWith('image/');
+    setMediaType(isImg ? 'photo' : 'video');
+
+    const preview = URL.createObjectURL(file);
+    setFilePreviewUrl(preview);
+    setErrorMessage('');
+  };
+
+  const handlePublish = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsPublishing(true);
+    setErrorMessage('');
+    setIsUploading(true);
 
-    setTimeout(() => {
+    try {
+      let finalMediaUrl = selectedVideoUrl;
+      let finalThumbnailUrl = selectedThumbnailUrl;
+      let detectedMediaType = mediaType;
+
+      // 1. If user uploaded a real file from phone/PC, upload it to /api/upload
+      if (sourceMode === 'upload' && selectedFile) {
+        setStatusMessage('Uploading video/picture to server...');
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok || !uploadData.success) {
+          throw new Error(uploadData.error || 'Failed to upload media file');
+        }
+
+        finalMediaUrl = uploadData.url;
+        detectedMediaType = uploadData.mediaType || mediaType;
+        // For photos, thumbnail is the photo itself; for video, default to preview or preset
+        finalThumbnailUrl = detectedMediaType === 'photo' ? uploadData.url : selectedThumbnailUrl;
+      }
+
+      setStatusMessage('Saving post to KRE8TOR network...');
+
       if (createType === 'story') {
         const newStory: Story = {
-          id: `story-${Date.now()}`,
+          id: `story-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
           creatorId: author.id,
           creatorName: author.displayName,
           creatorUsername: author.username,
           creatorAvatar: author.avatarUrl,
-          thumbnailUrl: selectedThumbnailUrl,
-          mediaUrl: selectedVideoUrl,
-          mediaType: mediaType,
-          caption: caption || 'Daily behind-the-scenes UGC update ✨',
+          thumbnailUrl: finalThumbnailUrl,
+          mediaUrl: finalMediaUrl,
+          mediaType: detectedMediaType,
+          caption: caption || 'Daily behind-the-scenes update ✨',
           hasUnseenStory: true,
           createdAt: 'Just now',
         };
+
+        // Persist to server API
+        await fetch('/api/stories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newStory),
+        }).catch((err) => console.warn('Server story sync error:', err));
+
         onPublishStory(newStory);
       } else {
         const newPost: Post = {
-          id: `post-${Date.now()}`,
+          id: `post-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
           creatorId: author.id,
           creator: author,
-          videoUrl: selectedVideoUrl,
-          thumbnailUrl: selectedThumbnailUrl,
+          videoUrl: finalMediaUrl,
+          thumbnailUrl: finalThumbnailUrl,
           caption: caption || 'Fresh UGC showcase piece produced for brand portfolio! 🔥✨ #ugccreator #ugc',
           category: category,
           contentFormat: contentFormat,
@@ -99,25 +169,37 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           savesCount: 0,
           sharesCount: 0,
           commentsCount: 0,
-          mediaType: mediaType,
+          mediaType: detectedMediaType,
           isLiked: false,
           isSaved: false,
           isPortfolioPinned: isPortfolioPinned,
           createdAt: new Date().toISOString(),
         };
+
+        // Persist to server API
+        await fetch('/api/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newPost),
+        }).catch((err) => console.warn('Server post sync error:', err));
+
         onPublishPost(newPost);
       }
 
-      setIsPublishing(false);
+      setIsUploading(false);
       onClose();
-    }, 600);
+    } catch (err: any) {
+      console.error('Publishing failed:', err);
+      setErrorMessage(err?.message || 'Failed to publish. Please try again.');
+      setIsUploading(false);
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
         onClick={onClose}
       />
 
@@ -125,19 +207,21 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
       <div className="relative w-full max-w-lg bg-neutral-950 border border-neutral-800 rounded-3xl shadow-2xl overflow-hidden z-10 max-h-[92vh] flex flex-col animate-fade-in">
         {/* Header */}
         <div className="p-4 border-b border-neutral-850 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 flex items-center justify-center text-white">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-md shadow-orange-500/30">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white">Create New Content</h2>
-              <p className="text-[11px] text-neutral-400">Publish to discovery feed & creator portfolio</p>
+              <h2 className="text-base font-bold text-white">Create & Upload Content</h2>
+              <p className="text-[11px] text-neutral-400">
+                Publishing as <span className="text-orange-400 font-bold">@{author.username}</span>
+              </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-neutral-900 text-neutral-400 hover:text-white flex items-center justify-center"
+            className="w-8 h-8 rounded-full bg-neutral-900 text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -145,6 +229,13 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
         {/* Content Body */}
         <form onSubmit={handlePublish} className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
+          {errorMessage && (
+            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
           {/* Post vs Story Selector */}
           <div className="grid grid-cols-2 gap-2 bg-neutral-900 p-1 rounded-2xl border border-neutral-800">
             <button
@@ -173,88 +264,160 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             </button>
           </div>
 
-          {/* Media Format Picker (Video vs High-Res Photo) */}
-          <div>
-            <label className="text-xs font-semibold text-neutral-300 block mb-1.5">
-              Select Media Format:
-            </label>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setMediaType('video')}
-                className={`flex-1 py-2 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-                  mediaType === 'video'
-                    ? 'border-orange-500 bg-orange-500/10 text-orange-400'
-                    : 'border-neutral-800 bg-neutral-900 text-neutral-400'
-                }`}
-              >
-                <Video className="w-3.5 h-3.5" />
-                <span>9:16 Video Clip</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setMediaType('photo')}
-                className={`flex-1 py-2 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-                  mediaType === 'photo'
-                    ? 'border-orange-500 bg-orange-500/10 text-orange-400'
-                    : 'border-neutral-800 bg-neutral-900 text-neutral-400'
-                }`}
-              >
-                <Camera className="w-3.5 h-3.5" />
-                <span>Photo Showcase</span>
-              </button>
-            </div>
+          {/* Source Picker: Phone/PC Upload vs Preset Library */}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setSourceMode('upload')}
+              className={`p-2.5 rounded-2xl border text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+                sourceMode === 'upload'
+                  ? 'border-orange-500 bg-orange-500/15 text-orange-400'
+                  : 'border-neutral-800 bg-neutral-900 text-neutral-400 hover:border-neutral-700'
+              }`}
+            >
+              <Upload className="w-4 h-4" />
+              <span>Upload Video / Photo</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSourceMode('preset')}
+              className={`p-2.5 rounded-2xl border text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+                sourceMode === 'preset'
+                  ? 'border-orange-500 bg-orange-500/15 text-orange-400'
+                  : 'border-neutral-800 bg-neutral-900 text-neutral-400 hover:border-neutral-700'
+              }`}
+            >
+              <FolderOpen className="w-4 h-4" />
+              <span>UGC Presets</span>
+            </button>
           </div>
 
-          {/* Media Preview & Sample Selector */}
-          <div>
-            <label className="text-xs font-semibold text-neutral-300 block mb-1.5">
-              Choose Sample Footage / Clip:
-            </label>
-            <div className="grid grid-cols-3 gap-2">
-              {SAMPLE_POST_THUMBNAILS.slice(0, 3).map((thumb, idx) => (
+          {/* 1. Real Upload Mode */}
+          {sourceMode === 'upload' && (
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="video/*,image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+
+              {!selectedFile ? (
                 <div
-                  key={thumb}
-                  onClick={() => {
-                    setSelectedThumbnailUrl(thumb);
-                    setSelectedVideoUrl(SAMPLE_VIDEOS[idx % SAMPLE_VIDEOS.length]);
-                  }}
-                  className={`relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer border-2 transition-all ${
-                    selectedThumbnailUrl === thumb
-                      ? 'border-orange-500 scale-[1.02] shadow-lg shadow-orange-500/30'
-                      : 'border-neutral-800 opacity-70 hover:opacity-100'
-                  }`}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full py-8 border-2 border-dashed border-neutral-700 hover:border-orange-500 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all bg-neutral-900/60 group"
                 >
-                  <img src={thumb} alt="" className="w-full h-full object-cover" />
-                  {selectedThumbnailUrl === thumb && (
-                    <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center">
-                      <Check className="w-3 h-3 stroke-[3]" />
-                    </div>
-                  )}
+                  <div className="w-12 h-12 rounded-full bg-neutral-800 group-hover:bg-orange-500/20 group-hover:text-orange-400 text-neutral-400 flex items-center justify-center transition-colors mb-2">
+                    <Upload className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs font-bold text-white group-hover:text-orange-400">
+                    Tap to select video or picture from your phone
+                  </span>
+                  <span className="text-[10px] text-neutral-500 mt-1">
+                    Supports MP4, MOV, WebM, JPEG, PNG, WebP
+                  </span>
                 </div>
-              ))}
+              ) : (
+                <div className="relative rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800 p-3">
+                  <div className="flex items-center gap-3">
+                    {/* Media Thumbnail / Video Preview */}
+                    <div className="w-16 h-20 rounded-xl bg-black overflow-hidden relative shrink-0">
+                      {mediaType === 'video' ? (
+                        <video
+                          src={filePreviewUrl}
+                          className="w-full h-full object-cover"
+                          muted
+                          playsInline
+                        />
+                      ) : (
+                        <img
+                          src={filePreviewUrl}
+                          alt="preview"
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 text-[10px] font-bold uppercase">
+                          {mediaType}
+                        </span>
+                        <span className="text-[11px] text-neutral-400 truncate">
+                          {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
+                        </span>
+                      </div>
+                      <p className="text-xs font-bold text-white truncate">{selectedFile.name}</p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedFile(null);
+                          setFilePreviewUrl('');
+                        }}
+                        className="text-[11px] text-orange-400 hover:underline mt-1 font-semibold block"
+                      >
+                        Change file
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
+          )}
+
+          {/* 2. Preset Library Mode */}
+          {sourceMode === 'preset' && (
+            <div>
+              <label className="text-[11px] font-bold text-neutral-400 block mb-1.5 uppercase tracking-wider">
+                Select Creative Footage Preset:
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {SAMPLE_POST_THUMBNAILS.slice(0, 3).map((thumb, idx) => (
+                  <div
+                    key={thumb}
+                    onClick={() => {
+                      setSelectedThumbnailUrl(thumb);
+                      setSelectedVideoUrl(SAMPLE_VIDEOS[idx % SAMPLE_VIDEOS.length]);
+                    }}
+                    className={`relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer border-2 transition-all ${
+                      selectedThumbnailUrl === thumb
+                        ? 'border-orange-500 scale-[1.02] shadow-lg shadow-orange-500/30'
+                        : 'border-neutral-800 opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <img src={thumb} alt="" className="w-full h-full object-cover" />
+                    {selectedThumbnailUrl === thumb && (
+                      <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center">
+                        <Check className="w-3 h-3 stroke-[3]" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Caption Field */}
           <div>
-            <label className="text-xs font-semibold text-neutral-300 block mb-1.5">
-              Caption & Hashtags:
+            <label className="text-[11px] font-bold text-neutral-400 block mb-1.5 uppercase tracking-wider">
+              Caption & Creative Hook:
             </label>
             <textarea
               rows={3}
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              placeholder="Describe your UGC piece, hook, product featured, and creative angle..."
+              placeholder="Tell brands what makes this UGC piece convert (hook, angle, product problem & solution)..."
               className="w-full p-3 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 transition-colors"
             />
           </div>
 
-          {/* Category & Content Format (Post only) */}
+          {/* Category & Format (Post Only) */}
           {createType === 'post' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-semibold text-neutral-300 block mb-1.5">
+                <label className="text-[11px] font-bold text-neutral-400 block mb-1.5 uppercase tracking-wider">
                   Content Category:
                 </label>
                 <select
@@ -271,8 +434,8 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-neutral-300 block mb-1.5">
-                  Format Type:
+                <label className="text-[11px] font-bold text-neutral-400 block mb-1.5 uppercase tracking-wider">
+                  UGC Format:
                 </label>
                 <select
                   value={contentFormat}
@@ -304,24 +467,28 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               </div>
               <div className="text-xs">
                 <span className="font-bold text-white block">Pin to Creator Portfolio & Rates</span>
-                <span className="text-[11px] text-neutral-400">Showcase this piece to brands viewing your rate cards</span>
+                <span className="text-[11px] text-neutral-400">
+                  Feature this on your profile when brands view your service rate card
+                </span>
               </div>
             </div>
           )}
 
-          {/* Submit CTA */}
+          {/* Submit Button */}
           <div className="pt-2">
             <button
               type="submit"
-              disabled={isPublishing}
-              className="w-full py-3 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white font-bold text-sm shadow-lg shadow-orange-500/25 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              disabled={isUploading || (sourceMode === 'upload' && !selectedFile)}
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white font-extrabold text-sm shadow-lg shadow-orange-500/30 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >
-              {isPublishing ? (
-                <span>Publishing to Network...</span>
+              {isUploading ? (
+                <span>{statusMessage || 'Publishing to KRE8TOR...'}</span>
               ) : (
                 <>
                   <Upload className="w-4 h-4" />
-                  <span>Publish {createType === 'post' ? 'UGC Post' : 'Creator Story'}</span>
+                  <span>
+                    Publish {createType === 'post' ? 'UGC Feed Reel' : 'Creator Story'}
+                  </span>
                 </>
               )}
             </button>

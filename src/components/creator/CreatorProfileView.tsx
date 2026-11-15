@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import type { Post, ServicePackage, Profile, CreatorDetails, Review } from '@/lib/types';
 import { MOCK_CREATORS, MOCK_POSTS } from '@/lib/mock-data';
+import { useAuth } from '@/context/AuthContext';
 import {
   BadgeCheck,
   MapPin,
@@ -30,6 +31,7 @@ import {
 
 interface CreatorProfileViewProps {
   creatorId?: string;
+  posts?: Post[];
   onSelectPost: (post: Post) => void;
   onBookService: (service: ServicePackage, creatorId: string) => void;
   onStartChat: (creatorId: string) => void;
@@ -58,22 +60,67 @@ const StarRating: React.FC<{ rating: number; size?: string }> = ({ rating, size 
 
 const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
   creatorId,
+  posts,
   onSelectPost,
   onBookService,
   onStartChat,
 }) => {
+  const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState<'portfolio' | 'services' | 'reviews'>('portfolio');
   const [isFollowing, setIsFollowing] = useState(false);
 
   const creatorData = useMemo(() => {
-    const id = creatorId || MOCK_CREATORS[0]?.profile.id || '';
-    return MOCK_CREATORS.find((c) => c.profile.id === id) || MOCK_CREATORS[0];
-  }, [creatorId]);
+    const id = creatorId || currentUser?.id || MOCK_CREATORS[0]?.profile.id || '';
+    const found = MOCK_CREATORS.find((c) => c.profile.id === id);
+    if (found) return found;
 
+    // Check if it's the currently authenticated real user
+    if (currentUser && (currentUser.id === id || currentUser.profile.id === id)) {
+      const p = currentUser.profile;
+      const d: CreatorDetails = currentUser.details || {
+        creatorId: p.id,
+        categories: currentUser.categories || ['Lifestyle'],
+        contentFormats: ['UGC Ad', 'Product Review', 'Unboxing'],
+        languages: ['English'],
+        ratingAvg: 5.0,
+        ratingCount: 1,
+        completedProjectsCount: 0,
+        onTimeDeliveryRate: 100,
+        repeatBookingRate: 0,
+        qualityScore: 5.0,
+        communicationScore: 5.0,
+        timelinessScore: 5.0,
+        verifiedTransactionsCount: 0,
+        isAvailable: true,
+        startingPriceCents: 4500,
+        totalSocialViews: 1200,
+      };
+      const s: ServicePackage[] = [
+        {
+          id: `srv-${p.id}-1`,
+          creatorId: p.id,
+          title: '30s UGC TikTok / Instagram Reel',
+          description:
+            'Authentic organic short-form UGC video designed to stop scrolling, build credibility, and convert viewers.',
+          priceCents: d.startingPriceCents || 4500,
+          currency: 'USD',
+          deliveryDays: 3,
+          revisionsAllowed: 1,
+          formatTag: 'UGC Video',
+          isActive: true,
+        },
+      ];
+      return { profile: p, details: d, services: s, reviews: [] };
+    }
+
+    return MOCK_CREATORS[0];
+  }, [creatorId, currentUser]);
+
+  const allPosts = posts || MOCK_POSTS;
   const creatorPosts = useMemo(() => {
     if (!creatorData) return [];
-    return MOCK_POSTS.filter((p) => p.creatorId === creatorData.profile.id);
-  }, [creatorData]);
+    return allPosts.filter((p) => p.creatorId === creatorData.profile.id);
+  }, [creatorData, allPosts]);
 
   if (!creatorData) {
     return (

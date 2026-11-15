@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
+import { AuthModal } from "@/components/auth/AuthModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,14 +24,14 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Antigravity — Creator Discovery & UGC Content Network",
+  title: "KRE8TOR — Global UGC Creator Social Network",
   description:
-    "Discover talented UGC creators through their content. Watch, explore, and hire creative talent for your brand. A social-first platform where content drives discovery.",
+    "Discover world-class UGC creators through authentic content. Watch, explore, and hire creators globally on KRE8TOR.",
   icons: { icon: "/favicon.ico" },
   openGraph: {
-    title: "Antigravity — Creator Discovery & UGC Content Network",
+    title: "KRE8TOR — Global UGC Creator Social Network",
     description:
-      "Watch authentic UGC content. Discover and hire talented short-form video creators for your brand.",
+      "Watch authentic short-form UGC videos. Discover, follow, and hire creators worldwide on KRE8TOR.",
     type: "website",
   },
 };
@@ -45,8 +47,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-neutral-950 text-white overscroll-none">
-        {children}
+        <AuthProvider>
+          {children}
+          <AuthModal />
+        </AuthProvider>
       </body>
     </html>
   );
 }
+

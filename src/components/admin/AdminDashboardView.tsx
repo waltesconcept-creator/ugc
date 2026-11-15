@@ -48,7 +48,7 @@ export const AdminDashboardView: React.FC = () => {
               Secure Administrative Suite
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-              Antigravity Control Center
+              KRE8TOR Control Center
             </h1>
           </div>
 
