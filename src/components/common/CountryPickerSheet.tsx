@@ -82,9 +82,10 @@ export const CountryPickerSheet: React.FC<CountryPickerSheetProps> = ({
             </div>
           ) : (
             filteredCountries.map((c) => {
+              const safeSelected = (selectedCode || 'NG').toLowerCase();
               const isSelected =
-                c.code.toLowerCase() === selectedCode.toLowerCase() ||
-                c.name.toLowerCase() === selectedCode.toLowerCase() ||
+                (c.code && c.code.toLowerCase() === safeSelected) ||
+                (c.name && c.name.toLowerCase() === safeSelected) ||
                 c.dialCode === selectedCode;
               return (
                 <button

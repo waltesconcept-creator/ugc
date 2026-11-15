@@ -254,14 +254,22 @@ export default function Home() {
                 </div>
                 <div className="flex gap-2 w-full sm:w-auto">
                   <button
-                    onClick={() => openAuth('register')}
-                    className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all text-center"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openAuth('register');
+                    }}
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all text-center cursor-pointer"
                   >
                     Sign Up Free
                   </button>
                   <button
-                    onClick={() => openAuth('login')}
-                    className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 text-xs font-bold transition-all text-center"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openAuth('login');
+                    }}
+                    className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 text-xs font-bold transition-all text-center cursor-pointer"
                   >
                     Sign In
                   </button>

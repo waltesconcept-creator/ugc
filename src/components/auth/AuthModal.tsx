@@ -66,6 +66,15 @@ export const AuthModal: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // Sync mode with authModalMode whenever it opens
+  useEffect(() => {
+    if (authModalMode) {
+      setMode(authModalMode);
+      setStep(1);
+      setErrorMessage('');
+    }
+  }, [authModalMode, isAuthModalOpen]);
+
   if (!isAuthModalOpen) return null;
 
   const toggleCategory = (catName: string) => {

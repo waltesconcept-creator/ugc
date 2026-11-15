@@ -240,15 +240,23 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
                   {!isAuthenticated ? (
                     <>
                       <button
-                        onClick={() => openAuth('register')}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-lg shadow-orange-500/25 hover:scale-105 active:scale-95 transition-all"
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openAuth('register');
+                        }}
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-lg shadow-orange-500/25 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                       >
                         <span>Join as Creator Free</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                       <button
-                        onClick={() => openAuth('login')}
-                        className="px-3.5 py-2 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-neutral-600 text-neutral-300 hover:text-white text-xs font-bold transition-colors"
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openAuth('login');
+                        }}
+                        className="px-3.5 py-2 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-neutral-600 text-neutral-300 hover:text-white text-xs font-bold transition-colors cursor-pointer"
                       >
                         Sign In
                       </button>
