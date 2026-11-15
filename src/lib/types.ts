@@ -30,6 +30,11 @@ export interface CreatorDetails {
   ratingCount: number;
   completedProjectsCount: number;
   onTimeDeliveryRate: number;
+  repeatBookingRate?: number;
+  qualityScore?: number;
+  communicationScore?: number;
+  timelinessScore?: number;
+  verifiedTransactionsCount?: number;
   isAvailable: boolean;
   startingPriceCents: number;
 }
@@ -195,3 +200,40 @@ export interface Category {
   description: string;
   videoCount: number;
 }
+
+export type NotificationType = 'like' | 'comment' | 'booking' | 'follow' | 'deliverable' | 'system';
+
+export interface AppNotification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  actorName: string;
+  actorAvatar: string;
+  targetTab?: string;
+  creatorId?: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export type InteractionSignalType =
+  | 'watch_start'
+  | 'watch_complete'
+  | 'replay'
+  | 'like'
+  | 'save'
+  | 'share'
+  | 'comment'
+  | 'profile_visit'
+  | 'skip_fast'
+  | 'not_interested';
+
+export interface UserInteraction {
+  postId: string;
+  creatorId: string;
+  category: string;
+  signal: InteractionSignalType;
+  watchDurationSeconds?: number;
+  timestamp: number;
+}
+

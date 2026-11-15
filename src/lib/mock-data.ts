@@ -12,6 +12,7 @@ import type {
   UserRole,
   Story,
   PostComment,
+  AppNotification,
 } from './types';
 
 // ---------------------------------------------------------------------------
@@ -1903,18 +1904,31 @@ export interface MockCreatorItem {
   reviews: Review[];
 }
 
-export const MOCK_CREATORS: MockCreatorItem[] = MOCK_PROFILES.map((profile) => {
-  const details = MOCK_CREATOR_DETAILS.find((d) => d.creatorId === profile.id) || {
+export const MOCK_CREATORS: MockCreatorItem[] = MOCK_PROFILES.map((profile, idx) => {
+  const rawDetails = MOCK_CREATOR_DETAILS.find((d) => d.creatorId === profile.id);
+  const details: CreatorDetails = {
     creatorId: profile.id,
-    categories: ['Lifestyle'],
-    contentFormats: ['Product Review'],
-    languages: ['English'],
-    ratingAvg: 4.9,
-    ratingCount: 15,
-    completedProjectsCount: 18,
-    onTimeDeliveryRate: 98,
-    isAvailable: true,
-    startingPriceCents: 4500,
+    categories: rawDetails?.categories || ['Lifestyle', 'Beauty & Skincare'],
+    contentFormats: rawDetails?.contentFormats || ['UGC Ad', 'Product Review'],
+    languages: rawDetails?.languages || ['English'],
+    ratingAvg: rawDetails?.ratingAvg || 4.9,
+    ratingCount: rawDetails?.ratingCount || 18,
+    completedProjectsCount: rawDetails?.completedProjectsCount || 24,
+    onTimeDeliveryRate: rawDetails?.onTimeDeliveryRate || 98,
+    repeatBookingRate: 36 + ((idx * 7) % 28),
+    qualityScore: 4.8 + ((idx % 3) === 0 ? 0.2 : 0.1),
+    communicationScore: 4.7 + ((idx % 2) === 0 ? 0.3 : 0.2),
+    timelinessScore: 4.9,
+    verifiedTransactionsCount: rawDetails?.completedProjectsCount || 24,
+    isAvailable: rawDetails?.isAvailable ?? true,
+    startingPriceCents: rawDetails?.startingPriceCents || 4500,
+    instagramHandle: rawDetails?.instagramHandle,
+    instagramFollowers: rawDetails?.instagramFollowers,
+    tiktokHandle: rawDetails?.tiktokHandle,
+    tiktokFollowers: rawDetails?.tiktokFollowers,
+    youtubeHandle: rawDetails?.youtubeHandle,
+    youtubeSubscribers: rawDetails?.youtubeSubscribers,
+    totalSocialViews: rawDetails?.totalSocialViews,
   };
   const services = MOCK_SERVICES.filter((s) => s.creatorId === profile.id);
   const reviews = MOCK_REVIEWS.filter((r) => {
@@ -2076,5 +2090,68 @@ export const DEFAULT_SAMPLE_COMMENTS: PostComment[] = [
     likesCount: 5,
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Notifications (Likes, Comments, Bookings, Deliverables, Follows)
+// ---------------------------------------------------------------------------
+export const MOCK_NOTIFICATIONS: AppNotification[] = [
+  {
+    id: 'notif-1',
+    type: 'booking',
+    title: 'New Booking Offer Received',
+    message: 'GlowSkin Organics offered $450 for a 30s Glow Serum UGC Ad',
+    actorName: 'GlowSkin Organics',
+    actorAvatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&h=120&fit=crop',
+    targetTab: 'projects',
+    isRead: false,
+    createdAt: '10m ago',
+  },
+  {
+    id: 'notif-2',
+    type: 'like',
+    title: 'Video Trending',
+    message: 'Marcus Chen and 142 others liked your Autumn Trench Coat video',
+    actorName: 'Marcus Chen',
+    actorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face',
+    targetTab: 'feed',
+    isRead: false,
+    createdAt: '45m ago',
+  },
+  {
+    id: 'notif-3',
+    type: 'comment',
+    title: 'New Business Comment',
+    message: 'TechPulse Media: "Outstanding pacing on this review. DMing you!"',
+    actorName: 'TechPulse Media',
+    actorAvatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&h=120&fit=crop',
+    targetTab: 'messages',
+    isRead: true,
+    createdAt: '2h ago',
+  },
+  {
+    id: 'notif-4',
+    type: 'deliverable',
+    title: 'Deliverable Approved & Paid',
+    message: 'FitPulse Smart Watch team accepted Draft v1. Funds released!',
+    actorName: 'FitPulse Gear',
+    actorAvatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=120&h=120&fit=crop',
+    targetTab: 'projects',
+    isRead: true,
+    createdAt: '1d ago',
+  },
+  {
+    id: 'notif-5',
+    type: 'follow',
+    title: 'New Creator Follower',
+    message: 'Elena Rostova started following your UGC portfolio',
+    actorName: 'Elena Rostova',
+    actorAvatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&h=120&fit=crop&crop=face',
+    targetTab: 'profile',
+    creatorId: 'creator-3',
+    isRead: true,
+    createdAt: '2d ago',
+  },
+];
+
 
 

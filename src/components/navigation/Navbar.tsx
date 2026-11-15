@@ -22,6 +22,8 @@ interface NavbarProps {
   currentRole: UserRole;
   setCurrentRole: (role: UserRole) => void;
   unreadCount?: number;
+  onOpenNotifications?: () => void;
+  onOpenCreate?: () => void;
 }
 
 const ROLE_OPTIONS: { value: UserRole; label: string; icon: React.ReactNode }[] = [
@@ -54,6 +56,8 @@ const Navbar: React.FC<NavbarProps> = ({
   currentRole,
   setCurrentRole,
   unreadCount = 1,
+  onOpenNotifications,
+  onOpenCreate,
 }) => {
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -120,12 +124,13 @@ const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Right Side Actions: Role Switcher & Create CTA */}
-          <div className="flex items-center gap-2.5">
-            {/* Notification bell (mobile) */}
+          {/* Right Side Actions: Role Switcher, Notifications & Create CTA */}
+          <div className="flex items-center gap-2 sm:gap-2.5">
+            {/* Notification bell (Mobile + Desktop) */}
             <button
-              onClick={() => setActiveTab('messages')}
-              className="lg:hidden relative flex items-center justify-center w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white transition-colors"
+              onClick={() => onOpenNotifications ? onOpenNotifications() : setActiveTab('messages')}
+              title="Notifications"
+              className="relative flex items-center justify-center w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors"
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
@@ -177,13 +182,13 @@ const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            {/* Join as Creator CTA (desktop) */}
+            {/* Create UGC Post CTA (desktop) */}
             <button
-              onClick={() => setActiveTab('create')}
+              onClick={() => onOpenCreate ? onOpenCreate() : setActiveTab('create')}
               className="hidden lg:flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/25 hover:from-orange-600 hover:to-amber-600 transition-all hover:scale-105 active:scale-95"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              Join as Creator
+              <span>Create Post</span>
             </button>
           </div>
         </div>
@@ -201,7 +206,7 @@ const Navbar: React.FC<NavbarProps> = ({
             return (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
+                onClick={() => (isCreate && onOpenCreate ? onOpenCreate() : setActiveTab(tab.key))}
                 className={`relative flex flex-col items-center justify-center min-w-[48px] min-h-[48px] rounded-2xl transition-all duration-200 ${
                   isCreate
                     ? ''

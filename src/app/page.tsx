@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import { Navbar } from '@/components/navigation/Navbar';
-import { VideoFeed } from '@/components/feed/VideoFeed';
-import { StoryTray } from '@/components/stories/StoryTray';
+import { HomeFeedView } from '@/components/feed/HomeFeedView';
 import { ExploreView } from '@/components/explore/ExploreView';
 import { CreatorProfileView } from '@/components/creator/CreatorProfileView';
 import { BookingModal } from '@/components/booking/BookingModal';
@@ -11,22 +10,38 @@ import { ProjectDashboard } from '@/components/booking/ProjectDashboard';
 import { ChatView } from '@/components/messaging/ChatView';
 import { CreatorOnboardingView } from '@/components/onboarding/CreatorOnboardingView';
 import { AdminDashboardView } from '@/components/admin/AdminDashboardView';
-import { MOCK_POSTS, MOCK_CREATORS, MOCK_BOOKINGS, MOCK_STORIES } from '@/lib/mock-data';
-import { Post, ServicePackage, Booking, UserRole } from '@/lib/types';
-import { Users, ChevronDown } from 'lucide-react';
+import { NotificationsDrawer } from '@/components/notifications/NotificationsDrawer';
+import { CreatePostModal } from '@/components/create/CreatePostModal';
+import {
+  MOCK_POSTS,
+  MOCK_CREATORS,
+  MOCK_BOOKINGS,
+  MOCK_STORIES,
+  MOCK_NOTIFICATIONS,
+  MOCK_PROFILES,
+} from '@/lib/mock-data';
+import { Post, Story, ServicePackage, Booking, UserRole, AppNotification } from '@/lib/types';
+import { Users, Sparkles } from 'lucide-react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<string>('feed');
   const [currentRole, setCurrentRole] = useState<UserRole>('guest');
   const [selectedCreatorId, setSelectedCreatorId] = useState<string>('creator-1');
-  
-  // Bookings state
-  const [bookings, setBookings] = useState<Booking[]>(MOCK_BOOKINGS);
 
-  // Booking modal state
+  // Dynamic Content State
+  const [posts, setPosts] = useState<Post[]>(MOCK_POSTS);
+  const [stories, setStories] = useState<Story[]>(MOCK_STORIES);
+  const [bookings, setBookings] = useState<Booking[]>(MOCK_BOOKINGS);
+  const [notifications, setNotifications] = useState<AppNotification[]>(MOCK_NOTIFICATIONS);
+
+  // Modals & Drawers
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<ServicePackage | null>(null);
   const [bookingCreatorName, setBookingCreatorName] = useState<string>('');
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const unreadNotificationsCount = notifications.filter((n) => !n.isRead).length;
 
   // Handle open creator profile
   const handleOpenProfile = (creatorId: string) => {
@@ -43,7 +58,7 @@ export default function Home() {
   // Handle booking request
   const handleBookService = (service: ServicePackage, creatorId: string) => {
     setSelectedService(service);
-    const creator = MOCK_CREATORS.find((c: (typeof MOCK_CREATORS)[number]) => c.profile.id === creatorId);
+    const creator = MOCK_CREATORS.find((c) => c.profile.id === creatorId);
     setBookingCreatorName(creator?.profile.displayName || 'Creator');
     setIsBookingModalOpen(true);
   };
@@ -51,6 +66,19 @@ export default function Home() {
   // Confirm new booking
   const handleConfirmBooking = (newBooking: Booking) => {
     setBookings((prev) => [newBooking, ...prev]);
+    // Also push a notification
+    const bookingNotif: AppNotification = {
+      id: `notif-${Date.now()}`,
+      type: 'booking',
+      title: 'Booking Confirmed',
+      message: `Project initiated for "${newBooking.briefTitle}" with ${newBooking.creatorName}`,
+      actorName: newBooking.creatorName,
+      actorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop',
+      targetTab: 'projects',
+      isRead: false,
+      createdAt: 'Just now',
+    };
+    setNotifications((prev) => [bookingNotif, ...prev]);
     setActiveTab('projects');
   };
 
@@ -74,38 +102,59 @@ export default function Home() {
     );
   };
 
+  // Publishing new content
+  const handlePublishPost = (newPost: Post) => {
+    setPosts((prev) => [newPost, ...prev]);
+    setActiveTab('feed');
+  };
+
+  const handlePublishStory = (newStory: Story) => {
+    setStories((prev) => [newStory, ...prev]);
+    setActiveTab('feed');
+  };
+
+  // Notifications handlers
+  const handleSelectNotification = (notif: AppNotification) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === notif.id ? { ...n, isRead: true } : n))
+    );
+    if (notif.targetTab) {
+      if (notif.creatorId) setSelectedCreatorId(notif.creatorId);
+      setActiveTab(notif.targetTab);
+    }
+  };
+
+  const handleMarkAllRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+  };
+
+  const activeCreatorProfile =
+    MOCK_PROFILES.find((p) => p.id === selectedCreatorId) || MOCK_PROFILES[0];
+
   return (
     <div className="min-h-screen bg-neutral-950 text-white flex flex-col font-sans select-none selection:bg-orange-500 selection:text-white">
-      {/* Top Navigation Bar with Role Simulator */}
+      {/* Top Navigation Bar with Role Simulator & Notifications */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         currentRole={currentRole}
         setCurrentRole={setCurrentRole}
-        unreadCount={1}
+        unreadCount={unreadNotificationsCount}
+        onOpenNotifications={() => setIsNotificationsOpen(true)}
+        onOpenCreate={() => setIsCreateModalOpen(true)}
       />
 
       {/* Main Screen Router */}
       <main className="flex-1 w-full flex flex-col">
-        {/* Tab: Feed (with Curved Box Stories Tray at top!) */}
+        {/* Tab: Feed (Integrated HomeFeedView with Natural-Scroll Stories & Dual-Modes) */}
         {activeTab === 'feed' && (
-          <div className="flex-1 flex flex-col w-full">
-            {/* Curved Box Story Carousel */}
-            <StoryTray
-              stories={MOCK_STORIES}
-              onOpenProfile={handleOpenProfile}
-              onStartChat={handleStartChat}
-              onCreateStory={() => setActiveTab('create')}
-            />
-
-            {/* Vertical Video Reel Player */}
-            <div className="flex-1 w-full">
-              <VideoFeed
-                posts={MOCK_POSTS}
-                onOpenProfile={handleOpenProfile}
-              />
-            </div>
-          </div>
+          <HomeFeedView
+            posts={posts}
+            stories={stories}
+            onOpenProfile={handleOpenProfile}
+            onStartChat={handleStartChat}
+            onCreateStory={() => setIsCreateModalOpen(true)}
+          />
         )}
 
         {/* Tab: Explore */}
@@ -119,11 +168,11 @@ export default function Home() {
         {/* Tab: Profile (matches both 'profile' and 'creator_profile') */}
         {(activeTab === 'profile' || activeTab === 'creator_profile') && (
           <div className="flex-1 flex flex-col w-full">
-            {/* Quick Creator Account Switcher Bar (allows testing all 16 creators!) */}
-            <div className="w-full bg-neutral-900/70 border-b border-neutral-800 px-4 py-2 flex items-center justify-between text-xs">
+            {/* Quick Creator Account Switcher Bar (allows testing all 16 international creators!) */}
+            <div className="w-full bg-neutral-900/80 border-b border-neutral-800 px-3 sm:px-6 py-2 flex items-center justify-between text-xs sticky top-14 z-20 backdrop-blur-md">
               <div className="flex items-center gap-2">
                 <Users className="w-3.5 h-3.5 text-orange-400" />
-                <span className="text-neutral-400 font-medium hidden sm:inline">Viewing Creator:</span>
+                <span className="text-neutral-400 font-medium hidden sm:inline">Inspect Creator:</span>
                 <select
                   value={selectedCreatorId}
                   onChange={(e) => setSelectedCreatorId(e.target.value)}
@@ -137,9 +186,18 @@ export default function Home() {
                 </select>
               </div>
 
-              <span className="text-[11px] text-orange-400 font-semibold">
-                16 Creator Profiles Loaded
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] text-orange-400 font-bold hidden sm:inline">
+                  16 Profiles & Rate Cards Loaded
+                </span>
+                <button
+                  onClick={() => setIsCreateModalOpen(true)}
+                  className="px-2.5 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-[11px] font-bold hover:bg-orange-500 hover:text-white transition-all flex items-center gap-1"
+                >
+                  <Sparkles className="w-3 h-3" />
+                  <span>Post as {activeCreatorProfile.displayName.split(' ')[0]}</span>
+                </button>
+              </div>
             </div>
 
             {/* Profile View Component */}
@@ -195,6 +253,24 @@ export default function Home() {
           onConfirmBooking={handleConfirmBooking}
         />
       )}
+
+      {/* Slide-Over / Slide-Up Notifications Drawer */}
+      <NotificationsDrawer
+        isOpen={isNotificationsOpen}
+        onClose={() => setIsNotificationsOpen(false)}
+        notifications={notifications}
+        onSelectNotification={handleSelectNotification}
+        onMarkAllRead={handleMarkAllRead}
+      />
+
+      {/* Quick Create Post / Story Modal */}
+      <CreatePostModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onPublishPost={handlePublishPost}
+        onPublishStory={handlePublishStory}
+        currentCreator={activeCreatorProfile}
+      />
     </div>
   );
 }
