@@ -27,6 +27,8 @@ import {
   Share2,
   DollarSign,
   TrendingUp,
+  Edit3,
+  Upload,
 } from 'lucide-react';
 
 interface CreatorProfileViewProps {
@@ -192,34 +194,56 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
               ))}
             </div>
 
-            {/* ── Action buttons ── */}
-            <div className="flex gap-2 mt-4">
-              <button
-                onClick={() => setIsFollowing(!isFollowing)}
-                className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold min-h-[44px] transition-all ${
-                  isFollowing
-                    ? 'bg-neutral-800 text-white border border-neutral-700'
-                    : 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20'
-                }`}
-              >
-                <UserPlus className="w-4 h-4" />
-                {isFollowing ? 'Following' : 'Follow'}
-              </button>
-              <button
-                onClick={() => onStartChat(profile.id)}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-neutral-800 text-white border border-neutral-700 hover:bg-neutral-700 transition-colors min-h-[44px]"
-              >
-                <MessageCircle className="w-4 h-4" />
-                Message
-              </button>
-              <button
-                onClick={() => services[0] && onBookService(services[0], profile.id)}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/20 min-h-[44px]"
-              >
-                <ShoppingBag className="w-4 h-4" />
-                Book
-              </button>
-            </div>
+            {/* ── Action buttons (Own Profile vs Viewing Other Creator) ── */}
+            {currentUser && (currentUser.id === profile.id || currentUser.profile.id === profile.id) ? (
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={() => alert(`Profile settings: You are signed in as @${profile.username}. Your rates and portfolio are active.`)}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-neutral-900 border border-neutral-700 hover:bg-neutral-800 text-white min-h-[44px] transition-colors"
+                >
+                  <Edit3 className="w-4 h-4 text-orange-400" />
+                  <span>Edit Profile & Rates</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigator.clipboard?.writeText(window.location.href);
+                    alert('✓ Profile link copied to clipboard!');
+                  }}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-neutral-900 border border-neutral-700 hover:bg-neutral-800 text-white min-h-[44px] transition-colors"
+                >
+                  <Share2 className="w-4 h-4 text-neutral-300" />
+                  <span>Share Portfolio</span>
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={() => setIsFollowing(!isFollowing)}
+                  className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold min-h-[44px] transition-all ${
+                    isFollowing
+                      ? 'bg-neutral-800 text-white border border-neutral-700'
+                      : 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20'
+                  }`}
+                >
+                  <UserPlus className="w-4 h-4" />
+                  {isFollowing ? 'Following' : 'Follow'}
+                </button>
+                <button
+                  onClick={() => onStartChat(profile.id)}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-neutral-800 text-white border border-neutral-700 hover:bg-neutral-700 transition-colors min-h-[44px]"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Message
+                </button>
+                <button
+                  onClick={() => services[0] && onBookService(services[0], profile.id)}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/20 min-h-[44px]"
+                >
+                  <ShoppingBag className="w-4 h-4" />
+                  Book
+                </button>
+              </div>
+            )}
 
             {/* ── Professional Reputation & Stats Grid (Section 10 of Master Brief) ── */}
             {(() => {

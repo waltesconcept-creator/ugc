@@ -22,13 +22,14 @@ import {
   MOCK_PROFILES,
 } from '@/lib/mock-data';
 import { Post, Story, ServicePackage, Booking, UserRole, AppNotification } from '@/lib/types';
-import { Users, Sparkles } from 'lucide-react';
+import { ArrowLeft, Sparkles, LogIn } from 'lucide-react';
 
 export default function Home() {
-  const { currentUser } = useAuth();
+  const { currentUser, openAuth } = useAuth();
   const [activeTab, setActiveTab] = useState<string>('feed');
   const [currentRole, setCurrentRole] = useState<UserRole>('guest');
-  const [selectedCreatorId, setSelectedCreatorId] = useState<string>('creator-1');
+  const [viewingOtherCreatorId, setViewingOtherCreatorId] = useState<string | null>(null);
+  const [activeChatCreatorId, setActiveChatCreatorId] = useState<string>('creator-1');
 
   // Dynamic Content State
   const [posts, setPosts] = useState<Post[]>(MOCK_POSTS);
@@ -64,27 +65,31 @@ export default function Home() {
       .catch((e) => console.warn('Could not fetch server stories:', e));
   }, []);
 
-  // When a user registers or logs in, sync role and select their profile
+  // When a user registers or logs in, sync role
   useEffect(() => {
-    if (currentUser?.profile?.id) {
-      setSelectedCreatorId(currentUser.profile.id);
-      if (currentUser.role) {
-        setCurrentRole(currentUser.role as UserRole);
-      }
+    if (currentUser?.role) {
+      setCurrentRole(currentUser.role as UserRole);
     }
   }, [currentUser]);
 
   const unreadNotificationsCount = notifications.filter((n) => !n.isRead).length;
 
-  // Handle open creator profile
+  // Handle navigation tab changes
+  const handleTabChange = (tab: string) => {
+    if (tab === 'profile') {
+      setViewingOtherCreatorId(null);
+    }
+    setActiveTab(tab);
+  };
+
+  // Handle open another creator's profile from Feed or Explore
   const handleOpenProfile = (creatorId: string) => {
-    setSelectedCreatorId(creatorId);
+    setViewingOtherCreatorId(creatorId);
     setActiveTab('profile');
   };
 
   // Handle selecting a post to watch from explore or portfolio
   const handleSelectPost = (post: Post) => {
-    setSelectedCreatorId(post.creatorId);
     setActiveTab('feed');
   };
 
@@ -117,7 +122,7 @@ export default function Home() {
 
   // Chat launcher
   const handleStartChat = (creatorId: string) => {
-    setSelectedCreatorId(creatorId);
+    setActiveChatCreatorId(creatorId);
     setActiveTab('messages');
   };
 
@@ -152,7 +157,10 @@ export default function Home() {
       prev.map((n) => (n.id === notif.id ? { ...n, isRead: true } : n))
     );
     if (notif.targetTab) {
-      if (notif.creatorId) setSelectedCreatorId(notif.creatorId);
+      if (notif.creatorId) {
+        setActiveChatCreatorId(notif.creatorId);
+        setViewingOtherCreatorId(notif.creatorId);
+      }
       setActiveTab(notif.targetTab);
     }
   };
@@ -162,14 +170,23 @@ export default function Home() {
   };
 
   const activeCreatorProfile =
-    MOCK_PROFILES.find((p) => p.id === selectedCreatorId) || MOCK_PROFILES[0];
+    currentUser?.profile ||
+    (viewingOtherCreatorId
+      ? MOCK_PROFILES.find((p) => p.id === viewingOtherCreatorId)
+      : null) ||
+    MOCK_PROFILES[0];
+
+  const activeTargetProfileId =
+    viewingOtherCreatorId ||
+    currentUser?.profile?.id ||
+    MOCK_CREATORS[0]?.profile?.id;
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white flex flex-col font-sans select-none selection:bg-orange-500 selection:text-white">
       {/* Top Navigation Bar with Role Simulator & Notifications */}
       <Navbar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
         currentRole={currentRole}
         setCurrentRole={setCurrentRole}
         unreadCount={unreadNotificationsCount}
@@ -201,46 +218,58 @@ export default function Home() {
         {/* Tab: Profile (matches both 'profile' and 'creator_profile') */}
         {(activeTab === 'profile' || activeTab === 'creator_profile') && (
           <div className="flex-1 flex flex-col w-full">
-            {/* Quick Creator Account Switcher Bar (allows testing all 16 international creators + your real profile!) */}
-            <div className="w-full bg-neutral-900/80 border-b border-neutral-800 px-3 sm:px-6 py-2 flex items-center justify-between text-xs sticky top-14 z-20 backdrop-blur-md">
-              <div className="flex items-center gap-2">
-                <Users className="w-3.5 h-3.5 text-orange-400" />
-                <span className="text-neutral-400 font-medium hidden sm:inline">Inspect Creator:</span>
-                <select
-                  value={selectedCreatorId}
-                  onChange={(e) => setSelectedCreatorId(e.target.value)}
-                  className="bg-neutral-800 border border-neutral-700 text-white font-semibold rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-orange-500 cursor-pointer"
-                >
-                  {currentUser && (
-                    <option value={currentUser.profile.id}>
-                      ★ {currentUser.profile.displayName} (@{currentUser.profile.username}) [YOUR PROFILE]
-                    </option>
-                  )}
-                  {MOCK_CREATORS.map((c) => (
-                    <option key={c.profile.id} value={c.profile.id}>
-                      {c.profile.displayName} (@{c.profile.username}) · {c.details.categories[0]}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] text-orange-400 font-bold hidden sm:inline">
-                  {currentUser ? 'Your Account Active' : '16 Creators Loaded'}
-                </span>
+            {/* 1. If viewing another creator's profile: show clean "Back to Feed" banner */}
+            {viewingOtherCreatorId && (
+              <div className="w-full bg-neutral-900/90 border-b border-neutral-800 px-4 py-2.5 flex items-center justify-between sticky top-14 z-20 backdrop-blur-md">
                 <button
-                  onClick={() => setIsCreateModalOpen(true)}
-                  className="px-2.5 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-[11px] font-bold hover:bg-orange-500 hover:text-white transition-all flex items-center gap-1"
+                  onClick={() => {
+                    setViewingOtherCreatorId(null);
+                    setActiveTab('feed');
+                  }}
+                  className="flex items-center gap-2 text-xs font-bold text-neutral-300 hover:text-white group"
                 >
-                  <Sparkles className="w-3 h-3" />
-                  <span>Upload Content</span>
+                  <ArrowLeft className="w-4 h-4 text-orange-400 group-hover:-translate-x-0.5 transition-transform" />
+                  <span>Back to Feed</span>
                 </button>
+
+                <span className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider">
+                  Creator Profile
+                </span>
               </div>
-            </div>
+            )}
+
+            {/* 2. If NOT logged in and on the Profile tab: show clean Creator Sign Up invitation */}
+            {!currentUser && !viewingOtherCreatorId && (
+              <div className="bg-gradient-to-r from-orange-500/15 via-neutral-900 to-amber-500/15 border-b border-orange-500/30 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 sticky top-14 z-20 backdrop-blur-md">
+                <div className="text-center sm:text-left">
+                  <h4 className="text-sm font-bold text-white flex items-center gap-1.5 justify-center sm:justify-start">
+                    <Sparkles className="w-4 h-4 text-orange-400" />
+                    <span>Launch Your Creator Profile on KRE8TOR</span>
+                  </h4>
+                  <p className="text-xs text-neutral-400 mt-0.5">
+                    Sign up with your phone number or email to showcase your portfolio and receive brand bookings.
+                  </p>
+                </div>
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <button
+                    onClick={() => openAuth('register')}
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all text-center"
+                  >
+                    Sign Up Free
+                  </button>
+                  <button
+                    onClick={() => openAuth('login')}
+                    className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 text-xs font-bold transition-all text-center"
+                  >
+                    Sign In
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Profile View Component */}
             <CreatorProfileView
-              creatorId={selectedCreatorId}
+              creatorId={activeTargetProfileId}
               posts={posts}
               onSelectPost={handleSelectPost}
               onBookService={handleBookService}
@@ -262,7 +291,7 @@ export default function Home() {
         {/* Tab: Messages */}
         {activeTab === 'messages' && (
           <ChatView
-            activeCreatorId={selectedCreatorId}
+            activeCreatorId={activeChatCreatorId}
             onOpenProject={() => setActiveTab('projects')}
           />
         )}

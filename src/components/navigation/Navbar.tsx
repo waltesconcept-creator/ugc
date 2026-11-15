@@ -293,7 +293,17 @@ const Navbar: React.FC<NavbarProps> = ({
                 ) : (
                   <>
                     <div className="relative">
-                      <Icon className="w-5 h-5" />
+                      {tab.key === 'profile' && currentUser?.profile?.avatarUrl ? (
+                        <img
+                          src={currentUser.profile.avatarUrl}
+                          alt="Profile"
+                          className={`w-5 h-5 rounded-full object-cover border ${
+                            isActive ? 'border-orange-500 scale-110' : 'border-neutral-700'
+                          }`}
+                        />
+                      ) : (
+                        <Icon className="w-5 h-5" />
+                      )}
                       {isMessages && unreadCount > 0 && (
                         <span className="absolute -top-1.5 -right-2 min-w-[16px] h-[16px] flex items-center justify-center rounded-full bg-orange-500 text-[9px] font-bold text-white px-0.5">
                           {unreadCount > 9 ? '9+' : unreadCount}
