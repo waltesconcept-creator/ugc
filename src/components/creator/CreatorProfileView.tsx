@@ -6,6 +6,7 @@ import { MOCK_CREATORS, MOCK_POSTS } from '@/lib/mock-data';
 import { useAuth } from '@/context/AuthContext';
 import { EditProfileModal } from './EditProfileModal';
 import { ShareProfileModal } from './ShareProfileModal';
+import { LeaveReviewModal } from './LeaveReviewModal';
 import {
   BadgeCheck,
   MapPin,
@@ -31,6 +32,10 @@ import {
   TrendingUp,
   Edit3,
   Upload,
+  Maximize2,
+  Plus,
+  X,
+  ShieldCheck,
 } from 'lucide-react';
 
 interface CreatorProfileViewProps {
@@ -74,6 +79,10 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
   const [isFollowing, setIsFollowing] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isAvatarViewerOpen, setIsAvatarViewerOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewLinkCopied, setReviewLinkCopied] = useState(false);
+  const [dynamicReviews, setDynamicReviews] = useState<Review[]>([]);
 
   const creatorData = useMemo(() => {
     const id = creatorId || currentUser?.id || MOCK_CREATORS[0]?.profile.id || '';
@@ -153,10 +162,41 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
 
   const { profile, details, services, reviews } = creatorData;
 
+  // Fetch live reviews for creator
+  React.useEffect(() => {
+    if (!creatorData?.profile.id) return;
+    fetch(`/api/reviews?creatorId=${creatorData.profile.id}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.reviews && Array.isArray(data.reviews)) {
+          setDynamicReviews(data.reviews);
+        }
+      })
+      .catch(() => {});
+  }, [creatorData?.profile.id]);
+
+  const allReviewsList = useMemo(() => {
+    const base = reviews || [];
+    const combined = [...dynamicReviews, ...base];
+    const seen = new Set();
+    return combined.filter((r) => {
+      if (seen.has(r.id)) return false;
+      seen.add(r.id);
+      return true;
+    });
+  }, [reviews, dynamicReviews]);
+
+  const handleCopyReviewLink = () => {
+    const url = `${typeof window !== 'undefined' ? window.location.origin : ''}/?creator=${profile.id}&review=true`;
+    navigator.clipboard?.writeText(url);
+    setReviewLinkCopied(true);
+    setTimeout(() => setReviewLinkCopied(false), 2500);
+  };
+
   const TABS = [
     { key: 'portfolio' as const, label: 'Portfolio', count: creatorPosts.length },
     { key: 'services' as const, label: 'Services', count: services.length },
-    { key: 'reviews' as const, label: 'Reviews', count: reviews.length },
+    { key: 'reviews' as const, label: 'Reviews', count: allReviewsList.length },
   ];
 
   return (
@@ -170,8 +210,15 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
           {/* Avatar + info */}
           <div className="px-4 sm:px-6 -mt-12 sm:-mt-14">
             <div className="flex items-end gap-4 sm:gap-5">
-              <div className="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 border-neutral-950 overflow-hidden shadow-xl">
+              <div
+                onClick={() => setIsAvatarViewerOpen(true)}
+                className="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 border-neutral-950 overflow-hidden shadow-xl cursor-pointer hover:scale-105 active:scale-95 transition-transform group relative"
+                title="Tap to view high-resolution profile picture"
+              >
                 <img src={profile.avatarUrl} alt={profile.displayName} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <Maximize2 className="w-5 h-5 text-white drop-shadow" />
+                </div>
               </div>
               <div className="flex-1 min-w-0 pb-1">
                 <div className="flex items-center gap-2">
@@ -380,29 +427,82 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
               );
             })()}
 
-            {/* Social handles */}
+            {/* Social handles & External Portfolios */}
             <div className="flex flex-wrap gap-2 mt-4">
-              {details.instagramHandle && (
-                <a href={`https://instagram.com/${details.instagramHandle}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-400 hover:text-white transition-colors min-h-[36px]">
-                  <Camera className="w-3.5 h-3.5 text-pink-400" />
-                  @{details.instagramHandle}
-                  {details.instagramFollowers && <span className="text-neutral-600 ml-1">{formatCount(details.instagramFollowers)}</span>}
+              {details.tiktokHandle && (
+                <a
+                  href={`https://tiktok.com/@${details.tiktokHandle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-300 hover:text-white hover:border-orange-500/50 transition-colors min-h-[36px]"
+                >
+                  <Play className="w-3.5 h-3.5 text-orange-400" />
+                  <span className="font-semibold">TikTok: @{details.tiktokHandle}</span>
+                  {details.tiktokFollowers && (
+                    <span className="text-neutral-500 text-[10px] ml-1">
+                      ({formatCount(details.tiktokFollowers)})
+                    </span>
+                  )}
                 </a>
               )}
-              {details.tiktokHandle && (
-                <a href={`https://tiktok.com/@${details.tiktokHandle}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-400 hover:text-white transition-colors min-h-[36px]">
-                  <Play className="w-3.5 h-3.5 text-rose-500" />
-                  @{details.tiktokHandle}
-                  {details.tiktokFollowers && <span className="text-neutral-600 ml-1">{formatCount(details.tiktokFollowers)}</span>}
+              {details.instagramHandle && (
+                <a
+                  href={`https://instagram.com/${details.instagramHandle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-300 hover:text-white hover:border-orange-500/50 transition-colors min-h-[36px]"
+                >
+                  <Camera className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="font-semibold">Instagram: @{details.instagramHandle}</span>
+                  {details.instagramFollowers && (
+                    <span className="text-neutral-500 text-[10px] ml-1">
+                      ({formatCount(details.instagramFollowers)})
+                    </span>
+                  )}
                 </a>
               )}
               {details.youtubeHandle && (
-                <a href={`https://youtube.com/@${details.youtubeHandle}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-400 hover:text-white transition-colors min-h-[36px]">
+                <a
+                  href={`https://youtube.com/@${details.youtubeHandle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-300 hover:text-white hover:border-orange-500/50 transition-colors min-h-[36px]"
+                >
                   <Video className="w-3.5 h-3.5 text-red-500" />
-                  @{details.youtubeHandle}
-                  {details.youtubeSubscribers && <span className="text-neutral-600 ml-1">{formatCount(details.youtubeSubscribers)}</span>}
+                  <span className="font-semibold">YouTube: @{details.youtubeHandle}</span>
+                  {details.youtubeSubscribers && (
+                    <span className="text-neutral-500 text-[10px] ml-1">
+                      ({formatCount(details.youtubeSubscribers)})
+                    </span>
+                  )}
                 </a>
               )}
+              {profile.website && (
+                <a
+                  href={profile.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-300 hover:text-white hover:border-orange-500/50 transition-colors min-h-[36px]"
+                >
+                  <Globe className="w-3.5 h-3.5 text-orange-400" />
+                  <span className="font-semibold">
+                    Website: {profile.website.replace(/^https?:\/\//, '')}
+                  </span>
+                  <ExternalLink className="w-3 h-3 text-neutral-500" />
+                </a>
+              )}
+              {currentUser &&
+                (currentUser.id === profile.id || currentUser.profile?.id === profile.id) &&
+                !details.tiktokHandle &&
+                !details.instagramHandle && (
+                  <button
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/10 border border-dashed border-orange-500/30 text-xs text-orange-400 hover:bg-orange-500 hover:text-white transition-all min-h-[36px]"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>+ Add TikTok / Instagram / YouTube Links</span>
+                  </button>
+                )}
             </div>
           </div>
         </div>
@@ -550,14 +650,53 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
 
           {/* Reviews */}
           {activeTab === 'reviews' && (
-            <div className="space-y-3">
-              {reviews.length === 0 ? (
-                <div className="py-12 text-center bg-neutral-900 rounded-2xl border border-neutral-800 p-6">
-                  <Star className="w-8 h-8 text-neutral-600 mx-auto mb-2" />
-                  <p className="text-sm font-bold text-white mb-1">No Reviews Yet</p>
-                  <p className="text-xs text-neutral-400 leading-relaxed max-w-sm mx-auto">
-                    Verified client reviews and ratings are automatically posted here once brand clients approve completed UGC deliveries on KRE8TOR.
+            <div className="space-y-4">
+              {/* Header row with Client Review & Share Actions */}
+              <div className="flex flex-wrap items-center justify-between gap-2.5 p-3.5 rounded-2xl bg-neutral-900 border border-neutral-800">
+                <div>
+                  <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                    <span>Verified Client Reviews ({allReviewsList.length})</span>
+                  </h4>
+                  <p className="text-[11px] text-neutral-400">
+                    Transparent feedback & performance metrics from completed brand campaigns
                   </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {currentUser && (currentUser.id === profile.id || currentUser.profile?.id === profile.id) ? (
+                    <button
+                      onClick={handleCopyReviewLink}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-800 border border-neutral-700 text-neutral-200 hover:text-white text-xs font-semibold hover:border-orange-500 transition-colors"
+                    >
+                      <Share2 className="w-3.5 h-3.5 text-orange-400" />
+                      <span>{reviewLinkCopied ? '✓ Review Link Copied!' : 'Share Review Request Link'}</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setIsReviewModalOpen(true)}
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 active:scale-95 transition-all"
+                    >
+                      <Star className="w-3.5 h-3.5 fill-white" />
+                      <span>Write Client Review</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {allReviewsList.length === 0 ? (
+                <div className="py-12 text-center bg-neutral-900 rounded-2xl border border-neutral-800 p-6 space-y-3">
+                  <Star className="w-8 h-8 text-neutral-600 mx-auto" />
+                  <p className="text-sm font-bold text-white mb-1">No Client Reviews Yet</p>
+                  <p className="text-xs text-neutral-400 leading-relaxed max-w-sm mx-auto">
+                    Be the first brand or agency to collaborate with {profile.displayName} and leave an honest verified rating.
+                  </p>
+                  <button
+                    onClick={() => setIsReviewModalOpen(true)}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all"
+                  >
+                    ★ Leave 1st Verified Review
+                  </button>
                 </div>
               ) : (
                 <>
@@ -565,14 +704,26 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                   <div className="bg-neutral-900 rounded-2xl border border-neutral-800 p-4 mb-4">
                     <div className="flex items-center gap-3">
                       <div className="text-center">
-                        <p className="text-3xl font-bold text-white">{details.ratingAvg.toFixed(1)}</p>
-                        <StarRating rating={details.ratingAvg} />
-                        <p className="text-[11px] text-neutral-500 mt-1">{details.ratingCount} reviews</p>
+                        <p className="text-3xl font-bold text-white">
+                          {(
+                            allReviewsList.reduce((sum, r) => sum + r.overallRating, 0) /
+                            allReviewsList.length
+                          ).toFixed(1)}
+                        </p>
+                        <StarRating
+                          rating={
+                            allReviewsList.reduce((sum, r) => sum + r.overallRating, 0) /
+                            allReviewsList.length
+                          }
+                        />
+                        <p className="text-[11px] text-neutral-500 mt-1">
+                          {allReviewsList.length} verified review{allReviewsList.length !== 1 ? 's' : ''}
+                        </p>
                       </div>
                       <div className="flex-1 space-y-1.5 ml-4">
                         {[5, 4, 3, 2, 1].map((s) => {
-                          const count = reviews.filter((r) => Math.round(r.overallRating) === s).length;
-                          const pct = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
+                          const count = allReviewsList.filter((r) => Math.round(r.overallRating) === s).length;
+                          const pct = allReviewsList.length > 0 ? (count / allReviewsList.length) * 100 : 0;
                           return (
                             <div key={s} className="flex items-center gap-2 text-xs">
                               <span className="text-neutral-500 w-2">{s}</span>
@@ -589,7 +740,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                   </div>
 
                   {/* Individual reviews */}
-                  {reviews.map((review) => (
+                  {allReviewsList.map((review) => (
                     <div key={review.id} className="bg-neutral-900 rounded-2xl border border-neutral-800 p-4">
                       <div className="flex items-start gap-3 mb-2">
                         <img src={review.reviewerAvatar} alt="" className="w-9 h-9 rounded-full object-cover" />
@@ -613,9 +764,9 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                       </div>
                       <p className="text-xs text-neutral-300 leading-relaxed">{review.reviewText}</p>
                       <div className="flex flex-wrap gap-3 mt-3 text-[10px] text-neutral-500">
-                        <span>Quality: {review.ratingQuality}/5</span>
-                        <span>Communication: {review.ratingCommunication}/5</span>
-                        <span>Timeliness: {review.ratingTimeliness}/5</span>
+                        <span>Quality: {review.ratingQuality || review.overallRating}/5</span>
+                        <span>Communication: {review.ratingCommunication || review.overallRating}/5</span>
+                        <span>Timeliness: {review.ratingTimeliness || review.overallRating}/5</span>
                       </div>
                     </div>
                   ))}
@@ -626,7 +777,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
         </div>
       </div>
 
-      {/* Real Modals for Edit Profile & Share Profile */}
+      {/* Real Modals for Edit Profile, Share Profile, and Leave Review */}
       <EditProfileModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
@@ -637,6 +788,52 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
         onClose={() => setIsShareModalOpen(false)}
         profile={profile}
       />
+
+      <LeaveReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+        creatorId={profile.id}
+        creatorName={profile.displayName}
+        creatorAvatar={profile.avatarUrl}
+        onReviewSubmitted={(newRev) => {
+          setDynamicReviews((prev) => [newRev, ...prev]);
+        }}
+      />
+
+      {/* High-Resolution Avatar Viewer Modal */}
+      {isAvatarViewerOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setIsAvatarViewerOpen(false)}
+        >
+          <div
+            className="relative max-w-sm w-full bg-neutral-900 border border-neutral-800 rounded-3xl p-5 flex flex-col items-center text-center shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsAvatarViewerOpen(false)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="w-56 h-56 sm:w-64 sm:h-64 rounded-2xl overflow-hidden ring-4 ring-orange-500/30 shadow-2xl mb-4">
+              <img
+                src={profile.avatarUrl}
+                alt={profile.displayName}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="flex items-center gap-1.5 mb-1">
+              <h3 className="text-base font-bold text-white">{profile.displayName}</h3>
+              {profile.isVerified && <BadgeCheck className="w-4 h-4 text-blue-400 fill-blue-400/20" />}
+            </div>
+            <p className="text-xs text-neutral-400 mb-2">@{profile.username}</p>
+            <p className="text-[11px] text-neutral-400 max-w-xs">{profile.bio}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

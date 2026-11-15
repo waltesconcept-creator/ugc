@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import type { Profile, CreatorDetails, Post, Story, Booking, ServicePackage } from './types';
+import type { Profile, CreatorDetails, Post, Story, Booking, ServicePackage, Review } from './types';
 import {
   MOCK_PROFILES,
   MOCK_CREATOR_DETAILS,
@@ -29,6 +29,7 @@ interface DatabaseSchema {
   posts: Post[];
   stories: Story[];
   bookings: Booking[];
+  reviews?: Review[];
   version: number;
 }
 
@@ -173,4 +174,61 @@ export async function createStory(story: Story): Promise<Story> {
   db.stories.unshift(story);
   await saveDb(db);
   return story;
+}
+
+// Review helpers
+export async function getReviewsByCreatorId(creatorId: string): Promise<Review[]> {
+  const db = await getDb();
+  if (!db.reviews || !Array.isArray(db.reviews)) return [];
+  return db.reviews.filter((r) => r.creatorId === creatorId);
+}
+
+export async function createReview(review: Review): Promise<Review> {
+  const db = await getDb();
+  if (!db.reviews || !Array.isArray(db.reviews)) {
+    db.reviews = [];
+  }
+  db.reviews.unshift(review);
+
+  // If target creator exists, recompute reputation stats
+  if (review.creatorId) {
+    const creatorIndex = db.users.findIndex((u) => u.id === review.creatorId);
+    if (creatorIndex >= 0 && db.users[creatorIndex].details) {
+      const creatorReviews = db.reviews.filter((r) => r.creatorId === review.creatorId);
+      const totalReviews = creatorReviews.length;
+      const avgOverall =
+        creatorReviews.reduce((sum, r) => sum + r.overallRating, 0) / totalReviews;
+      const avgQuality =
+        creatorReviews.reduce(
+          (sum, r) => sum + (r.ratingQuality || r.overallRating),
+          0
+        ) / totalReviews;
+      const avgComm =
+        creatorReviews.reduce(
+          (sum, r) => sum + (r.ratingCommunication || r.overallRating),
+          0
+        ) / totalReviews;
+      const avgTime =
+        creatorReviews.reduce(
+          (sum, r) => sum + (r.ratingTimeliness || r.overallRating),
+          0
+        ) / totalReviews;
+
+      db.users[creatorIndex].details = {
+        ...db.users[creatorIndex].details!,
+        ratingAvg: Math.round(avgOverall * 10) / 10,
+        ratingCount: totalReviews,
+        qualityScore: Math.round(avgQuality * 10) / 10,
+        communicationScore: Math.round(avgComm * 10) / 10,
+        timelinessScore: Math.round(avgTime * 10) / 10,
+        completedProjectsCount: Math.max(
+          db.users[creatorIndex].details!.completedProjectsCount || 0,
+          totalReviews
+        ),
+      };
+    }
+  }
+
+  await saveDb(db);
+  return review;
 }

@@ -85,18 +85,18 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
     }
   }, [currentIndex, isOpen, isPhoto]);
 
-  // Handle next / prev navigation
+  // Handle next / prev navigation (Infinite loop for continuous feed flow)
   const goNext = useCallback(() => {
-    if (currentIndex < posts.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
+    if (posts.length > 0) {
+      setCurrentIndex((prev) => (prev + 1) % posts.length);
     }
-  }, [currentIndex, posts.length]);
+  }, [posts.length]);
 
   const goPrev = useCallback(() => {
-    if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
+    if (posts.length > 0) {
+      setCurrentIndex((prev) => (prev - 1 + posts.length) % posts.length);
     }
-  }, [currentIndex]);
+  }, [posts.length]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -212,10 +212,9 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono text-neutral-300 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-            {currentIndex + 1} / {posts.length}
-          </span>
+        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-xs font-bold text-white shadow-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+          <span>Watch Feed</span>
         </div>
 
         <button
@@ -273,16 +272,14 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
       <div className="hidden sm:flex absolute right-6 top-1/2 -translate-y-1/2 flex-col gap-3 z-40">
         <button
           onClick={goPrev}
-          disabled={currentIndex === 0}
-          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-orange-500 hover:border-orange-500 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-orange-500 hover:border-orange-500 transition-colors"
           title="Previous post (Up)"
         >
           <ChevronUp className="w-5 h-5" />
         </button>
         <button
           onClick={goNext}
-          disabled={currentIndex === posts.length - 1}
-          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-orange-500 hover:border-orange-500 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-orange-500 hover:border-orange-500 transition-colors"
           title="Next post (Down)"
         >
           <ChevronDown className="w-5 h-5" />

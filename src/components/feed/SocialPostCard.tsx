@@ -21,6 +21,7 @@ import {
   Ban,
   TrendingUp,
   Maximize2,
+  X,
 } from 'lucide-react';
 import { CommentsDrawer } from './CommentsDrawer';
 import { recommendationEngine } from '@/lib/recommendation-engine';
@@ -229,30 +230,71 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
             <MoreHorizontal className="w-4 h-4" />
           </button>
 
-          {/* Menu Dropdown */}
+          {/* Menu Mobile Bottom Sheet Drawer */}
           {showMenu && (
-            <div className="absolute right-0 top-10 w-52 bg-neutral-950 border border-neutral-800 rounded-2xl shadow-2xl py-1.5 z-40 text-xs">
-              <button
-                onClick={handleBoostCategory}
-                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
-              >
-                <TrendingUp className="w-3.5 h-3.5 text-orange-400" />
-                <span>Show more from {post.category}</span>
-              </button>
-              <button
-                onClick={handleNotInterested}
-                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-rose-400 text-left font-medium"
-              >
-                <Ban className="w-3.5 h-3.5 text-rose-500" />
-                <span>Not interested in this post</span>
-              </button>
-              <button
-                onClick={handleShare}
-                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium border-t border-neutral-850"
-              >
-                <Share2 className="w-3.5 h-3.5 text-neutral-400" />
-                <span>Copy post link</span>
-              </button>
+            <div className="fixed inset-0 z-50 flex items-end justify-center">
+              {/* Dim Backdrop */}
+              <div
+                className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
+                onClick={() => setShowMenu(false)}
+              />
+              {/* Bottom Sheet Drawer */}
+              <div className="relative w-full max-w-md bg-neutral-900 border-t border-neutral-800 rounded-t-3xl p-4 pb-8 z-10 shadow-2xl animate-fade-in">
+                {/* Drag Handle */}
+                <div className="w-12 h-1.5 bg-neutral-700 rounded-full mx-auto mb-4" />
+
+                {/* Header */}
+                <div className="flex items-center justify-between pb-3 mb-2 border-b border-neutral-800">
+                  <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Post Options</span>
+                  <button
+                    onClick={() => setShowMenu(false)}
+                    className="text-neutral-400 hover:text-white p-1 rounded-full hover:bg-neutral-800"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  <button
+                    onClick={handleBoostCategory}
+                    className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-neutral-800/60 hover:bg-neutral-800 text-neutral-200 hover:text-white text-xs font-semibold transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-400 shrink-0">
+                      <TrendingUp className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-bold text-white">Show more from {post.category}</p>
+                      <p className="text-[11px] text-neutral-400">Tune your feed recommendations</p>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={handleShare}
+                    className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-neutral-800/60 hover:bg-neutral-800 text-neutral-200 hover:text-white text-xs font-semibold transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-neutral-700/60 flex items-center justify-center text-neutral-300 shrink-0">
+                      <Share2 className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-bold text-white">Share / Copy Post Link</p>
+                      <p className="text-[11px] text-neutral-400">Copy URL to clipboard</p>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={handleNotInterested}
+                    className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-rose-500/20 flex items-center justify-center text-rose-400 shrink-0">
+                      <Ban className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-bold text-rose-400">Not interested in this post</p>
+                      <p className="text-[11px] text-rose-300/70">Hide similar content from your feed</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>

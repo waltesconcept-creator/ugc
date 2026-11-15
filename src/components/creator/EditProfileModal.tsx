@@ -56,6 +56,18 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     currentUser?.details?.categories || currentUser?.categories || ['Lifestyle']
   );
+  const [instagramHandle, setInstagramHandle] = useState(
+    currentUser?.details?.instagramHandle || ''
+  );
+  const [tiktokHandle, setTiktokHandle] = useState(
+    currentUser?.details?.tiktokHandle || ''
+  );
+  const [youtubeHandle, setYoutubeHandle] = useState(
+    currentUser?.details?.youtubeHandle || ''
+  );
+  const [website, setWebsite] = useState(
+    currentUser?.profile?.website || ''
+  );
   const [services, setServices] = useState<ServicePackage[]>(
     currentUser?.services && currentUser.services.length > 0
       ? currentUser.services
@@ -142,6 +154,10 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
       startingPrice: Number(startingRate) || 50,
       categories: selectedCategories,
       services,
+      instagramHandle: instagramHandle.trim(),
+      tiktokHandle: tiktokHandle.trim(),
+      youtubeHandle: youtubeHandle.trim(),
+      website: website.trim(),
     });
     setSaving(false);
 
@@ -270,6 +286,67 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                 onChange={(e) => setStartingRate(e.target.value)}
                 className="w-full py-2.5 pl-9 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white font-bold text-sm focus:outline-none focus:border-orange-500"
               />
+            </div>
+          </div>
+
+          {/* Social Profiles & Portfolio Links */}
+          <div className="pt-2 border-t border-neutral-850">
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[11px] font-bold text-neutral-300 uppercase tracking-wider">
+                Social Accounts & External Links
+              </label>
+              <span className="text-[10px] text-orange-400 font-semibold">Tapped directly from your profile</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label className="text-[10px] font-semibold text-neutral-400 block mb-1">TikTok Handle</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 font-bold">@</span>
+                  <input
+                    type="text"
+                    value={tiktokHandle}
+                    onChange={(e) => setTiktokHandle(e.target.value.replace(/^@/, ''))}
+                    placeholder="yourtiktok"
+                    className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-[10px] font-semibold text-neutral-400 block mb-1">Instagram Handle</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 font-bold">@</span>
+                  <input
+                    type="text"
+                    value={instagramHandle}
+                    onChange={(e) => setInstagramHandle(e.target.value.replace(/^@/, ''))}
+                    placeholder="yourinstagram"
+                    className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-[10px] font-semibold text-neutral-400 block mb-1">YouTube Handle / Channel</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 font-bold">@</span>
+                  <input
+                    type="text"
+                    value={youtubeHandle}
+                    onChange={(e) => setYoutubeHandle(e.target.value.replace(/^@/, ''))}
+                    placeholder="youryoutube"
+                    className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-[10px] font-semibold text-neutral-400 block mb-1">Website / Portfolio / Linktree</label>
+                <input
+                  type="url"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  placeholder="https://myportfolio.com"
+                  className="w-full py-2 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs"
+                />
+              </div>
             </div>
           </div>
 

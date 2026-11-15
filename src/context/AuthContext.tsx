@@ -47,6 +47,10 @@ interface AuthContextType {
     startingPrice: number;
     categories: string[];
     services: ServicePackage[];
+    instagramHandle?: string;
+    tiktokHandle?: string;
+    youtubeHandle?: string;
+    website?: string;
   }>) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
@@ -142,6 +146,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     startingPrice: number;
     categories: string[];
     services: ServicePackage[];
+    instagramHandle?: string;
+    tiktokHandle?: string;
+    youtubeHandle?: string;
+    website?: string;
   }>): Promise<{ success: boolean; error?: string }> => {
     if (!currentUser) return { success: false, error: 'Not authenticated' };
 

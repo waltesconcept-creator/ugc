@@ -1,0 +1,18 @@
+{
+  "name": "KRE8TOR - UGC Creator Network",
+  "short_name": "KRE8TOR",
+  "description": "Global Social Platform for UGC Content Creators and Direct Brand Bookings",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "/kre8tor-icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

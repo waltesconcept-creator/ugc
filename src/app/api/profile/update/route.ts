@@ -14,6 +14,10 @@ export async function POST(request: Request) {
       startingPrice,
       categories,
       services,
+      instagramHandle,
+      tiktokHandle,
+      youtubeHandle,
+      website,
     } = body;
 
     if (!userId) {
@@ -24,6 +28,8 @@ export async function POST(request: Request) {
     if (!existingUser) {
       return NextResponse.json({ error: 'User not found.' }, { status: 404 });
     }
+
+    const cleanHandle = (h?: string) => (h ? h.replace(/^@/, '').trim() : undefined);
 
     const updatedStartingCents = startingPrice !== undefined
       ? Math.round(Number(startingPrice) * 100)
@@ -36,12 +42,16 @@ export async function POST(request: Request) {
         bio: bio !== undefined ? bio.trim() : existingUser.profile.bio,
         location: location !== undefined ? location.trim() : existingUser.profile.location,
         country: country !== undefined ? country.trim() : existingUser.profile.country,
+        website: website !== undefined ? website.trim() : existingUser.profile.website,
       },
       details: existingUser.details
         ? {
             ...existingUser.details,
             categories: Array.isArray(categories) ? categories : existingUser.details.categories,
             startingPriceCents: updatedStartingCents,
+            instagramHandle: instagramHandle !== undefined ? cleanHandle(instagramHandle) : existingUser.details.instagramHandle,
+            tiktokHandle: tiktokHandle !== undefined ? cleanHandle(tiktokHandle) : existingUser.details.tiktokHandle,
+            youtubeHandle: youtubeHandle !== undefined ? cleanHandle(youtubeHandle) : existingUser.details.youtubeHandle,
           }
         : undefined,
       services: Array.isArray(services) ? services : existingUser.services,

@@ -27,7 +27,16 @@ export const metadata: Metadata = {
   title: "KRE8TOR — Global UGC Creator Social Network",
   description:
     "Discover world-class UGC creators through authentic content. Watch, explore, and hire creators globally on KRE8TOR.",
-  icons: { icon: "/favicon.ico" },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "KRE8TOR",
+  },
+  icons: {
+    icon: "/kre8tor-icon.svg",
+    apple: "/kre8tor-icon.svg",
+  },
   openGraph: {
     title: "KRE8TOR — Global UGC Creator Social Network",
     description:

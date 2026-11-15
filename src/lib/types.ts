@@ -155,7 +155,9 @@ export interface Deliverable {
 
 export interface Review {
   id: string;
+  creatorId?: string;
   bookingId: string;
+  projectTitle?: string;
   reviewerName: string;
   reviewerAvatar: string;
   reviewerRole: 'business' | 'creator';
