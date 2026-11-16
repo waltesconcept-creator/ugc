@@ -1,18 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistSans = { variable: "--font-geist-sans" };
+const geistMono = { variable: "--font-geist-mono" };
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -24,23 +16,23 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "KRE8TOR — Global UGC Creator Social Network",
+  title: "Creator — Social Commerce Platform for Creators & Brands",
   description:
-    "Discover world-class UGC creators through authentic content. Watch, explore, and hire creators globally on KRE8TOR.",
+    "Creator is a unified social commerce platform where content is the entry point, creators are the supply, businesses bring products and opportunities, and commerce happens naturally.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "KRE8TOR",
+    title: "Creator",
   },
   icons: {
     icon: "/kre8tor-icon.svg",
     apple: "/kre8tor-icon.svg",
   },
   openGraph: {
-    title: "KRE8TOR — Global UGC Creator Social Network",
+    title: "Creator — Social Commerce Platform for Creators & Brands",
     description:
-      "Watch authentic short-form UGC videos. Discover, follow, and hire creators worldwide on KRE8TOR.",
+      "Watch reels, book authentic UGC creators, and shop Nigerian brand products with creator affiliate commissions.",
     type: "website",
   },
 };

@@ -23,6 +23,11 @@ import {
   UserCheck,
   X,
   Store,
+  Home,
+  Search,
+  PlusSquare,
+  Heart,
+  Send,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -54,9 +59,9 @@ const DESKTOP_TABS = [
 ];
 
 const MOBILE_TABS = [
-  { key: 'feed', label: 'Home', icon: Video },
-  { key: 'explore', label: 'Explore', icon: Compass },
-  { key: 'create', label: 'Create', icon: Plus },
+  { key: 'feed', label: 'Home', icon: Home },
+  { key: 'explore', label: 'Explore', icon: Search },
+  { key: 'create', label: 'Create', icon: PlusSquare },
   { key: 'messages', label: 'Messages', icon: MessageCircle },
   { key: 'profile', label: 'Profile', icon: User },
 ];
@@ -141,18 +146,27 @@ const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Right Side Actions: Notifications, Auth / User Profile, Role Simulator & Create CTA */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
-            {/* Notification bell (Mobile + Desktop) */}
+          {/* Right Side Actions: Notifications, Messages, Auth / User Profile, Role Simulator */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Activity / Heart icon (Instagram style) */}
             <button
               onClick={() => (onOpenNotifications ? onOpenNotifications() : setActiveTab('messages'))}
-              title="Notifications"
+              title="Activity"
               className="relative flex items-center justify-center w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors"
             >
-              <Bell className="w-4 h-4" />
+              <Heart className="w-4 h-4 text-neutral-300" />
               {unreadCount > 0 && (
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
               )}
+            </button>
+
+            {/* Direct Messages Send icon (Instagram style) */}
+            <button
+              onClick={() => setActiveTab('messages')}
+              title="Direct Messages"
+              className="relative flex items-center justify-center w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors"
+            >
+              <Send className="w-4 h-4 text-neutral-300" />
             </button>
 
             {/* Real User Account Button or Sign Up Pill */}

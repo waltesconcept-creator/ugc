@@ -22,8 +22,10 @@ import {
   TrendingUp,
   Maximize2,
   X,
+  ShoppingBag,
 } from 'lucide-react';
 import { CommentsDrawer } from './CommentsDrawer';
+import { ProductDrawer } from '../commerce/ProductDrawer';
 import { recommendationEngine } from '@/lib/recommendation-engine';
 
 interface SocialPostCardProps {
@@ -62,6 +64,7 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
   const [showMenu, setShowMenu] = useState(false);
   const [copiedToast, setCopiedToast] = useState(false);
   const [isExpandedCaption, setIsExpandedCaption] = useState(false);
+  const [productDrawerOpen, setProductDrawerOpen] = useState(false);
 
   const lastTapRef = useRef(0);
   const isPhotoPost = post.mediaType === 'photo';
@@ -360,12 +363,26 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
           </button>
         )}
 
-        {/* Bottom Format Badge */}
-        <div className="absolute bottom-3 left-3 z-10">
-          <span className="px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[10px] font-semibold text-neutral-200 border border-white/10">
-            {post.contentFormat}
-          </span>
-        </div>
+        {/* Bottom Format / Shoppable Product Tag Badge */}
+        {post.taggedProduct ? (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setProductDrawerOpen(true);
+            }}
+            className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/75 hover:bg-black/90 text-white backdrop-blur-md border border-white/20 text-xs font-semibold shadow-lg active:scale-95 transition-all group"
+          >
+            <ShoppingBag className="w-3.5 h-3.5 text-orange-400 group-hover:scale-110 transition-transform" />
+            <span className="truncate max-w-[120px] text-[11px]">{post.taggedProduct.title}</span>
+            <span className="text-orange-400 font-bold text-[11px]">₦{post.taggedProduct.priceNaira.toLocaleString()}</span>
+          </button>
+        ) : (
+          <div className="absolute bottom-3 left-3 z-10">
+            <span className="px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[10px] font-semibold text-neutral-200 border border-white/10">
+              {post.contentFormat}
+            </span>
+          </div>
+        )}
 
         {/* Mute/unmute button */}
         {!isPhotoPost && (
@@ -456,6 +473,36 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
           )}
         </div>
 
+        {/* Shoppable Product Card (Instagram Shop Style) */}
+        {post.taggedProduct && (
+          <div
+            onClick={() => setProductDrawerOpen(true)}
+            className="mt-2.5 mb-3 p-2.5 rounded-2xl bg-neutral-950 border border-neutral-800 hover:border-orange-500/40 transition-colors flex items-center justify-between cursor-pointer group"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <img
+                src={post.taggedProduct.imageUrl}
+                alt={post.taggedProduct.title}
+                className="w-10 h-10 rounded-xl object-cover border border-neutral-800 shrink-0"
+              />
+              <div className="min-w-0">
+                <p className="text-xs font-bold text-white truncate group-hover:text-orange-400 transition-colors">
+                  {post.taggedProduct.title}
+                </p>
+                <p className="text-[11px] text-neutral-400">
+                  ₦{post.taggedProduct.priceNaira.toLocaleString()} &bull;{' '}
+                  <span className="text-emerald-400 font-semibold">
+                    Earn {post.taggedProduct.commissionPercent || 15}% (₦{((post.taggedProduct.priceNaira * (post.taggedProduct.commissionPercent || 15)) / 100).toLocaleString()})
+                  </span>
+                </p>
+              </div>
+            </div>
+            <span className="px-3 py-1 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white text-[11px] font-bold shrink-0 shadow-sm">
+              Shop / Affiliate
+            </span>
+          </div>
+        )}
+
         {/* Creator Hire & Portfolio Pill (Connects Social Discovery directly to Creator Hiring) */}
         <div className="pt-2 border-t border-neutral-800/80 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
@@ -491,6 +538,16 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
         creatorUsername={post.creator.username}
         currentRole="guest"
       />
+
+      {/* Shoppable Product Drawer */}
+      {post.taggedProduct && (
+        <ProductDrawer
+          product={post.taggedProduct}
+          creatorName={post.creator.displayName || post.creator.username}
+          isOpen={productDrawerOpen}
+          onClose={() => setProductDrawerOpen(false)}
+        />
+      )}
     </article>
   );
 };

@@ -103,32 +103,28 @@ export const Kre8torLogo: React.FC<Kre8torLogoProps> = ({
   className = '',
 }) => {
   const iconSizes = {
-    sm: 26,
-    md: 32,
-    lg: 40,
-    xl: 52,
+    sm: 24,
+    md: 28,
+    lg: 36,
+    xl: 48,
   };
 
   const textSizes = {
-    sm: 'text-base',
-    md: 'text-lg',
+    sm: 'text-lg',
+    md: 'text-xl',
     lg: 'text-2xl',
     xl: 'text-3xl',
   };
 
   return (
-    <div className={`flex items-center gap-2.5 select-none ${className}`}>
+    <div className={`flex items-center gap-2 select-none cursor-pointer ${className}`}>
       <Kre8torIcon size={iconSizes[size]} />
       {showWordmark && (
-        <div className="flex flex-col leading-none">
-          <div className={`font-black tracking-wider text-white ${textSizes[size]}`}>
-            KRE<span className="text-orange-500 drop-shadow-[0_0_12px_rgba(255,107,0,0.5)]">8</span>TOR
-          </div>
-          {size !== 'sm' && (
-            <span className="text-[9px] font-bold text-neutral-400 tracking-widest uppercase mt-0.5">
-              Creator Network
-            </span>
-          )}
+        <div className="flex items-center leading-none">
+          <span className={`font-black tracking-tight text-white font-serif italic ${textSizes[size]}`}>
+            Creator
+          </span>
+          <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 ml-1 mb-2 animate-pulse" />
         </div>
       )}
     </div>
