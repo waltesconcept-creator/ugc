@@ -15,8 +15,10 @@ import {
   Eye,
   Sparkles,
   Camera,
+  ShoppingBag,
 } from 'lucide-react';
 import { CommentsDrawer } from './CommentsDrawer';
+import { ProductDrawer } from '../commerce/ProductDrawer';
 
 interface VideoCardProps {
   post: Post;
@@ -49,6 +51,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   const [progress, setProgress] = useState(0);
   const [showPause, setShowPause] = useState(false);
   const [commentsOpen, setCommentsOpen] = useState(false);
+  const [productDrawerOpen, setProductDrawerOpen] = useState(false);
   const [copiedToast, setCopiedToast] = useState(false);
 
   const lastTapRef = useRef(0);
@@ -317,6 +320,30 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
         {/* ── Bottom overlay: creator info & rates CTA ── */}
         <div className="absolute bottom-0 left-0 right-16 z-20 p-4 pb-6 text-left">
+          {/* ── Shoppable Tagged Product Badge ── */}
+          {post.taggedProduct && (
+            <div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setProductDrawerOpen(true);
+                }}
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900/90 hover:bg-neutral-850 border border-orange-500/50 text-white backdrop-blur-md shadow-lg shadow-black/50 mb-2 active:scale-95 transition-all text-xs font-semibold group max-w-xs"
+              >
+                <div className="w-4 h-4 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 shrink-0">
+                  <ShoppingBag className="w-2.5 h-2.5" />
+                </div>
+                <span className="truncate max-w-[120px] text-white font-medium text-[11px]">
+                  {post.taggedProduct.title}
+                </span>
+                <span className="text-orange-400 font-bold text-[11px] shrink-0">
+                  ₦{post.taggedProduct.priceNaira.toLocaleString()}
+                </span>
+                <ChevronRight className="w-3 h-3 text-neutral-400 group-hover:text-white shrink-0" />
+              </button>
+            </div>
+          )}
+
           {/* Creator handle */}
           <div
             onClick={(e) => {
@@ -373,6 +400,17 @@ const VideoCard: React.FC<VideoCardProps> = ({
         creatorUsername={post.creator.username}
         currentRole="guest"
       />
+
+      {/* Shoppable Product Bottom Sheet Drawer */}
+      {post.taggedProduct && (
+        <ProductDrawer
+          product={post.taggedProduct}
+          isOpen={productDrawerOpen}
+          onClose={() => setProductDrawerOpen(false)}
+          creatorId={post.creatorId}
+          creatorName={post.creator.displayName || post.creator.username}
+        />
+      )}
     </>
   );
 };

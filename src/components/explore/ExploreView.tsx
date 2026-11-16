@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import type { Post, Category } from '@/lib/types';
-import { MOCK_CATEGORIES, MOCK_POSTS, MOCK_CREATORS } from '@/lib/mock-data';
+import type { Post, Category, Product } from '@/lib/types';
+import { MOCK_CATEGORIES, MOCK_POSTS, MOCK_CREATORS, MOCK_PRODUCTS } from '@/lib/mock-data';
+import { ProductDrawer } from '../commerce/ProductDrawer';
 import {
   Search,
   Play,
@@ -14,6 +15,11 @@ import {
   TrendingUp,
   Sparkles,
   Filter,
+  ShoppingBag,
+  Users,
+  Video,
+  Star,
+  Package,
 } from 'lucide-react';
 
 interface ExploreViewProps {
@@ -30,11 +36,13 @@ function formatCount(n: number): string {
 const FORMAT_FILTERS = ['All', 'UGC Ad', 'Product Review', 'Unboxing', 'Tutorial', 'Testimonial', 'Lifestyle'];
 
 const ExploreView: React.FC<ExploreViewProps> = ({ onSelectPost, onOpenProfile }) => {
+  const [exploreMode, setExploreMode] = useState<'videos' | 'creators' | 'shop'>('videos');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedFormat, setSelectedFormat] = useState('All');
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
   const [sortBy, setSortBy] = useState<'trending' | 'recent' | 'popular'>('trending');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const filteredPosts = useMemo(() => {
     let result = [...MOCK_POSTS];
@@ -89,6 +97,43 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSelectPost, onOpenProfile }
               className="flex items-center justify-center w-11 h-11 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-neutral-700 transition-colors lg:hidden"
             >
               <SlidersHorizontal className="w-4 h-4 text-neutral-400" />
+            </button>
+          </div>
+
+          {/* ── Mode Switcher: Videos | Creators | Shop ── */}
+          <div className="flex gap-2 p-1 bg-neutral-900 rounded-2xl mb-3 border border-neutral-800">
+            <button
+              onClick={() => setExploreMode('videos')}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                exploreMode === 'videos'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
+                  : 'text-neutral-400 hover:text-white'
+              }`}
+            >
+              <Video className="w-3.5 h-3.5" />
+              <span>Watch UGC</span>
+            </button>
+            <button
+              onClick={() => setExploreMode('creators')}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                exploreMode === 'creators'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
+                  : 'text-neutral-400 hover:text-white'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>Hire Creators</span>
+            </button>
+            <button
+              onClick={() => setExploreMode('shop')}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                exploreMode === 'shop'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
+                  : 'text-neutral-400 hover:text-white'
+              }`}
+            >
+              <ShoppingBag className="w-3.5 h-3.5" />
+              <span>Shop & Affiliate</span>
             </button>
           </div>
 
@@ -156,72 +201,190 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSelectPost, onOpenProfile }
         </div>
       </div>
 
-      {/* ── Video grid ── */}
+      {/* ── Main Content Grid (Videos | Creators | Shop) ── */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 pt-4">
-        {filteredPosts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <Search className="w-12 h-12 text-neutral-700 mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-1">No results found</h3>
-            <p className="text-sm text-neutral-500">Try adjusting your search or filters</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3">
-            {filteredPosts.map((post) => (
-              <button
-                key={post.id}
-                onClick={() => onSelectPost(post)}
-                className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800/50 hover:border-orange-500/30 transition-all duration-300"
-              >
-                {/* Thumbnail */}
-                <img
-                  src={post.thumbnailUrl}
-                  alt={post.caption}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+        {/* MODE: SHOP & PRODUCTS */}
+        {exploreMode === 'shop' && (
+          <div className="space-y-4">
+            <div className="p-3.5 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-xs text-orange-200 flex items-center justify-between">
+              <div>
+                <span className="font-bold text-orange-400">Creator Affiliate Marketplace:</span> Browse brand products, get free samples, tag in your videos, and earn direct commissions per sale!
+              </div>
+            </div>
 
-                {/* Play icon on hover */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-                    <Play className="w-5 h-5 text-white ml-0.5" />
-                  </div>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {MOCK_PRODUCTS.map((prod) => (
+                <div
+                  key={prod.id}
+                  onClick={() => setSelectedProduct(prod)}
+                  className="group p-3.5 rounded-2xl bg-neutral-900 border border-neutral-800 hover:border-orange-500/40 transition-all cursor-pointer flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="relative aspect-square rounded-xl overflow-hidden mb-3 bg-neutral-950">
+                      <img
+                        src={prod.mediaUrls?.[0] || 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=400&fit=crop'}
+                        alt={prod.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      {prod.sampleAvailable && (
+                        <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-emerald-500 text-neutral-950 text-[10px] font-extrabold shadow-md">
+                          Free Sample Avail.
+                        </span>
+                      )}
+                    </div>
 
-                {/* Top stats */}
-                <div className="absolute top-2 left-2 right-2 flex items-center justify-between z-10">
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-[10px] text-white">
-                    <Eye className="w-3 h-3" />
-                    {formatCount(post.viewsCount)}
-                  </span>
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-[10px] text-white">
-                    <Heart className="w-3 h-3" />
-                    {formatCount(post.likesCount)}
-                  </span>
-                </div>
-
-                {/* Bottom overlay */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-2.5 pt-8">
-                  <p className="text-[11px] text-white/90 font-medium line-clamp-2 leading-tight mb-1.5">
-                    {post.caption}
-                  </p>
-                  <div className="flex items-center gap-1.5">
-                    <img
-                      src={post.creator.avatarUrl}
-                      alt=""
-                      className="w-4 h-4 rounded-full object-cover"
-                    />
-                    <span className="text-[10px] text-white/70 truncate">
-                      @{post.creator.username}
+                    <span className="text-[10px] text-neutral-400 uppercase font-semibold">
+                      {prod.businessName}
                     </span>
-                    {post.creator.isVerified && (
-                      <BadgeCheck className="w-3 h-3 text-blue-400 fill-blue-400/20 shrink-0" />
-                    )}
+                    <h4 className="text-xs sm:text-sm font-bold text-white line-clamp-2 mt-0.5 group-hover:text-orange-400 transition-colors">
+                      {prod.title}
+                    </h4>
+                  </div>
+
+                  <div className="mt-3 pt-2.5 border-t border-neutral-800 flex items-center justify-between">
+                    <div>
+                      <p className="text-xs sm:text-sm font-extrabold text-white">
+                        ₦{prod.priceNaira.toLocaleString()}
+                      </p>
+                      <p className="text-[10px] text-orange-400 font-bold">
+                        Earn {prod.commissionPercent}% (₦{Math.round((prod.priceNaira * prod.commissionPercent) / 100).toLocaleString()})
+                      </p>
+                    </div>
+                    <button className="px-3 py-1.5 rounded-full bg-neutral-800 group-hover:bg-orange-500 text-white text-[11px] font-bold transition-colors">
+                      Details
+                    </button>
                   </div>
                 </div>
-              </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* MODE: HIRE CREATORS */}
+        {exploreMode === 'creators' && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {MOCK_CREATORS.map((c) => (
+              <div
+                key={c.profile.id}
+                onClick={() => onOpenProfile(c.profile.id)}
+                className="p-4 rounded-2xl bg-neutral-900 border border-neutral-800 hover:border-orange-500/40 transition-all cursor-pointer flex items-center justify-between gap-3 group"
+              >
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <img
+                    src={c.profile.avatarUrl}
+                    alt=""
+                    className="w-14 h-14 rounded-full object-cover border-2 border-orange-500/40 shrink-0"
+                  />
+                  <div className="overflow-hidden">
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="text-xs sm:text-sm font-bold text-white truncate group-hover:text-orange-400 transition-colors">
+                        {c.profile.displayName}
+                      </h4>
+                      {c.profile.isVerified && (
+                        <BadgeCheck className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20 shrink-0" />
+                      )}
+                    </div>
+                    <p className="text-[11px] text-neutral-400 truncate">@{c.profile.username}</p>
+                    <div className="flex items-center gap-2 mt-1 text-[10px]">
+                      <span className="text-amber-400 font-bold flex items-center gap-0.5">
+                        <Star className="w-3 h-3 fill-amber-400" /> {c.details.ratingAvg || 4.9}
+                      </span>
+                      <span className="text-neutral-500">&bull;</span>
+                      <span className="text-neutral-400">{c.details.categories?.[0] || 'UGC'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-right shrink-0">
+                  <span className="text-[10px] text-neutral-500 block">Starting at</span>
+                  <span className="text-xs font-extrabold text-white">
+                    ₦{(c.details.startingPriceCents ? c.details.startingPriceCents * 10 : 30000).toLocaleString()}
+                  </span>
+                  <button className="mt-1 px-2.5 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-[10px] font-bold group-hover:bg-orange-500 group-hover:text-white transition-colors block ml-auto">
+                    View Rates
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         )}
+
+        {/* MODE: VIDEOS (DEFAULT) */}
+        {exploreMode === 'videos' && (
+          filteredPosts.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <Search className="w-12 h-12 text-neutral-700 mb-4" />
+              <h3 className="text-lg font-semibold text-white mb-1">No results found</h3>
+              <p className="text-sm text-neutral-500">Try adjusting your search or filters</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3">
+              {filteredPosts.map((post) => (
+                <button
+                  key={post.id}
+                  onClick={() => onSelectPost(post)}
+                  className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800/50 hover:border-orange-500/30 transition-all duration-300"
+                >
+                  {/* Thumbnail */}
+                  <img
+                    src={post.thumbnailUrl}
+                    alt={post.caption}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+
+                  {/* Play icon on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                      <Play className="w-5 h-5 text-white ml-0.5" />
+                    </div>
+                  </div>
+
+                  {/* Top stats */}
+                  <div className="absolute top-2 left-2 right-2 flex items-center justify-between z-10">
+                    <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-[10px] text-white">
+                      <Eye className="w-3 h-3" />
+                      {formatCount(post.viewsCount)}
+                    </span>
+                    <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-[10px] text-white">
+                      <Heart className="w-3 h-3" />
+                      {formatCount(post.likesCount)}
+                    </span>
+                  </div>
+
+                  {/* Bottom overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-2.5 pt-8">
+                    <p className="text-[11px] text-white/90 font-medium line-clamp-2 leading-tight mb-1.5 text-left">
+                      {post.caption}
+                    </p>
+                    <div className="flex items-center gap-1.5">
+                      <img
+                        src={post.creator.avatarUrl}
+                        alt=""
+                        className="w-4 h-4 rounded-full object-cover"
+                      />
+                      <span className="text-[10px] text-white/70 truncate">
+                        @{post.creator.username}
+                      </span>
+                      {post.creator.isVerified && (
+                        <BadgeCheck className="w-3 h-3 text-blue-400 fill-blue-400/20 shrink-0" />
+                      )}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )
+        )}
       </div>
+
+      {/* Shoppable Product Details Bottom Sheet */}
+      {selectedProduct && (
+        <ProductDrawer
+          product={selectedProduct}
+          isOpen={!!selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
 
       {/* ── Mobile filter drawer ── */}
       {showFilterDrawer && (

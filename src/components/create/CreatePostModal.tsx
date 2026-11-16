@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import type { Post, Story, Profile } from '@/lib/types';
-import { SAMPLE_VIDEOS, MOCK_CATEGORIES, MOCK_PROFILES } from '@/lib/mock-data';
+import { SAMPLE_VIDEOS, MOCK_CATEGORIES, MOCK_PROFILES, MOCK_PRODUCTS } from '@/lib/mock-data';
 import { useAuth } from '@/context/AuthContext';
 import {
   X,
@@ -17,6 +17,7 @@ import {
   Bookmark,
   FolderOpen,
   AlertCircle,
+  ShoppingBag,
 } from 'lucide-react';
 
 interface CreatePostModalProps {
@@ -71,6 +72,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   const [caption, setCaption] = useState('');
   const [category, setCategory] = useState(MOCK_CATEGORIES[0]?.name || 'Beauty & Skincare');
   const [contentFormat, setContentFormat] = useState(FORMAT_OPTIONS[0]);
+  const [selectedProductId, setSelectedProductId] = useState('');
   const [isPortfolioPinned, setIsPortfolioPinned] = useState(true);
 
   // Status
@@ -154,6 +156,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
         onPublishStory(newStory);
       } else {
+        const prodObj = selectedProductId ? MOCK_PRODUCTS.find((p) => p.id === selectedProductId) : null;
         const newPost: Post = {
           id: `post-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
           creatorId: author.id,
@@ -173,6 +176,18 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           isLiked: false,
           isSaved: false,
           isPortfolioPinned: isPortfolioPinned,
+          taggedProductId: prodObj ? prodObj.id : undefined,
+          taggedProduct: prodObj
+            ? {
+                id: prodObj.id,
+                title: prodObj.title,
+                priceNaira: prodObj.priceNaira,
+                commissionPercent: prodObj.commissionPercent,
+                brandName: prodObj.businessName,
+                imageUrl: prodObj.mediaUrls?.[0],
+                affiliateCode: `REF-${author.displayName?.replace(/[^a-zA-Z]/g, '').slice(0, 4).toUpperCase() || 'CREATOR'}-${Math.floor(100 + Math.random() * 900)}`,
+              }
+            : undefined,
           createdAt: new Date().toISOString(),
         };
 
@@ -449,6 +464,31 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                   ))}
                 </select>
               </div>
+            </div>
+          )}
+
+          {/* Shoppable Affiliate Product Tagging */}
+          {createType === 'post' && (
+            <div>
+              <label className="text-[11px] font-bold text-orange-400 flex items-center gap-1.5 mb-1.5 uppercase tracking-wider">
+                <ShoppingBag className="w-3.5 h-3.5" />
+                <span>Tag an Affiliate Product (Optional):</span>
+              </label>
+              <select
+                value={selectedProductId}
+                onChange={(e) => setSelectedProductId(e.target.value)}
+                className="w-full p-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 cursor-pointer"
+              >
+                <option value="">None (Pure Lifestyle / Showcase Content)</option>
+                {MOCK_PRODUCTS.map((prod) => (
+                  <option key={prod.id} value={prod.id}>
+                    {prod.title} — ₦{prod.priceNaira.toLocaleString()} ({prod.commissionPercent}% Commission)
+                  </option>
+                ))}
+              </select>
+              <p className="text-[10px] text-neutral-500 mt-1">
+                Adds a one-tap product badge on your video. Viewers can purchase directly, and commissions credit your wallet.
+              </p>
             </div>
           )}
 

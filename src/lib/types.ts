@@ -96,7 +96,19 @@ export interface Post {
   isSaved?: boolean;
   isPortfolioPinned?: boolean;
   isSponsored?: boolean;
+  taggedProductId?: string;
+  taggedProduct?: TaggedProductRef;
   createdAt: string;
+}
+
+export interface TaggedProductRef {
+  id: string;
+  title: string;
+  priceNaira: number;
+  commissionPercent?: number;
+  brandName?: string;
+  imageUrl?: string;
+  affiliateCode?: string;
 }
 
 export interface ServicePackage {
@@ -238,4 +250,118 @@ export interface UserInteraction {
   watchDurationSeconds?: number;
   timestamp: number;
 }
+
+// ───── SOCIAL COMMERCE & AFFILIATE SYSTEM ─────
+
+export interface Product {
+  id: string;
+  businessId: string;
+  businessName: string;
+  businessLogo?: string;
+  title: string;
+  description: string;
+  priceNaira: number;
+  compareAtPriceNaira?: number;
+  mediaUrls: string[];
+  category: string;
+  stockCount: number;
+  isAvailable: boolean;
+  sampleAvailable: boolean;
+  deliveryInfo: string;
+  commissionPercent: number; // default campaign commission %
+  createdAt: string;
+}
+
+export interface AffiliateCampaign {
+  id: string;
+  productId: string;
+  product: Product;
+  businessId: string;
+  businessName: string;
+  commissionPercent: number;
+  commissionAmountNaira: number;
+  sampleRequiresApproval: boolean;
+  sampleStock: number;
+  terms: string;
+  active: boolean;
+  totalCreatorsCount: number;
+  totalSalesCount: number;
+  totalRevenueNaira: number;
+  createdAt: string;
+}
+
+export interface CreatorApplication {
+  id: string;
+  campaignId: string;
+  creatorId: string;
+  creatorName: string;
+  creatorAvatar: string;
+  status: 'pending' | 'approved' | 'rejected';
+  sampleRequested: boolean;
+  sampleStatus?: 'none' | 'processing' | 'shipped' | 'delivered';
+  affiliateCode?: string;
+  appliedAt: string;
+  notes?: string;
+}
+
+export interface AffiliateLink {
+  id: string;
+  code: string; // e.g. "GLOW-SARAH"
+  campaignId: string;
+  productId: string;
+  creatorId: string;
+  totalClicks: number;
+  totalOrders: number;
+  totalCommissionNaira: number;
+  createdAt: string;
+}
+
+export interface CommerceOrder {
+  id: string;
+  productId: string;
+  productTitle: string;
+  businessId: string;
+  businessName: string;
+  customerName: string;
+  customerPhone?: string;
+  customerAddress?: string;
+  creatorId?: string;
+  creatorName?: string;
+  affiliateCode?: string;
+  unitPriceNaira: number;
+  quantity: number;
+  totalAmountNaira: number;
+  commissionEarnedNaira: number;
+  status: 'pending' | 'confirmed' | 'fulfilled' | 'cancelled';
+  createdAt: string;
+}
+
+export interface WalletTransaction {
+  id: string;
+  userId: string;
+  type: 'booking_payout' | 'affiliate_commission' | 'withdrawal' | 'platform_fee';
+  amountNaira: number;
+  title: string;
+  description: string;
+  status: 'pending' | 'cleared' | 'failed';
+  referenceId?: string; // bookingId or orderId
+  clearedAt?: string;
+  createdAt: string;
+}
+
+export interface Wallet {
+  userId: string;
+  currency: 'NGN';
+  availableBalanceNaira: number;
+  pendingBalanceNaira: number;
+  totalEarnedBookingsNaira: number;
+  totalEarnedAffiliateNaira: number;
+  totalWithdrawnNaira: number;
+  bankDetails?: {
+    accountNumber: string;
+    bankName: string;
+    accountName: string;
+  };
+}
+
 

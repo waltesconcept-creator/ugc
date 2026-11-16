@@ -15,6 +15,8 @@ import { AdminDashboardView } from '@/components/admin/AdminDashboardView';
 import { NotificationsDrawer } from '@/components/notifications/NotificationsDrawer';
 import { CreatePostModal } from '@/components/create/CreatePostModal';
 import { ImmersiveMediaViewer } from '@/components/feed/ImmersiveMediaViewer';
+import { CreatorStudioModal } from '@/components/studio/CreatorStudioModal';
+import { BusinessStudioModal } from '@/components/studio/BusinessStudioModal';
 import {
   MOCK_POSTS,
   MOCK_CREATORS,
@@ -45,6 +47,8 @@ export default function Home() {
   const [bookingCreatorName, setBookingCreatorName] = useState<string>('');
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCreatorStudioOpen, setIsCreatorStudioOpen] = useState(false);
+  const [isBusinessStudioOpen, setIsBusinessStudioOpen] = useState(false);
   const [expandedPost, setExpandedPost] = useState<Post | null>(null);
 
   // Live Server Database Synchronization
@@ -195,6 +199,8 @@ export default function Home() {
         unreadCount={unreadNotificationsCount}
         onOpenNotifications={() => setIsNotificationsOpen(true)}
         onOpenCreate={() => setIsCreateModalOpen(true)}
+        onOpenCreatorStudio={() => setIsCreatorStudioOpen(true)}
+        onOpenBusinessStudio={() => setIsBusinessStudioOpen(true)}
       />
 
       {/* Main Screen Router */}
@@ -341,6 +347,22 @@ export default function Home() {
         onPublishPost={handlePublishPost}
         onPublishStory={handlePublishStory}
         currentCreator={activeCreatorProfile}
+      />
+
+      {/* Creator Studio Hub (Wallet, Bookings & Affiliate) */}
+      <CreatorStudioModal
+        isOpen={isCreatorStudioOpen}
+        onClose={() => setIsCreatorStudioOpen(false)}
+        creatorId={currentUser?.id || activeCreatorProfile?.id}
+        creatorName={currentUser?.profile?.displayName || activeCreatorProfile?.displayName}
+      />
+
+      {/* Business Studio Hub (Product Catalog & Brand Campaigns) */}
+      <BusinessStudioModal
+        isOpen={isBusinessStudioOpen}
+        onClose={() => setIsBusinessStudioOpen(false)}
+        businessName={currentUser?.profile?.displayName || 'My Brand'}
+        onOpenCreatorDiscovery={() => handleTabChange('explore')}
       />
 
       {/* Immersive Media Viewer (opens uncropped from Portfolio / Explore / Search) */}

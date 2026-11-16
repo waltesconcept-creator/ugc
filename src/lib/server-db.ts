@@ -1,6 +1,21 @@
 import fs from 'fs';
 import path from 'path';
-import type { Profile, CreatorDetails, Post, Story, Booking, ServicePackage, Review } from './types';
+import type {
+  Profile,
+  CreatorDetails,
+  Post,
+  Story,
+  Booking,
+  ServicePackage,
+  Review,
+  Product,
+  AffiliateCampaign,
+  CreatorApplication,
+  AffiliateLink,
+  CommerceOrder,
+  Wallet,
+  WalletTransaction,
+} from './types';
 import {
   MOCK_PROFILES,
   MOCK_CREATOR_DETAILS,
@@ -8,6 +23,13 @@ import {
   MOCK_STORIES,
   MOCK_BOOKINGS,
   MOCK_CREATORS,
+  MOCK_PRODUCTS,
+  MOCK_CAMPAIGNS,
+  MOCK_APPLICATIONS,
+  MOCK_AFFILIATE_LINKS,
+  MOCK_COMMERCE_ORDERS,
+  MOCK_WALLET,
+  MOCK_WALLET_TRANSACTIONS,
 } from './mock-data';
 import { supabaseAdmin, isSupabaseConfigured } from './supabase';
 
@@ -31,6 +53,13 @@ interface DatabaseSchema {
   stories: Story[];
   bookings: Booking[];
   reviews?: Review[];
+  products?: Product[];
+  campaigns?: AffiliateCampaign[];
+  applications?: CreatorApplication[];
+  affiliateLinks?: AffiliateLink[];
+  orders?: CommerceOrder[];
+  wallets?: Record<string, Wallet>;
+  walletTransactions?: WalletTransaction[];
   version: number;
 }
 
@@ -58,12 +87,23 @@ function getInitialData(): DatabaseSchema {
     createdAt: c.profile.createdAt,
   }));
 
+  const initialWallets: Record<string, Wallet> = {
+    'creator-1': MOCK_WALLET,
+  };
+
   return {
     users: seededUsers,
     posts: MOCK_POSTS,
     stories: MOCK_STORIES,
     bookings: MOCK_BOOKINGS,
-    version: 2,
+    products: MOCK_PRODUCTS,
+    campaigns: MOCK_CAMPAIGNS,
+    applications: MOCK_APPLICATIONS,
+    affiliateLinks: MOCK_AFFILIATE_LINKS,
+    orders: MOCK_COMMERCE_ORDERS,
+    wallets: initialWallets,
+    walletTransactions: MOCK_WALLET_TRANSACTIONS,
+    version: 3,
   };
 }
 
@@ -78,6 +118,16 @@ export async function getDb(): Promise<DatabaseSchema> {
     }
     const data = await fs.promises.readFile(DB_FILE, 'utf-8');
     const parsed = JSON.parse(data) as DatabaseSchema;
+    if (!parsed.products || parsed.products.length === 0) {
+      parsed.products = MOCK_PRODUCTS;
+      parsed.campaigns = MOCK_CAMPAIGNS;
+      parsed.applications = MOCK_APPLICATIONS;
+      parsed.affiliateLinks = MOCK_AFFILIATE_LINKS;
+      parsed.orders = MOCK_COMMERCE_ORDERS;
+      parsed.wallets = { 'creator-1': MOCK_WALLET };
+      parsed.walletTransactions = MOCK_WALLET_TRANSACTIONS;
+      await saveDb(parsed);
+    }
     return parsed;
   } catch (error) {
     console.error('Error reading db.json, returning initial seed:', error);
@@ -324,4 +374,218 @@ export async function createReview(review: Review): Promise<Review> {
   });
 
   return review;
+}
+
+// ─────────────────────────────────────────────────────────────
+// SOCIAL COMMERCE & AFFILIATE HELPERS
+// ─────────────────────────────────────────────────────────────
+
+// ── Products ──
+export async function getProducts(businessId?: string): Promise<Product[]> {
+  const db = await getDb();
+  const prods = db.products || [];
+  if (businessId) {
+    return prods.filter((p) => p.businessId === businessId);
+  }
+  return prods;
+}
+
+export async function getProductById(id: string): Promise<Product | undefined> {
+  const db = await getDb();
+  return (db.products || []).find((p) => p.id === id);
+}
+
+export async function createProduct(product: Product): Promise<Product> {
+  const db = await getDb();
+  if (!db.products) db.products = [];
+  db.products.unshift(product);
+  await saveDb(db);
+  return product;
+}
+
+// ── Campaigns ──
+export async function getCampaigns(businessId?: string): Promise<AffiliateCampaign[]> {
+  const db = await getDb();
+  const camps = db.campaigns || [];
+  if (businessId) {
+    return camps.filter((c) => c.businessId === businessId);
+  }
+  return camps;
+}
+
+export async function getCampaignById(id: string): Promise<AffiliateCampaign | undefined> {
+  const db = await getDb();
+  return (db.campaigns || []).find((c) => c.id === id);
+}
+
+export async function createCampaign(campaign: AffiliateCampaign): Promise<AffiliateCampaign> {
+  const db = await getDb();
+  if (!db.campaigns) db.campaigns = [];
+  db.campaigns.unshift(campaign);
+  await saveDb(db);
+  return campaign;
+}
+
+// ── Creator Applications & Affiliate Links ──
+export async function getCreatorApplications(creatorId?: string, campaignId?: string): Promise<CreatorApplication[]> {
+  const db = await getDb();
+  let apps = db.applications || [];
+  if (creatorId) {
+    apps = apps.filter((a) => a.creatorId === creatorId);
+  }
+  if (campaignId) {
+    apps = apps.filter((a) => a.campaignId === campaignId);
+  }
+  return apps;
+}
+
+export async function applyToCampaign(application: CreatorApplication): Promise<CreatorApplication> {
+  const db = await getDb();
+  if (!db.applications) db.applications = [];
+  db.applications.unshift(application);
+
+  // If approved automatically or upon submission, generate link
+  if (application.status === 'approved') {
+    if (!db.affiliateLinks) db.affiliateLinks = [];
+    const campaign = (db.campaigns || []).find((c) => c.id === application.campaignId);
+    if (campaign) {
+      db.affiliateLinks.push({
+        id: `link-${Date.now()}`,
+        code: application.affiliateCode || `REF-${application.creatorId.slice(-4).toUpperCase()}`,
+        campaignId: campaign.id,
+        productId: campaign.productId,
+        creatorId: application.creatorId,
+        totalClicks: 0,
+        totalOrders: 0,
+        totalCommissionNaira: 0,
+        createdAt: new Date().toISOString(),
+      });
+    }
+  }
+
+  await saveDb(db);
+  return application;
+}
+
+export async function getAffiliateLinks(creatorId?: string): Promise<AffiliateLink[]> {
+  const db = await getDb();
+  const links = db.affiliateLinks || [];
+  if (creatorId) {
+    return links.filter((l) => l.creatorId === creatorId);
+  }
+  return links;
+}
+
+// ── Orders & Automated Commissions ──
+export async function createCommerceOrder(order: CommerceOrder): Promise<CommerceOrder> {
+  const db = await getDb();
+  if (!db.orders) db.orders = [];
+  db.orders.unshift(order);
+
+  // If order was generated via an affiliate link/creator, credit creator's wallet!
+  if (order.creatorId && order.commissionEarnedNaira > 0) {
+    if (!db.wallets) db.wallets = {};
+    if (!db.walletTransactions) db.walletTransactions = [];
+
+    const creatorId = order.creatorId;
+    if (!db.wallets[creatorId]) {
+      db.wallets[creatorId] = {
+        userId: creatorId,
+        currency: 'NGN',
+        availableBalanceNaira: 0,
+        pendingBalanceNaira: 0,
+        totalEarnedBookingsNaira: 0,
+        totalEarnedAffiliateNaira: 0,
+        totalWithdrawnNaira: 0,
+      };
+    }
+
+    // Add to pending balance
+    db.wallets[creatorId].pendingBalanceNaira += order.commissionEarnedNaira;
+    db.wallets[creatorId].totalEarnedAffiliateNaira += order.commissionEarnedNaira;
+
+    // Record ledger entry
+    db.walletTransactions.unshift({
+      id: `tx-${Date.now()}`,
+      userId: creatorId,
+      type: 'affiliate_commission',
+      amountNaira: order.commissionEarnedNaira,
+      title: `Affiliate Commission: ${order.productTitle}`,
+      description: `Sale generated via affiliate code ${order.affiliateCode || 'DIRECT'}`,
+      status: 'pending',
+      referenceId: order.id,
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  await saveDb(db);
+  return order;
+}
+
+// ── Unified Wallet ──
+export async function getWallet(userId: string): Promise<Wallet> {
+  const db = await getDb();
+  if (!db.wallets) db.wallets = {};
+  if (!db.wallets[userId]) {
+    // Return default or mock for creator-1
+    if (userId === 'creator-1') {
+      db.wallets[userId] = MOCK_WALLET;
+    } else {
+      db.wallets[userId] = {
+        userId,
+        currency: 'NGN',
+        availableBalanceNaira: 0,
+        pendingBalanceNaira: 0,
+        totalEarnedBookingsNaira: 0,
+        totalEarnedAffiliateNaira: 0,
+        totalWithdrawnNaira: 0,
+      };
+    }
+    await saveDb(db);
+  }
+  return db.wallets[userId];
+}
+
+export async function getWalletTransactions(userId: string): Promise<WalletTransaction[]> {
+  const db = await getDb();
+  const txs = db.walletTransactions || [];
+  return txs.filter((t) => t.userId === userId || userId === 'creator-1');
+}
+
+export async function requestWithdrawal(
+  userId: string,
+  amountNaira: number,
+  bankDetails: { accountNumber: string; bankName: string; accountName: string }
+): Promise<{ success: boolean; message: string; wallet?: Wallet }> {
+  const db = await getDb();
+  if (!db.wallets) db.wallets = {};
+  const wallet = db.wallets[userId] || MOCK_WALLET;
+
+  if (amountNaira <= 0) {
+    return { success: false, message: 'Invalid withdrawal amount' };
+  }
+  if (wallet.availableBalanceNaira < amountNaira) {
+    return { success: false, message: 'Insufficient available balance' };
+  }
+
+  wallet.availableBalanceNaira -= amountNaira;
+  wallet.totalWithdrawnNaira += amountNaira;
+  wallet.bankDetails = bankDetails;
+  db.wallets[userId] = wallet;
+
+  if (!db.walletTransactions) db.walletTransactions = [];
+  db.walletTransactions.unshift({
+    id: `tx-${Date.now()}`,
+    userId,
+    type: 'withdrawal',
+    amountNaira: -amountNaira,
+    title: `Bank Transfer to ${bankDetails.bankName}`,
+    description: `Withdrawal to account ${bankDetails.accountNumber} (${bankDetails.accountName})`,
+    status: 'cleared',
+    clearedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+  });
+
+  await saveDb(db);
+  return { success: true, message: 'Withdrawal processed successfully', wallet };
 }

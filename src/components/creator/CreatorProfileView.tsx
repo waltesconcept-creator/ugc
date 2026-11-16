@@ -7,6 +7,8 @@ import { useAuth } from '@/context/AuthContext';
 import { EditProfileModal } from './EditProfileModal';
 import { ShareProfileModal } from './ShareProfileModal';
 import { LeaveReviewModal } from './LeaveReviewModal';
+import { CreatorStudioModal } from '../studio/CreatorStudioModal';
+import { BusinessStudioModal } from '../studio/BusinessStudioModal';
 import {
   BadgeCheck,
   MapPin,
@@ -36,6 +38,8 @@ import {
   Plus,
   X,
   ShieldCheck,
+  Briefcase,
+  Store,
 } from 'lucide-react';
 
 interface CreatorProfileViewProps {
@@ -80,6 +84,8 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isAvatarViewerOpen, setIsAvatarViewerOpen] = useState(false);
+  const [isCreatorStudioOpen, setIsCreatorStudioOpen] = useState(false);
+  const [isBusinessStudioOpen, setIsBusinessStudioOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviewLinkCopied, setReviewLinkCopied] = useState(false);
   const [dynamicReviews, setDynamicReviews] = useState<Review[]>([]);
@@ -262,20 +268,34 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
 
             {/* ── Action buttons (Own Profile vs Viewing Other Creator) ── */}
             {currentUser && (currentUser.id === profile.id || currentUser.profile?.id === profile.id) ? (
-              <div className="flex gap-2 mt-4">
+              <div className="flex flex-wrap gap-2 mt-4">
+                <button
+                  onClick={() => setIsCreatorStudioOpen(true)}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-orange-500 to-amber-500 text-white min-h-[44px] shadow-lg shadow-orange-500/20 active:scale-95 transition-all cursor-pointer"
+                >
+                  <Briefcase className="w-4 h-4" />
+                  <span>Creator Studio (Wallet & Affiliate)</span>
+                </button>
+                <button
+                  onClick={() => setIsBusinessStudioOpen(true)}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-neutral-900 border border-neutral-700 hover:bg-neutral-800 text-white min-h-[44px] transition-colors"
+                >
+                  <Store className="w-4 h-4 text-emerald-400" />
+                  <span>Brand Studio</span>
+                </button>
                 <button
                   onClick={() => setIsEditModalOpen(true)}
-                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-neutral-900 border border-neutral-700 hover:bg-neutral-800 text-white min-h-[44px] transition-colors"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-neutral-900 border border-neutral-700 hover:bg-neutral-800 text-white min-h-[44px] transition-colors"
                 >
                   <Edit3 className="w-4 h-4 text-orange-400" />
-                  <span>Edit Profile & Rates</span>
+                  <span>Edit Rates</span>
                 </button>
                 <button
                   onClick={() => setIsShareModalOpen(true)}
-                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-neutral-900 border border-neutral-700 hover:bg-neutral-800 text-white min-h-[44px] transition-colors"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-neutral-900 border border-neutral-700 hover:bg-neutral-800 text-white min-h-[44px] transition-colors"
                 >
                   <Share2 className="w-4 h-4 text-neutral-300" />
-                  <span>Share Portfolio</span>
+                  <span>Share</span>
                 </button>
               </div>
             ) : (
@@ -834,6 +854,21 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Creator Studio Hub */}
+      <CreatorStudioModal
+        isOpen={isCreatorStudioOpen}
+        onClose={() => setIsCreatorStudioOpen(false)}
+        creatorId={profile.id}
+        creatorName={profile.displayName || profile.username}
+      />
+
+      {/* Business Studio Hub */}
+      <BusinessStudioModal
+        isOpen={isBusinessStudioOpen}
+        onClose={() => setIsBusinessStudioOpen(false)}
+        businessName={profile.displayName || 'My Brand'}
+      />
     </div>
   );
 };

@@ -22,6 +22,7 @@ import {
   LogOut,
   UserCheck,
   X,
+  Store,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -32,6 +33,8 @@ interface NavbarProps {
   unreadCount?: number;
   onOpenNotifications?: () => void;
   onOpenCreate?: () => void;
+  onOpenCreatorStudio?: () => void;
+  onOpenBusinessStudio?: () => void;
 }
 
 const ROLE_OPTIONS: { value: UserRole; label: string; icon: React.ReactNode }[] = [
@@ -66,6 +69,8 @@ const Navbar: React.FC<NavbarProps> = ({
   unreadCount = 1,
   onOpenNotifications,
   onOpenCreate,
+  onOpenCreatorStudio,
+  onOpenBusinessStudio,
 }) => {
   const { currentUser, isAuthenticated, openAuth, logout } = useAuth();
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
@@ -185,6 +190,30 @@ const Navbar: React.FC<NavbarProps> = ({
                       <User className="w-3.5 h-3.5 text-neutral-400" />
                       <span>My Profile & Rates</span>
                     </button>
+                    {onOpenCreatorStudio && (
+                      <button
+                        onClick={() => {
+                          onOpenCreatorStudio();
+                          setUserMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
+                      >
+                        <Briefcase className="w-3.5 h-3.5 text-orange-400" />
+                        <span>Creator Studio & Wallet</span>
+                      </button>
+                    )}
+                    {onOpenBusinessStudio && (
+                      <button
+                        onClick={() => {
+                          onOpenBusinessStudio();
+                          setUserMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
+                      >
+                        <Store className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Brand Studio & Products</span>
+                      </button>
+                    )}
                     <button
                       onClick={() => {
                         if (onOpenCreate) onOpenCreate();
@@ -375,6 +404,30 @@ const Navbar: React.FC<NavbarProps> = ({
                 <User className="w-4 h-4 text-orange-400" />
                 <span>My Profile & Packages</span>
               </button>
+              {onOpenCreatorStudio && (
+                <button
+                  onClick={() => {
+                    onOpenCreatorStudio();
+                    setUserMenuOpen(false);
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-orange-500/10 hover:bg-orange-500/20 text-orange-300 border border-orange-500/20 text-xs font-semibold transition-colors"
+                >
+                  <Briefcase className="w-4 h-4 text-orange-400" />
+                  <span>Creator Studio & Wallet</span>
+                </button>
+              )}
+              {onOpenBusinessStudio && (
+                <button
+                  onClick={() => {
+                    onOpenBusinessStudio();
+                    setUserMenuOpen(false);
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-800/80 hover:bg-neutral-800 text-white text-xs font-semibold transition-colors"
+                >
+                  <Store className="w-4 h-4 text-emerald-400" />
+                  <span>Brand Studio (Products)</span>
+                </button>
+              )}
               <button
                 onClick={() => {
                   if (onOpenCreate) onOpenCreate();
