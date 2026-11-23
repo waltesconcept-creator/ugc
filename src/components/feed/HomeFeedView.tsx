@@ -51,7 +51,7 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
 }) => {
   const { currentUser, isAuthenticated, openAuth } = useAuth();
 
-  // Feed view mode: 'social' (Instagram-style standard feed) vs 'reels' (TikTok-style 9:16 immersive)
+  // Feed view mode: 'social' (standard social feed) vs 'reels' (9:16 vertical reels)
   const [viewMode, setViewMode] = useState<'social' | 'reels'>('social');
 
   // Discovery section: 'for_you' (recommendation engine ranked) vs 'following' (chronological)
@@ -305,7 +305,7 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
         </div>
       )}
 
-      {/* ── MODE 2: Immersive 9:16 Full-Bleed Vertical Reels (TikTok-style swipe) ── */}
+      {/* ── MODE 2: Immersive 9:16 Full-Bleed Vertical Reels ── */}
       {viewMode === 'reels' && (
         <div className="flex-1 w-full h-[calc(100dvh-7.5rem)]">
           <VideoFeed

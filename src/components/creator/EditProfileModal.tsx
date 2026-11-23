@@ -77,7 +77,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
             creatorId: currentUser?.id || 'creator',
             title: 'Authentic UGC Short-Form Video',
             description:
-              'Organic 30-60s UGC video optimized for TikTok and Reels with authentic hook, storytelling, and call to action.',
+              'Organic 30-60s vertical UGC video optimized for social feeds and reels with authentic hook, storytelling, and call to action.',
             priceCents: (Number(startingRate) || 50) * 100,
             currency: 'USD',
             deliveryDays: 3,
@@ -299,27 +299,27 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div>
-                <label className="text-[10px] font-semibold text-neutral-400 block mb-1">TikTok Handle</label>
+                <label className="text-[10px] font-semibold text-neutral-400 block mb-1">Video Profile Handle</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 font-bold">@</span>
                   <input
                     type="text"
                     value={tiktokHandle}
                     onChange={(e) => setTiktokHandle(e.target.value.replace(/^@/, ''))}
-                    placeholder="yourtiktok"
+                    placeholder="yourhandle"
                     className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] text-xs"
                   />
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-neutral-400 block mb-1">Instagram Handle</label>
+                <label className="text-[10px] font-semibold text-neutral-400 block mb-1">Social Profile Handle</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 font-bold">@</span>
                   <input
                     type="text"
                     value={instagramHandle}
                     onChange={(e) => setInstagramHandle(e.target.value.replace(/^@/, ''))}
-                    placeholder="yourinstagram"
+                    placeholder="yourprofile"
                     className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] text-xs"
                   />
                 </div>

@@ -111,7 +111,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
         username: 'creator',
         displayName: 'Creator',
         avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face',
-        bio: 'UGC Creator on KRE8TOR',
+        bio: 'UGC Creator on Creator',
         location: currentUser.country || '',
         country: currentUser.country || '',
         website: '',
@@ -145,7 +145,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
               creatorId: p.id,
               title: 'Authentic Short-Form UGC Video',
               description:
-                'High-converting organic UGC video tailored for TikTok, Instagram Reels, or Ads. Includes 1 revision & fast turnaround.',
+                'High-converting organic vertical UGC video tailored for feeds, reels, and brand campaigns. Includes 1 revision & fast turnaround.',
               priceCents: startingPriceCents,
               currency: 'USD',
               deliveryDays: 3,
@@ -305,7 +305,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                   className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#181818] border border-[#262626] text-[11px] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-colors"
                 >
                   <Play className="w-3 h-3 text-neutral-400" />
-                  <span>TikTok: @{details.tiktokHandle.replace('@', '')}</span>
+                  <span>@{details.tiktokHandle.replace('@', '')}</span>
                   <ExternalLink className="w-2.5 h-2.5 text-neutral-500" />
                 </a>
               )}

@@ -433,7 +433,7 @@ export const BusinessStudioModal: React.FC<BusinessStudioModalProps> = ({
             </div>
           )}
 
-          {/* TAB 3: CREATOR APPLICATIONS & SAMPLE REQUESTS (TikTok Shop Model) */}
+          {/* TAB 3: CREATOR APPLICATIONS & SAMPLE REQUESTS */}
           {activeTab === 'applications' && (
             <div className="space-y-4">
               <div className="p-3.5 rounded-xl bg-[#181818] border border-[#262626] text-xs text-neutral-300">

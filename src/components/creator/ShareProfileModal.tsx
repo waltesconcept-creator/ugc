@@ -29,7 +29,7 @@ export const ShareProfileModal: React.FC<ShareProfileModalProps> = ({
 
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://ugc-b3pl.onrender.com';
   const shareUrl = `${origin}/?creator=${profile.username}`;
-  const shareText = `Check out @${profile.username}'s UGC creator portfolio on KRE8TOR! 🎬✨`;
+  const shareText = `Check out @${profile.username}'s UGC creator portfolio on Creator! 🎬✨`;
 
   const handleCopy = () => {
     navigator.clipboard?.writeText(shareUrl);
@@ -41,7 +41,7 @@ export const ShareProfileModal: React.FC<ShareProfileModalProps> = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${profile.displayName} on KRE8TOR`,
+          title: `${profile.displayName} on Creator`,
           text: shareText,
           url: shareUrl,
         });

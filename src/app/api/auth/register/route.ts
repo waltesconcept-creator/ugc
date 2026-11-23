@@ -85,7 +85,7 @@ export async function POST(request: Request) {
         creatorId: userId,
         title: 'Authentic Short-Form UGC Video',
         description:
-          'High-converting organic UGC video tailored for TikTok, Instagram Reels, or Ads. Includes 1 revision & fast turnaround.',
+          'High-converting organic vertical UGC video tailored for feeds, reels, and brand campaigns. Includes 1 revision & fast turnaround.',
         priceCents: startingCents,
         currency: 'USD',
         deliveryDays: 3,

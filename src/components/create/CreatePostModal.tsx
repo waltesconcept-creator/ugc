@@ -130,7 +130,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
         finalThumbnailUrl = detectedMediaType === 'photo' ? uploadData.url : selectedThumbnailUrl;
       }
 
-      setStatusMessage('Saving post to KRE8TOR network...');
+      setStatusMessage('Saving post to Creator...');
 
       if (createType === 'story') {
         const newStory: Story = {

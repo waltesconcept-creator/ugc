@@ -53,7 +53,7 @@ export async function POST(request: Request) {
           id: `svc-${Date.now()}-1`,
           creatorId: user.id,
           title: 'Standard UGC Video',
-          description: 'High-energy authentic vertical UGC video for TikTok, Reels & Ads.',
+          description: 'High-energy authentic vertical UGC video for social feeds, reels, and ads.',
           priceCents: 5000,
           currency: 'NGN',
           deliveryDays: 3,

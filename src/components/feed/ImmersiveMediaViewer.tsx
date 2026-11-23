@@ -183,7 +183,7 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
     const url = window.location.href;
     if (navigator.share) {
       navigator.share({
-        title: `${currentPost.creator.displayName} on KRE8TOR`,
+        title: `${currentPost.creator.displayName} on Creator`,
         text: currentPost.caption,
         url,
       }).catch(() => {});

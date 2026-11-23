@@ -324,7 +324,7 @@ export const CreatorStudioModal: React.FC<CreatorStudioModalProps> = ({
           {activeTab === 'campaigns' && (
             <div className="space-y-4">
               <div className="p-3.5 rounded-xl bg-[#181818] border border-[#262626] text-xs text-neutral-300">
-                <span className="font-semibold text-white">TikTok Shop Affiliate Model:</span> Brands provide free samples and pay fixed commissions for every sale your reels drive.
+                <span className="font-semibold text-white">Creator Affiliate & Sample Program:</span> Request free products from brands, promote them in your content, and earn direct commissions on every customer order.
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
@@ -439,7 +439,7 @@ export const CreatorStudioModal: React.FC<CreatorStudioModalProps> = ({
           {activeTab === 'links' && (
             <div className="space-y-4">
               <div className="p-3.5 rounded-xl bg-[#181818] border border-[#262626] text-xs text-neutral-300">
-                Share these referral links in your Instagram bio, TikTok comments, or WhatsApp status. Purchases automatically credit your wallet!
+                Share these unique referral links across your social channels, bio, or direct messages. Purchases automatically credit your wallet!
               </div>
 
               {[

@@ -190,7 +190,7 @@ export const MOCK_PROFILES: Profile[] = [
     username: 'jamespark',
     displayName: 'James Park',
     avatarUrl: avatar('1506794778202-cad84cf45f1d'),
-    bio: 'Gaming & tech creator 🎮🇰🇷 Seoul × LA. Setup tours, game reviews, and honest tech takes. 78K on TikTok and growing!',
+    bio: 'Gaming & tech creator 🎮🇰🇷 Seoul × LA. Setup tours, game reviews, and honest tech takes. 78K engaged audience and growing!',
     location: 'Los Angeles',
     country: 'United States',
     website: 'https://jamespark.gg',
@@ -592,18 +592,18 @@ export const MOCK_CREATOR_DETAILS: CreatorDetails[] = [
 // ---------------------------------------------------------------------------
 export const MOCK_SERVICES: ServicePackage[] = [
   // Chloe Adams (creator-1)
-  { id: 'svc-1', creatorId: 'creator-1', title: 'Skincare Product Review', description: 'Honest, in-depth review of your skincare product. Includes unboxing, first impressions, texture & scent analysis, application demo, and final verdict. Delivered as a polished 60-90 second vertical video optimised for TikTok or Instagram Reels.', priceCents: 4500, currency: 'GBP', deliveryDays: 5, revisionsAllowed: 2, formatTag: 'Product Review', isActive: true },
+  { id: 'svc-1', creatorId: 'creator-1', title: 'Skincare Product Review', description: 'Honest, in-depth review of your skincare product. Includes unboxing, first impressions, texture & scent analysis, application demo, and final verdict. Delivered as a polished 60-90 second vertical video optimised for social feeds and high-converting reels.', priceCents: 4500, currency: 'GBP', deliveryDays: 5, revisionsAllowed: 2, formatTag: 'Product Review', isActive: true },
   { id: 'svc-2', creatorId: 'creator-1', title: 'Get Ready With Me — Skincare Edition', description: 'A full morning or evening skincare routine video featuring your product as the hero. Natural lighting, close-up shots, and genuine commentary on how it fits into my routine. Perfect for brand awareness campaigns.', priceCents: 8500, currency: 'GBP', deliveryDays: 7, revisionsAllowed: 2, formatTag: 'Get Ready With Me', isActive: true },
-  { id: 'svc-3', creatorId: 'creator-1', title: 'Premium Skincare Campaign Bundle', description: 'Full campaign package: 1 hero review video (90s), 1 GRWM integration (60s), plus 3 Instagram Stories. Includes brand tag, swipe-up link, and custom CTA. Ideal for product launches.', priceCents: 11000, currency: 'GBP', deliveryDays: 10, revisionsAllowed: 3, formatTag: 'Campaign Bundle', isActive: true },
+  { id: 'svc-3', creatorId: 'creator-1', title: 'Premium Skincare Campaign Bundle', description: 'Full campaign package: 1 hero review video (90s), 1 GRWM integration (60s), plus 3 Story highlights. Includes brand tag, product link, and custom CTA. Ideal for product launches.', priceCents: 11000, currency: 'GBP', deliveryDays: 10, revisionsAllowed: 3, formatTag: 'Campaign Bundle', isActive: true },
 
   // Marcus Chen (creator-2)
-  { id: 'svc-4', creatorId: 'creator-2', title: 'Tech Unboxing Video', description: 'Professional unboxing and first-look video of your tech product. Covers packaging, build quality, key features, and initial performance impressions. Shot in 4K with studio lighting. Optimised for TikTok and YouTube Shorts.', priceCents: 5500, currency: 'CAD', deliveryDays: 4, revisionsAllowed: 2, formatTag: 'Unboxing', isActive: true },
-  { id: 'svc-5', creatorId: 'creator-2', title: 'In-Depth Tech Review', description: 'Comprehensive review after one week of daily use. Benchmarks, real-world performance tests, comparisons with competitors, pros and cons breakdown. 3-5 minute YouTube video with TikTok cut-down included.', priceCents: 8500, currency: 'CAD', deliveryDays: 10, revisionsAllowed: 2, formatTag: 'Review', isActive: true },
+  { id: 'svc-4', creatorId: 'creator-2', title: 'Tech Unboxing Video', description: 'Professional unboxing and first-look video of your tech product. Covers packaging, build quality, key features, and initial performance impressions. Shot in 4K with studio lighting. Optimised for vertical video showcases.', priceCents: 5500, currency: 'CAD', deliveryDays: 4, revisionsAllowed: 2, formatTag: 'Unboxing', isActive: true },
+  { id: 'svc-5', creatorId: 'creator-2', title: 'In-Depth Tech Review', description: 'Comprehensive review after one week of daily use. Benchmarks, real-world performance tests, comparisons with competitors, pros and cons breakdown. 3-5 minute high-res video with 60s punchy cut-down included.', priceCents: 8500, currency: 'CAD', deliveryDays: 10, revisionsAllowed: 2, formatTag: 'Review', isActive: true },
 
   // Elena Rostova (creator-3)
   { id: 'svc-6', creatorId: 'creator-3', title: 'Fashion Lookbook Video', description: 'Styled lookbook video featuring 3-4 outfits incorporating your pieces. Shot on location in Berlin with cinematic editing. Includes on-screen brand credits and shopping links.', priceCents: 6500, currency: 'EUR', deliveryDays: 7, revisionsAllowed: 2, formatTag: 'Lookbook', isActive: true },
   { id: 'svc-7', creatorId: 'creator-3', title: 'Fashion Haul & Try-On', description: 'Try-on haul video with honest commentary on fit, fabric quality, and styling potential. Perfect for seasonal collections and new drops.', priceCents: 4000, currency: 'EUR', deliveryDays: 5, revisionsAllowed: 1, formatTag: 'Haul', isActive: true },
-  { id: 'svc-8', creatorId: 'creator-3', title: 'Outfit of the Day Feature', description: 'Single outfit spotlight video featuring your brand. Styled for street-style aesthetics with Berlin backdrop. Quick, punchy 30-45 second edit for Reels and TikTok.', priceCents: 9000, currency: 'EUR', deliveryDays: 3, revisionsAllowed: 1, formatTag: 'OOTD', isActive: true },
+  { id: 'svc-8', creatorId: 'creator-3', title: 'Outfit of the Day Feature', description: 'Single outfit spotlight video featuring your brand. Styled for street-style aesthetics with Berlin backdrop. Quick, punchy 30-45 second edit for feeds and reels.', priceCents: 9000, currency: 'EUR', deliveryDays: 3, revisionsAllowed: 1, formatTag: 'OOTD', isActive: true },
 
   // David Miller (creator-4)
   { id: 'svc-9', creatorId: 'creator-4', title: 'Recipe Feature Video', description: 'Recipe video starring your food product as the key ingredient. Styled overhead shots, step-by-step instructions, and a mouth-watering final plating shot. Ideal for sauces, spices, and specialty ingredients.', priceCents: 5000, currency: 'USD', deliveryDays: 6, revisionsAllowed: 2, formatTag: 'Recipe', isActive: true },
@@ -649,7 +649,7 @@ export const MOCK_SERVICES: ServicePackage[] = [
   // Zara Hassan (creator-14)
   { id: 'svc-30', creatorId: 'creator-14', title: 'Modest Fashion Lookbook', description: 'Elegant lookbook featuring your modest fashion pieces styled for different occasions — work, casual, and evening. Shot against Dubai\'s stunning architectural backdrops.', priceCents: 7000, currency: 'AED', deliveryDays: 6, revisionsAllowed: 2, formatTag: 'Lookbook', isActive: true },
   { id: 'svc-31', creatorId: 'creator-14', title: 'Hijab Styling Tutorial', description: 'Hijab styling tutorial using your scarves or accessories. Multiple styles demonstrated with step-by-step instructions. Serves both as branded content and a genuinely useful tutorial.', priceCents: 5000, currency: 'AED', deliveryDays: 5, revisionsAllowed: 2, formatTag: 'Styling Tips', isActive: true },
-  { id: 'svc-32', creatorId: 'creator-14', title: 'Fashion Haul & Try-On', description: 'Try-on haul video featuring your latest collection. Covers fit, fabric quality, and styling suggestions with an inclusive, body-positive approach. Optimised for TikTok and Reels.', priceCents: 9500, currency: 'AED', deliveryDays: 7, revisionsAllowed: 2, formatTag: 'Haul', isActive: true },
+  { id: 'svc-32', creatorId: 'creator-14', title: 'Fashion Haul & Try-On', description: 'Try-on haul video featuring your latest collection. Covers fit, fabric quality, and styling suggestions with an inclusive, body-positive approach. Optimised for feeds and reels.', priceCents: 9500, currency: 'AED', deliveryDays: 7, revisionsAllowed: 2, formatTag: 'Haul', isActive: true },
 
   // Ryan Carter (creator-15)
   { id: 'svc-33', creatorId: 'creator-15', title: 'Budget Car Mod Review', description: 'Honest review and install walkthrough of your aftermarket car part or accessory. Before-and-after comparison, difficulty rating, and value assessment for the everyday car enthusiast.', priceCents: 3500, currency: 'USD', deliveryDays: 7, revisionsAllowed: 1, formatTag: 'Car Review', isActive: true },
@@ -721,7 +721,7 @@ export const MOCK_REVIEWS: Review[] = [
   { id: 'rev-26', bookingId: 'booking-26', reviewerName: 'WeatherTech', reviewerAvatar: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=100&h=100&fit=crop', reviewerRole: 'business', overallRating: 5, ratingQuality: 4, ratingCommunication: 5, ratingTimeliness: 5, reviewText: 'Ryan keeps it real — exactly what our brand needed. His floor liner install video was straightforward, practical, and his audience appreciated the no-BS approach. Great value at his price point.', isVerifiedBooking: true, createdAt: '2025-03-15T19:00:00Z' },
 
   // Luna Martinez
-  { id: 'rev-27', bookingId: 'booking-27', reviewerName: 'Casa Bonita Decor', reviewerAvatar: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=100&h=100&fit=crop', reviewerRole: 'business', overallRating: 5, ratingQuality: 5, ratingCommunication: 4, ratingTimeliness: 4, reviewText: 'Luna transformed a plain room into a colourful, inviting space using our products. The before-and-after was so dramatic that it went semi-viral on TikTok. Her warm style really connects with Latin American audiences.', isVerifiedBooking: true, createdAt: '2025-02-05T11:00:00Z' },
+  { id: 'rev-27', bookingId: 'booking-27', reviewerName: 'Casa Bonita Decor', reviewerAvatar: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=100&h=100&fit=crop', reviewerRole: 'business', overallRating: 5, ratingQuality: 5, ratingCommunication: 4, ratingTimeliness: 4, reviewText: 'Luna transformed a plain room into a colourful, inviting space using our products. The before-and-after was so dramatic that it went viral and drove over 200,000 views. Her warm style really connects with Latin American audiences.', isVerifiedBooking: true, createdAt: '2025-02-05T11:00:00Z' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -1377,8 +1377,8 @@ export const MOCK_BOOKINGS: Booking[] = [
     serviceTitle: 'Skincare Product Review',
     briefTitle: 'Vitamin C Brightening Serum Launch Review',
     briefDescription: 'We need an honest, detailed review of our new Vitamin C Brightening Serum. Cover the unboxing experience, texture, scent, application, and visible results after 7 days of use. Target audience is women 25-40 interested in clean beauty. Mention our cruelty-free and vegan certifications.',
-    targetPlatform: 'TikTok',
-    referenceUrls: ['https://www.tiktok.com/@skincarebyhyram/video/example1', 'https://www.instagram.com/reel/example1/'],
+    targetPlatform: 'Reels & Feed',
+    referenceUrls: ['https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=800&fit=crop'],
     totalAmountCents: 4500,
     currency: 'GBP',
     status: 'completed',
@@ -1396,8 +1396,8 @@ export const MOCK_BOOKINGS: Booking[] = [
     serviceTitle: 'Tech Unboxing Video',
     briefTitle: 'Wireless Earbuds Pro Max Unboxing & First Look',
     briefDescription: 'Unbox our new Wireless Earbuds Pro Max on camera. Highlight the premium packaging, magnetic charging case, active noise cancellation demo, and sound quality test with different music genres. Compare briefly with AirPods Pro 2. Tone should be enthusiastic but honest.',
-    targetPlatform: 'TikTok',
-    referenceUrls: ['https://www.youtube.com/watch?v=example2'],
+    targetPlatform: 'Reels & Feed',
+    referenceUrls: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop'],
     totalAmountCents: 5500,
     currency: 'CAD',
     status: 'completed',
@@ -1436,8 +1436,8 @@ export const MOCK_BOOKINGS: Booking[] = [
     serviceTitle: 'Modest Fashion Lookbook',
     briefTitle: 'Eid 2025 Modest Fashion Collection Lookbook',
     briefDescription: 'Create a cinematic lookbook featuring 4-5 outfits from our Eid 2025 collection. Style each outfit for a different occasion — casual day out, iftar dinner, Eid prayer, family gathering, and evening celebration. Shoot against Dubai\'s architectural backdrops. Include brand tags and shopping link CTA.',
-    targetPlatform: 'TikTok',
-    referenceUrls: ['https://www.tiktok.com/@zarahassan/video/example4', 'https://www.instagram.com/reel/example4/'],
+    targetPlatform: 'Reels & Feed',
+    referenceUrls: ['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=800&fit=crop'],
     totalAmountCents: 7000,
     currency: 'AED',
     status: 'in_progress',
@@ -1457,8 +1457,8 @@ export const MOCK_BOOKINGS: Booking[] = [
     serviceTitle: 'Beauty Product Showcase',
     briefTitle: 'Hydrating Face Mist Product Showcase',
     briefDescription: 'Showcase our new Rose Hydrating Face Mist. Demonstrate the spray, show the dewy finish on skin, and share your genuine thoughts on scent and hydration. Highlight that it\'s suitable for all skin tones. Vibrant, energetic editing style preferred.',
-    targetPlatform: 'TikTok',
-    referenceUrls: ['https://www.tiktok.com/@amaraokonkwo/video/example5'],
+    targetPlatform: 'Reels & Feed',
+    referenceUrls: ['https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=800&fit=crop'],
     totalAmountCents: 3500,
     currency: 'GBP',
     status: 'submitted',
@@ -1479,8 +1479,8 @@ export const MOCK_BOOKINGS: Booking[] = [
     serviceTitle: 'Room Makeover Video',
     briefTitle: 'Living Room Transformation with HomeVibe Collection',
     briefDescription: 'Transform a living room space using pieces from our new Tropical Brights collection — including the rattan armchair, ceramic planters, and woven throw pillows. Before-and-after format with time-lapse assembly. Warm, inviting aesthetic that appeals to young homeowners in Latin America.',
-    targetPlatform: 'TikTok',
-    referenceUrls: ['https://www.tiktok.com/@lunamartinez/video/example6'],
+    targetPlatform: 'Reels & Feed',
+    referenceUrls: ['https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=800&fit=crop'],
     totalAmountCents: 4500,
     currency: 'COP',
     status: 'pending',
@@ -1532,8 +1532,8 @@ export const MOCK_BOOKINGS: Booking[] = [
     serviceTitle: 'Gaming Accessory Review',
     briefTitle: 'RGB Mechanical Keyboard Review for Gamers',
     briefDescription: 'Review our new MechStrike Pro RGB mechanical keyboard. Cover the typing feel (Cherry MX switches), RGB customisation software, build quality, and gaming performance across FPS and MOBA titles. Include sound test and comparison with your current keyboard.',
-    targetPlatform: 'TikTok',
-    referenceUrls: ['https://www.tiktok.com/@jamespark.gg/video/example8', 'https://www.youtube.com/watch?v=example8b'],
+    targetPlatform: 'Reels & Feed',
+    referenceUrls: ['https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=800&h=800&fit=crop'],
     totalAmountCents: 6000,
     currency: 'USD',
     status: 'awaiting_acceptance',

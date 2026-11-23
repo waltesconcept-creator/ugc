@@ -39,7 +39,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
 }) => {
   const [briefTitle, setBriefTitle] = useState('');
   const [briefDescription, setBriefDescription] = useState('');
-  const [targetPlatform, setTargetPlatform] = useState('Instagram');
+  const [targetPlatform, setTargetPlatform] = useState('Reels & Feed');
   const [referenceUrls, setReferenceUrls] = useState<string[]>(['']);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState<'form' | 'review' | 'success'>('form');
@@ -53,7 +53,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
 
   const isFormValid = briefTitle.trim().length >= 3 && briefDescription.trim().length >= 10;
 
-  const PLATFORMS = ['Instagram', 'TikTok', 'YouTube', 'Facebook', 'Twitter/X', 'LinkedIn', 'Website', 'Other'];
+  const PLATFORMS = ['Reels & Feed', 'Video Ads', 'Brand Website', 'Social Channels', 'Product Pages', 'Other'];
 
   const handleSubmit = () => {
     if (!isFormValid) return;
@@ -91,7 +91,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
         setStep('form');
         setBriefTitle('');
         setBriefDescription('');
-        setTargetPlatform('Instagram');
+        setTargetPlatform('Reels & Feed');
         setReferenceUrls(['']);
       }, 1500);
     }, 1000);

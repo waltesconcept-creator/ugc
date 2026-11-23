@@ -211,19 +211,19 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-white">Social Media Reach (Optional)</h2>
               <p className="text-neutral-400 mt-1">
-                If you have an existing audience on TikTok, Instagram, or YouTube, connect them here. If you have 0 followers, you can skip this step!
+                If you have an existing audience on social platforms, connect your profiles here so brands can discover your reach. If you are starting fresh, you can skip this step!
               </p>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="font-semibold text-neutral-300 block mb-1">TikTok Account</label>
+                <label className="font-semibold text-neutral-300 block mb-1">Primary Video Profile</label>
                 <div className="grid grid-cols-2 gap-3">
                   <input
                     type="text"
                     value={tiktokHandle}
                     onChange={e => setTiktokHandle(e.target.value)}
-                    placeholder="@yourtiktok"
+                    placeholder="@yourhandle"
                     className="bg-[#181818] border border-[#262626] rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-[#0095f6]"
                   />
                   <input
@@ -237,12 +237,12 @@ export const CreatorOnboardingView: React.FC<CreatorOnboardingViewProps> = ({ on
               </div>
 
               <div>
-                <label className="font-semibold text-neutral-300 block mb-1">Instagram Account</label>
+                <label className="font-semibold text-neutral-300 block mb-1">Secondary Social Profile</label>
                 <input
                   type="text"
                   value={instagramHandle}
                   onChange={e => setInstagramHandle(e.target.value)}
-                  placeholder="@yourinstagram"
+                  placeholder="@yourprofile"
                   className="w-full bg-[#181818] border border-[#262626] rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-[#0095f6]"
                 />
               </div>

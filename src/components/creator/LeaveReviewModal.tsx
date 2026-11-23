@@ -199,7 +199,7 @@ export const LeaveReviewModal: React.FC<LeaveReviewModalProps> = ({
               type="text"
               value={projectTitle}
               onChange={(e) => setProjectTitle(e.target.value)}
-              placeholder="e.g. 30s TikTok Ad, Instagram Unboxing Video"
+              placeholder="e.g. 30s Product Review Video, Organic Brand Reel"
               className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] text-xs"
             />
           </div>
