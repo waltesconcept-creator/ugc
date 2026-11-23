@@ -113,10 +113,10 @@ const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
         <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-3 px-3 mb-5 pb-1" style={{ scrollbarWidth: 'none' }}>
           <button
             onClick={() => setStatusFilter('all')}
-            className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium transition-all min-h-[40px] ${
+            className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all min-h-[40px] ${
               statusFilter === 'all'
-                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20 font-bold'
-                : 'bg-neutral-900 text-neutral-400 border border-neutral-800'
+                ? 'bg-white text-black font-bold'
+                : 'bg-[#181818] text-neutral-400 border border-[#262626]'
             }`}
           >
             All ({statusCounts.all || 0})

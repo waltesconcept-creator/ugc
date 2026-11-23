@@ -183,10 +183,10 @@ const VideoCard: React.FC<VideoCardProps> = ({
         {/* Ambient top and bottom dark gradient shadows */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 pointer-events-none" />
 
-        {/* Heart animation on double-tap (Electric Orange) */}
+        {/* Heart animation on double-tap (Red Heart) */}
         {showHeart && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
-            <Heart className="w-24 h-24 text-orange-500 fill-orange-500 animate-ping opacity-90 drop-shadow-2xl" />
+            <Heart className="w-24 h-24 text-[#ed4956] fill-[#ed4956] animate-ping opacity-90 drop-shadow-2xl" />
           </div>
         )}
 
@@ -202,7 +202,6 @@ const VideoCard: React.FC<VideoCardProps> = ({
         {/* Top category pill */}
         <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
           <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[11px] font-semibold text-white border border-white/15 flex items-center gap-1.5 shadow-sm">
-            <Sparkles className="w-3 h-3 text-orange-400" />
             {post.category}
           </span>
           <span className="px-2 py-0.5 rounded-full bg-neutral-900/70 backdrop-blur-md text-[10px] font-medium text-neutral-300 border border-neutral-700/60 hidden sm:inline-block">
@@ -210,7 +209,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
           </span>
         </div>
 
-        {/* ── Right action rail (Orange & White accents, thumb ergonomic) ── */}
+        {/* ── Right action rail ── */}
         <div className="absolute right-3 top-20 sm:top-24 z-20 flex flex-col items-center gap-4">
           {/* Creator Avatar with Follow button */}
           <button
@@ -220,15 +219,15 @@ const VideoCard: React.FC<VideoCardProps> = ({
             }}
             className="relative group min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
-            <div className="w-11 h-11 rounded-full border-2 border-orange-500 overflow-hidden shadow-lg shadow-orange-500/30 group-hover:scale-105 transition-transform">
+            <div className="w-11 h-11 rounded-full border-2 border-white/80 overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
               <img
                 src={post.creator.avatarUrl}
                 alt={post.creator.username}
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white flex items-center justify-center shadow-md">
-              <span className="text-[11px] font-extrabold leading-none">+</span>
+            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-[#0095f6] text-white flex items-center justify-center shadow-md">
+              <span className="text-[11px] font-bold leading-none">+</span>
             </div>
           </button>
 
@@ -238,11 +237,11 @@ const VideoCard: React.FC<VideoCardProps> = ({
             className="flex flex-col items-center min-w-[44px] min-h-[44px] justify-center group"
           >
             <div className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-all ${
-              liked ? 'bg-orange-500/20 text-orange-500 scale-110' : 'bg-black/50 text-white hover:bg-black/70'
+              liked ? 'bg-[#ed4956]/20 text-[#ed4956] scale-110' : 'bg-black/50 text-white hover:bg-black/70'
             }`}>
               <Heart
                 className={`w-5 h-5 transition-transform duration-200 ${
-                  liked ? 'text-orange-500 fill-orange-500' : 'text-white'
+                  liked ? 'text-[#ed4956] fill-[#ed4956]' : 'text-white'
                 }`}
               />
             </div>
@@ -273,11 +272,11 @@ const VideoCard: React.FC<VideoCardProps> = ({
             className="flex flex-col items-center min-w-[44px] min-h-[44px] justify-center group"
           >
             <div className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-all ${
-              saved ? 'bg-amber-500/20 text-amber-400 scale-110' : 'bg-black/50 text-white hover:bg-black/70'
+              saved ? 'bg-white/20 text-white scale-110' : 'bg-black/50 text-white hover:bg-black/70'
             }`}>
               <Bookmark
                 className={`w-5 h-5 transition-transform duration-200 ${
-                  saved ? 'text-amber-400 fill-amber-400' : 'text-white'
+                  saved ? 'text-white fill-white' : 'text-white'
                 }`}
               />
             </div>
@@ -328,15 +327,15 @@ const VideoCard: React.FC<VideoCardProps> = ({
                   e.stopPropagation();
                   setProductDrawerOpen(true);
                 }}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900/90 hover:bg-neutral-850 border border-orange-500/50 text-white backdrop-blur-md shadow-lg shadow-black/50 mb-2 active:scale-95 transition-all text-xs font-semibold group max-w-xs"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121212]/95 hover:bg-[#1c1c1c] border border-[#262626] text-white backdrop-blur-md shadow-lg mb-2 active:scale-95 transition-all text-xs font-semibold group max-w-xs"
               >
-                <div className="w-4 h-4 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 shrink-0">
+                <div className="w-4 h-4 rounded-full bg-[#262626] flex items-center justify-center text-neutral-300 shrink-0">
                   <ShoppingBag className="w-2.5 h-2.5" />
                 </div>
                 <span className="truncate max-w-[120px] text-white font-medium text-[11px]">
                   {post.taggedProduct.title}
                 </span>
-                <span className="text-orange-400 font-bold text-[11px] shrink-0">
+                <span className="text-white font-bold text-[11px] shrink-0">
                   ₦{post.taggedProduct.priceNaira.toLocaleString()}
                 </span>
                 <ChevronRight className="w-3 h-3 text-neutral-400 group-hover:text-white shrink-0" />
@@ -352,12 +351,12 @@ const VideoCard: React.FC<VideoCardProps> = ({
             }}
             className="inline-flex items-center gap-1.5 cursor-pointer group mb-1.5"
           >
-            <span className="font-extrabold text-sm sm:text-base text-white group-hover:text-orange-400 transition-colors drop-shadow">
+            <span className="font-bold text-sm sm:text-base text-white group-hover:text-neutral-200 transition-colors drop-shadow">
               @{post.creator.username}
             </span>
-            <BadgeCheck className="w-4 h-4 text-orange-400 fill-orange-400/20" />
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 font-bold border border-orange-500/30">
-              UGC Creator
+            <BadgeCheck className="w-4 h-4 text-[#0095f6] fill-[#0095f6]/20" />
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#181818] text-neutral-300 font-semibold border border-[#262626]">
+              Creator
             </span>
           </div>
 
@@ -373,19 +372,19 @@ const VideoCard: React.FC<VideoCardProps> = ({
                 e.stopPropagation();
                 onOpenProfile(post.creatorId);
               }}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-white/10 hover:bg-orange-500 backdrop-blur-md border border-white/20 hover:border-orange-500 px-3.5 py-1.5 rounded-full transition-all group shadow-lg"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[#262626] hover:bg-[#333333] border border-[#333333] px-3.5 py-1.5 rounded-lg transition-colors group shadow-lg"
             >
               <span>View Creator Portfolio & Rates</span>
-              <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform text-orange-400 group-hover:text-white" />
+              <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform text-neutral-300" />
             </button>
           </div>
         </div>
 
         {/* Progress bar */}
         {!isPhotoPost && (
-          <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/10 z-20">
+          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/20 z-20">
             <div
-              className="h-full bg-gradient-to-r from-orange-500 to-amber-400 transition-[width] duration-100 ease-linear"
+              className="h-full bg-white transition-[width] duration-100 ease-linear"
               style={{ width: `${progress}%` }}
             />
           </div>

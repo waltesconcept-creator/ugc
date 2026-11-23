@@ -4,7 +4,7 @@ import { findUserByIdentifier, getDb } from '@/lib/server-db';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { identifier } = body;
+    const { identifier, password } = body;
 
     if (!identifier) {
       return NextResponse.json(
@@ -18,6 +18,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: 'No account found with that email, phone, or username. Please sign up!' },
         { status: 404 }
+      );
+    }
+
+    // If account has a password set and password is provided, verify it
+    if (user.passwordHash && password && user.passwordHash !== password.trim()) {
+      return NextResponse.json(
+        { error: 'Incorrect password. Please try again or tap "Forgot Password?".' },
+        { status: 401 }
       );
     }
 

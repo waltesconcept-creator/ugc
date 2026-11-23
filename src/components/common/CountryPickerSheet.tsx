@@ -7,8 +7,10 @@ import { Search, X, Check } from 'lucide-react';
 interface CountryPickerSheetProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelect: (country: Country) => void;
+  onSelect?: (country: Country) => void;
+  onSelectCountry?: (country: Country) => void;
   selectedCode?: string;
+  selectedCountry?: Country;
   title?: string;
 }
 
@@ -16,10 +18,19 @@ export const CountryPickerSheet: React.FC<CountryPickerSheetProps> = ({
   isOpen,
   onClose,
   onSelect,
+  onSelectCountry,
   selectedCode = 'NG',
+  selectedCountry,
   title = 'Select Country / Region',
 }) => {
   const [search, setSearch] = useState('');
+  const activeCode = selectedCountry?.code || selectedCode;
+
+  const handleSelect = (c: Country) => {
+    if (onSelectCountry) onSelectCountry(c);
+    if (onSelect) onSelect(c);
+    onClose();
+  };
 
   const filteredCountries = useMemo(() => {
     return searchCountries(search);
@@ -82,22 +93,19 @@ export const CountryPickerSheet: React.FC<CountryPickerSheetProps> = ({
             </div>
           ) : (
             filteredCountries.map((c) => {
-              const safeSelected = (selectedCode || 'NG').toLowerCase();
+              const safeSelected = (activeCode || 'NG').toLowerCase();
               const isSelected =
                 (c.code && c.code.toLowerCase() === safeSelected) ||
                 (c.name && c.name.toLowerCase() === safeSelected) ||
-                c.dialCode === selectedCode;
+                c.dialCode === activeCode;
               return (
                 <button
                   key={`${c.code}-${c.dialCode}`}
-                  onClick={() => {
-                    onSelect(c);
-                    onClose();
-                  }}
+                  onClick={() => handleSelect(c)}
                   className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-colors ${
                     isSelected
-                      ? 'bg-orange-500/15 text-orange-400 font-bold'
-                      : 'hover:bg-neutral-900 text-neutral-200'
+                      ? 'bg-[#181818] text-[#0095f6] font-semibold'
+                      : 'text-neutral-300 hover:bg-[#181818] hover:text-white'
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -112,7 +120,7 @@ export const CountryPickerSheet: React.FC<CountryPickerSheetProps> = ({
                     <span className="text-xs font-mono font-bold text-neutral-400">
                       {c.dialCode}
                     </span>
-                    {isSelected && <Check className="w-4 h-4 text-orange-400 stroke-[3]" />}
+                    {isSelected && <Check className="w-4 h-4 text-[#0095f6] stroke-[2.5]" />}
                   </div>
                 </button>
               );

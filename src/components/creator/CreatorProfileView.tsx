@@ -220,10 +220,10 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
             {/* Story Ring Avatar */}
             <div
               onClick={() => setIsAvatarViewerOpen(true)}
-              className="relative p-1 rounded-full bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 shrink-0 cursor-pointer active:scale-95 transition-transform"
+              className="relative p-0.5 rounded-full border-2 border-[#262626] shrink-0 cursor-pointer active:scale-95 transition-transform"
               title="View profile photo"
             >
-              <div className="p-0.5 bg-neutral-950 rounded-full">
+              <div className="p-0.5 bg-black rounded-full">
                 <img
                   src={profile.avatarUrl}
                   alt={profile.displayName}
@@ -269,7 +269,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
 
             {/* Starting rate badge & availability */}
             <div className="pt-1 flex flex-wrap items-center gap-2 text-xs">
-              <span className="text-orange-400 font-bold bg-orange-500/10 border border-orange-500/25 px-2.5 py-0.5 rounded-full text-[11px]">
+              <span className="text-[#e0e0e0] font-semibold bg-[#181818] border border-[#262626] px-2.5 py-0.5 rounded-full text-[11px]">
                 UGC Videos from ₦{((details.startingPriceCents || 5000) * 6).toLocaleString()}
               </span>
               {details.isAvailable && (
@@ -286,9 +286,9 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                   href={`https://instagram.com/${details.instagramHandle.replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300 hover:text-white hover:border-orange-500/40 transition-colors"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#181818] border border-[#262626] text-[11px] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-colors"
                 >
-                  <Camera className="w-3 h-3 text-rose-400" />
+                  <Camera className="w-3 h-3 text-neutral-400" />
                   <span>@{details.instagramHandle.replace('@', '')}</span>
                   <ExternalLink className="w-2.5 h-2.5 text-neutral-500" />
                 </a>
@@ -298,9 +298,9 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                   href={`https://tiktok.com/@${details.tiktokHandle.replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300 hover:text-white hover:border-orange-500/40 transition-colors"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#181818] border border-[#262626] text-[11px] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-colors"
                 >
-                  <Play className="w-3 h-3 text-cyan-400" />
+                  <Play className="w-3 h-3 text-neutral-400" />
                   <span>TikTok: @{details.tiktokHandle.replace('@', '')}</span>
                   <ExternalLink className="w-2.5 h-2.5 text-neutral-500" />
                 </a>
@@ -310,9 +310,9 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                   href={profile.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300 hover:text-white hover:border-orange-500/40 transition-colors"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#181818] border border-[#262626] text-[11px] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-colors"
                 >
-                  <Globe className="w-3 h-3 text-orange-400" />
+                  <Globe className="w-3 h-3 text-neutral-400" />
                   <span>{profile.website.replace(/^https?:\/\//, '')}</span>
                   <ExternalLink className="w-2.5 h-2.5 text-neutral-500" />
                 </a>
@@ -323,18 +323,18 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
           {/* Instagram-Style Professional Dashboard Card */}
           <div
             onClick={() => setIsCreatorStudioOpen(true)}
-            className="mt-3.5 p-3 rounded-2xl bg-neutral-900/90 border border-neutral-800 hover:border-orange-500/40 transition-all cursor-pointer flex items-center justify-between group active:scale-[0.99]"
+            className="mt-3.5 p-3 rounded-2xl bg-[#121212] border border-[#262626] hover:border-[#3a3a3a] transition-all cursor-pointer flex items-center justify-between group active:scale-[0.99]"
           >
             <div>
               <p className="text-[10px] text-neutral-400 uppercase font-bold tracking-wider">Professional Dashboard</p>
               <p className="text-xs font-bold text-white mt-0.5">
                 ₦295,000 available earnings &bull; 86 affiliate sales &bull; 3 active jobs
               </p>
-              <p className="text-[10px] text-orange-400 font-semibold mt-0.5 flex items-center gap-1">
+              <p className="text-[10px] text-[#0095f6] font-semibold mt-0.5 flex items-center gap-1">
                 <span>Open Creator Studio, Wallet & Bookings &rarr;</span>
               </p>
             </div>
-            <div className="w-8 h-8 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-full bg-[#181818] border border-[#262626] text-[#0095f6] flex items-center justify-center shrink-0">
               <Briefcase className="w-4 h-4" />
             </div>
           </div>
@@ -345,19 +345,19 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
               <>
                 <button
                   onClick={() => setIsEditModalOpen(true)}
-                  className="flex-1 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-850 text-white text-xs font-semibold border border-neutral-800 transition-colors"
+                  className="flex-1 py-2 rounded-lg bg-[#262626] hover:bg-[#333333] text-white text-xs font-semibold border border-[#333333] transition-colors"
                 >
                   Edit Profile & Rates
                 </button>
                 <button
                   onClick={() => setIsShareModalOpen(true)}
-                  className="flex-1 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-850 text-white text-xs font-semibold border border-neutral-800 transition-colors"
+                  className="flex-1 py-2 rounded-lg bg-[#262626] hover:bg-[#333333] text-white text-xs font-semibold border border-[#333333] transition-colors"
                 >
                   Share Profile
                 </button>
                 <button
                   onClick={() => setIsBusinessStudioOpen(true)}
-                  className="px-3.5 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-850 text-emerald-400 text-xs font-semibold border border-neutral-800 transition-colors flex items-center gap-1"
+                  className="px-3.5 py-2 rounded-lg bg-[#262626] hover:bg-[#333333] text-emerald-400 text-xs font-semibold border border-[#333333] transition-colors flex items-center gap-1"
                   title="Brand Studio (Products & Campaigns)"
                 >
                   <Store className="w-3.5 h-3.5" />
@@ -368,23 +368,23 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
               <>
                 <button
                   onClick={() => setIsFollowing(!isFollowing)}
-                  className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
+                  className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-colors ${
                     isFollowing
-                      ? 'bg-neutral-800 text-white border border-neutral-700'
-                      : 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
+                      ? 'bg-[#262626] text-white border border-[#333333]'
+                      : 'bg-[#0095f6] hover:bg-[#1877f2] text-white'
                   }`}
                 >
                   {isFollowing ? 'Following' : 'Follow'}
                 </button>
                 <button
                   onClick={() => onStartChat(profile.id)}
-                  className="flex-1 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-850 text-white text-xs font-semibold border border-neutral-800 transition-colors"
+                  className="flex-1 py-2 rounded-lg bg-[#262626] hover:bg-[#333333] text-white text-xs font-semibold border border-[#333333] transition-colors"
                 >
                   Message
                 </button>
                 <button
                   onClick={() => services[0] && onBookService(services[0], profile.id)}
-                  className="flex-1 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-bold shadow-md"
+                  className="flex-1 py-2 rounded-lg bg-white hover:bg-neutral-200 text-black text-xs font-bold transition-colors"
                 >
                   Book UGC (₦30k)
                 </button>
@@ -395,9 +395,9 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
           {/* Instagram Story Highlights Row */}
           <div className="flex gap-4 overflow-x-auto scrollbar-none py-3.5 mt-2 -mx-4 px-4 sm:-mx-6 sm:px-6">
             {[
-              { label: 'Rates ₦', icon: DollarSign, onClick: () => setActiveTab('services') },
-              { label: 'UGC Reels', icon: Video, onClick: () => setActiveTab('portfolio') },
-              { label: 'Reviews ★', icon: Star, onClick: () => setActiveTab('reviews') },
+              { label: 'Rates', icon: DollarSign, onClick: () => setActiveTab('services') },
+              { label: 'Reels', icon: Video, onClick: () => setActiveTab('portfolio') },
+              { label: 'Reviews', icon: Star, onClick: () => setActiveTab('reviews') },
               { label: 'Behind Scenes', icon: Camera, onClick: () => setActiveTab('portfolio') },
               { label: 'Collabs', icon: Briefcase, onClick: () => setIsCreatorStudioOpen(true) },
             ].map((hl, i) => {
@@ -408,9 +408,9 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                   onClick={hl.onClick}
                   className="flex flex-col items-center gap-1.5 shrink-0 group"
                 >
-                  <div className="w-14 h-14 rounded-full p-0.5 bg-neutral-850 group-hover:bg-gradient-to-tr group-hover:from-orange-500 group-hover:to-amber-500 transition-all">
-                    <div className="w-full h-full rounded-full bg-neutral-950 flex items-center justify-center text-neutral-300 group-hover:text-white transition-colors">
-                      <Icon className="w-5 h-5 text-orange-400" />
+                  <div className="w-14 h-14 rounded-full p-0.5 bg-[#181818] border border-[#262626] group-hover:border-neutral-500 transition-colors">
+                    <div className="w-full h-full rounded-full bg-black flex items-center justify-center text-neutral-300 group-hover:text-white transition-colors">
+                      <Icon className="w-5 h-5 text-neutral-300" />
                     </div>
                   </div>
                   <span className="text-[10px] text-neutral-400 group-hover:text-white transition-colors truncate max-w-[65px]">
@@ -554,17 +554,17 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                      <Briefcase className="w-3.5 h-3.5 text-orange-400" />
-                      <span>UGC Video Packages & Rates (₦)</span>
+                      <Briefcase className="w-3.5 h-3.5 text-neutral-400" />
+                      <span>UGC Video Packages & Rates</span>
                     </h3>
                     <p className="text-[11px] text-neutral-400">Direct booking with full escrow payment protection</p>
                   </div>
                   {currentUser && (currentUser.id === profile.id || currentUser.profile?.id === profile.id) && (
                     <button
                       onClick={() => setIsEditModalOpen(true)}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-orange-500/15 border border-orange-500/30 text-orange-400 text-xs font-bold hover:bg-orange-500 hover:text-white transition-colors"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#262626] border border-[#333333] text-white text-xs font-semibold hover:bg-[#333333] transition-colors"
                     >
-                      <Edit3 className="w-3.5 h-3.5" />
+                      <Edit3 className="w-3.5 h-3.5 text-neutral-400" />
                       <span>Manage Rates</span>
                     </button>
                   )}
@@ -572,7 +572,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
 
                 <div className="space-y-3">
                   {services.filter((s) => s.isActive).length === 0 ? (
-                    <div className="py-8 text-center bg-neutral-900 rounded-2xl border border-neutral-800 p-6">
+                    <div className="py-8 text-center bg-[#121212] rounded-2xl border border-[#262626] p-6">
                       <ShoppingBag className="w-8 h-8 text-neutral-600 mx-auto mb-2" />
                       <p className="text-sm font-bold text-white mb-1">No Custom Packages Configured</p>
                       <p className="text-xs text-neutral-400 mb-3">
@@ -583,11 +583,11 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                     services.filter((s) => s.isActive).map((service) => (
                       <div
                         key={service.id}
-                        className="bg-neutral-900 rounded-2xl border border-neutral-800 p-4 sm:p-5 hover:border-neutral-700 transition-colors shadow-sm"
+                        className="bg-[#121212] rounded-2xl border border-[#262626] p-4 sm:p-5 hover:border-[#333333] transition-colors"
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex-1 min-w-0">
-                            <span className="px-2 py-0.5 rounded-full bg-orange-500/10 text-[10px] font-bold text-orange-400 border border-orange-500/20">
+                            <span className="px-2 py-0.5 rounded-full bg-[#181818] text-[10px] font-semibold text-neutral-300 border border-[#262626]">
                               {service.formatTag}
                             </span>
                             <h3 className="text-sm font-bold text-white mt-1 mb-1">{service.title}</h3>
@@ -604,10 +604,10 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <p className="text-base sm:text-lg font-black text-white">{formatPrice(service.priceCents, service.currency)}</p>
+                            <p className="text-base sm:text-lg font-bold text-white">{formatPrice(service.priceCents, service.currency)}</p>
                             <button
                               onClick={() => onBookService(service, profile.id)}
-                              className="mt-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all"
+                              className="mt-2 px-4 py-2 rounded-lg bg-[#0095f6] hover:bg-[#1877f2] text-white text-xs font-semibold transition-colors"
                             >
                               Book Package
                             </button>

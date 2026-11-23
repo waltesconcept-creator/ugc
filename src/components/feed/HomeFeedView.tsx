@@ -33,13 +33,13 @@ interface HomeFeedViewProps {
 }
 
 const NICHE_TABS = [
-  { id: 'all', label: '🔥 All Feeds' },
-  { id: 'tech', label: '📱 Tech & Gadgets' },
-  { id: 'beauty', label: '💄 Beauty & Skincare' },
-  { id: 'fashion', label: '👗 Fashion & Style' },
-  { id: 'food', label: '🍔 Food & Beverage' },
-  { id: 'fitness', label: '💪 Fitness & Health' },
-  { id: 'lifestyle', label: '✨ Lifestyle' },
+  { id: 'all', label: 'All' },
+  { id: 'tech', label: 'Tech' },
+  { id: 'beauty', label: 'Beauty' },
+  { id: 'fashion', label: 'Fashion' },
+  { id: 'food', label: 'Food' },
+  { id: 'fitness', label: 'Fitness' },
+  { id: 'lifestyle', label: 'Lifestyle' },
 ];
 
 export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
@@ -125,24 +125,22 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
               onClick={() => setFeedSection('for_you')}
               className={`flex items-center gap-1.5 px-3.5 py-1 text-xs font-bold rounded-full transition-all ${
                 feedSection === 'for_you'
-                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm shadow-orange-500/20'
+                  ? 'bg-white text-black shadow-sm'
                   : 'text-neutral-400 hover:text-white'
               }`}
             >
-              <Sparkles className="w-3 h-3 text-orange-200" />
-              <span>For You</span>
+              For You
             </button>
 
             <button
               onClick={() => setFeedSection('following')}
               className={`flex items-center gap-1.5 px-3.5 py-1 text-xs font-bold rounded-full transition-all ${
                 feedSection === 'following'
-                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm shadow-orange-500/20'
+                  ? 'bg-white text-black shadow-sm'
                   : 'text-neutral-400 hover:text-white'
               }`}
             >
-              <Users className="w-3 h-3" />
-              <span>Following</span>
+              Following
             </button>
           </div>
 
@@ -151,10 +149,10 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
             <button
               onClick={() => setViewMode('social')}
               title="Classic Social Feed"
-              className={`flex items-center gap-1 px-3 py-1 text-xs font-bold rounded-full transition-all ${
+              className={`flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full transition-all ${
                 viewMode === 'social'
-                  ? 'bg-neutral-800 text-orange-400 shadow-sm border border-neutral-700'
-                  : 'text-neutral-500 hover:text-white'
+                  ? 'bg-neutral-800 text-white shadow-sm border border-neutral-700'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               <LayoutList className="w-3.5 h-3.5" />
@@ -164,10 +162,10 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
             <button
               onClick={() => setViewMode('reels')}
               title="Full-Screen 9:16 Reels"
-              className={`flex items-center gap-1 px-3 py-1 text-xs font-bold rounded-full transition-all ${
+              className={`flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full transition-all ${
                 viewMode === 'reels'
-                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm shadow-orange-500/20'
-                  : 'text-neutral-500 hover:text-white'
+                  ? 'bg-neutral-800 text-white shadow-sm border border-neutral-700'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               <Clapperboard className="w-3.5 h-3.5" />
@@ -194,65 +192,57 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
             <div className="mb-5">
               <div className="flex items-center justify-between mb-2.5 px-1">
                 <div className="flex items-center gap-1.5">
-                  <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
+                  <Users className="w-4 h-4 text-[#a8a8a8]" />
                   <h3 className="text-xs font-bold text-white tracking-wider uppercase">
                     Featured Creators
                   </h3>
                 </div>
-                <span className="text-[11px] font-semibold text-orange-400">
-                  Direct Hire Available
+                <span className="text-[11px] font-semibold text-[#a8a8a8]">
+                  Available for Hire
                 </span>
               </div>
 
               <div className="flex items-center gap-2.5 overflow-x-auto no-scrollbar scrollbar-none pb-2 pt-0.5 -mx-1 px-1">
                 {spotlightCreators.map((creator) => {
-                  const isNig = creator.profile.country === 'Nigeria' || creator.profile.location?.toLowerCase().includes('lagos');
-                  const isUK = creator.profile.country === 'United Kingdom' || creator.profile.location?.toLowerCase().includes('london');
-                  const isCA = creator.profile.country === 'Canada';
-                  const isDE = creator.profile.country === 'Germany';
-                  const isUS = creator.profile.country === 'United States';
-                  const flag = isNig ? '🇳🇬' : isUK ? '🇬🇧' : isCA ? '🇨🇦' : isDE ? '🇩🇪' : isUS ? '🇺🇸' : '🌎';
-
                   return (
                     <div
                       key={creator.profile.id}
                       onClick={() => onOpenProfile(creator.profile.id)}
-                      className="group shrink-0 w-60 bg-neutral-900/90 border border-neutral-800 hover:border-orange-500/50 rounded-2xl p-3 flex flex-col justify-between transition-all hover:scale-[1.02] active:scale-98 shadow-md hover:shadow-orange-500/10 cursor-pointer"
+                      className="group shrink-0 w-60 bg-[#121212] border border-[#262626] hover:border-[#3a3a3a] rounded-2xl p-3 flex flex-col justify-between transition-colors cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
                         <div className="relative shrink-0">
                           <img
                             src={creator.profile.avatarUrl}
                             alt={creator.profile.displayName}
-                            className="w-11 h-11 rounded-xl object-cover ring-2 ring-orange-500/40 group-hover:ring-orange-500 transition-all shadow-sm"
+                            className="w-11 h-11 rounded-xl object-cover ring-1 ring-[#262626]"
                           />
-                          <span className="absolute -bottom-1 -right-1 text-xs">{flag}</span>
                         </div>
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1">
-                            <h4 className="text-xs font-bold text-white truncate group-hover:text-orange-400 transition-colors">
+                            <h4 className="text-xs font-bold text-white truncate group-hover:text-neutral-200 transition-colors">
                               {creator.profile.displayName}
                             </h4>
-                            <BadgeCheck className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20 shrink-0" />
+                            <BadgeCheck className="w-3.5 h-3.5 text-[#0095f6] fill-[#0095f6]/20 shrink-0" />
                           </div>
                           <p className="text-[10px] text-neutral-400 truncate">@{creator.profile.username}</p>
-                          <span className="inline-block mt-0.5 px-2 py-0.5 rounded-md bg-orange-500/10 text-orange-400 font-semibold text-[9px] border border-orange-500/20">
+                          <span className="inline-block mt-0.5 px-2 py-0.5 rounded-md bg-[#181818] text-neutral-300 font-medium text-[9px] border border-[#262626]">
                             {creator.details.categories[0]}
                           </span>
                         </div>
                       </div>
 
-                      <div className="mt-3 pt-2 border-t border-neutral-800/80 flex items-center justify-between">
+                      <div className="mt-3 pt-2 border-t border-[#262626] flex items-center justify-between">
                         <div>
                           <span className="text-[9px] text-neutral-500 block">Starting rate</span>
-                          <span className="text-xs font-bold text-amber-400">
-                            ${(creator.details.startingPriceCents / 100).toFixed(0)}/video
+                          <span className="text-xs font-bold text-white">
+                            ₦{((creator.details.startingPriceCents || 5000) * 6).toLocaleString()}
                           </span>
                         </div>
-                        <button className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-orange-500/15 border border-orange-500/30 text-orange-400 text-[10px] font-bold group-hover:bg-gradient-to-r group-hover:from-orange-500 group-hover:to-amber-500 group-hover:text-white transition-all shadow-sm">
+                        <button className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#262626] hover:bg-[#333333] border border-[#333333] text-white text-[10px] font-semibold transition-colors">
                           <span>Portfolio</span>
-                          <ChevronRight className="w-3 h-3" />
+                          <ChevronRight className="w-3 h-3 text-neutral-400" />
                         </button>
                       </div>
                     </div>
@@ -270,10 +260,10 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
                     <button
                       key={niche.id}
                       onClick={() => setSelectedNiche(niche.id)}
-                      className={`shrink-0 px-3.5 py-1.5 text-xs font-bold rounded-full transition-all duration-200 ${
+                      className={`shrink-0 px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 ${
                         isSelected
-                          ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/30 border-transparent'
-                          : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-850 border border-neutral-800'
+                          ? 'bg-white text-black shadow-sm'
+                          : 'bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800'
                       }`}
                     >
                       {niche.label}
@@ -286,14 +276,14 @@ export const HomeFeedView: React.FC<HomeFeedViewProps> = ({
             {/* ── Posts Stream ── */}
             {displayedPosts.length === 0 ? (
               <div className="text-center py-16 bg-neutral-900/50 rounded-3xl border border-neutral-800 p-8 my-6">
-                <Sparkles className="w-12 h-12 text-orange-400 mx-auto mb-3 opacity-60" />
+                <Sparkles className="w-10 h-10 text-neutral-500 mx-auto mb-3 opacity-60" />
                 <h3 className="text-base font-bold text-white mb-1">No Posts in This Category</h3>
                 <p className="text-xs text-neutral-400 max-w-xs mx-auto mb-4">
                   Try exploring other niches or check back soon for newly published creator videos.
                 </p>
                 <button
                   onClick={() => setSelectedNiche('all')}
-                  className="px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20"
+                  className="px-4 py-2 rounded-full bg-white text-black text-xs font-semibold hover:bg-neutral-200"
                 >
                   View All Feeds
                 </button>

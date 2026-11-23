@@ -177,7 +177,7 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
   return (
     <article
       ref={cardRef}
-      className="w-full max-w-lg mx-auto bg-neutral-900/90 border border-neutral-800/90 hover:border-orange-500/40 rounded-3xl overflow-hidden mb-6 shadow-xl hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-300"
+      className="w-full max-w-lg mx-auto bg-[#121212] border border-[#262626] rounded-2xl overflow-hidden mb-6 transition-colors"
     >
       {/* ── 1. Creator Header ── */}
       <div className="flex items-center justify-between p-3.5 sm:p-4">
@@ -188,26 +188,26 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
           }}
           className="flex items-center gap-3 cursor-pointer group"
         >
-          {/* Avatar with orange ring */}
-          <div className="relative w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-orange-500 to-amber-400 group-hover:scale-105 transition-transform">
+          {/* Avatar with subtle ring */}
+          <div className="relative w-10 h-10 rounded-full p-[1px] border border-[#333333] transition-transform">
             <img
               src={post.creator.avatarUrl}
               alt={post.creator.displayName}
-              className="w-full h-full rounded-full object-cover border-2 border-neutral-950"
+              className="w-full h-full rounded-full object-cover"
             />
           </div>
 
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-white group-hover:text-orange-400 transition-colors">
+              <span className="text-sm font-bold text-white group-hover:text-neutral-200 transition-colors">
                 {post.creator.displayName}
               </span>
-              <BadgeCheck className="w-3.5 h-3.5 text-orange-400 fill-orange-400/20" />
+              <BadgeCheck className="w-3.5 h-3.5 text-[#0095f6] fill-[#0095f6]/20" />
             </div>
             <div className="flex items-center gap-2 text-xs text-neutral-400">
               <span>@{post.creator.username}</span>
               <span>·</span>
-              <span className="text-orange-400/90 font-medium">{post.category}</span>
+              <span className="text-neutral-400 font-medium">{post.category}</span>
             </div>
           </div>
         </div>
@@ -216,13 +216,13 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
         <div className="flex items-center gap-2 relative">
           <button
             onClick={() => setIsFollowing(!isFollowing)}
-            className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
               isFollowing
-                ? 'bg-neutral-800 text-neutral-300 border border-neutral-700'
-                : 'bg-orange-500/15 text-orange-400 border border-orange-500/40 hover:bg-orange-500 hover:text-white'
+                ? 'bg-[#262626] text-white border border-[#333333]'
+                : 'bg-[#0095f6] hover:bg-[#1877f2] text-white'
             }`}
           >
-            {isFollowing ? 'Following' : '+ Follow'}
+            {isFollowing ? 'Following' : 'Follow'}
           </button>
 
           {/* Overflow Menu Button */}
@@ -356,9 +356,9 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
               e.stopPropagation();
               onExpandPost(post);
             }}
-            className="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white flex items-center gap-1.5 text-[10px] font-semibold hover:bg-orange-500 hover:border-orange-500 transition-colors shadow-lg"
+            className="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center gap-1.5 text-[10px] font-semibold hover:bg-black/80 transition-colors"
           >
-            <Maximize2 className="w-3 h-3 text-orange-400" />
+            <Maximize2 className="w-3 h-3 text-neutral-300" />
             <span>Full View</span>
           </button>
         )}
@@ -370,11 +370,11 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
               e.stopPropagation();
               setProductDrawerOpen(true);
             }}
-            className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/75 hover:bg-black/90 text-white backdrop-blur-md border border-white/20 text-xs font-semibold shadow-lg active:scale-95 transition-all group"
+            className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/80 hover:bg-black/95 text-white backdrop-blur-md border border-white/20 text-xs font-semibold shadow-lg active:scale-95 transition-all group"
           >
-            <ShoppingBag className="w-3.5 h-3.5 text-orange-400 group-hover:scale-110 transition-transform" />
+            <ShoppingBag className="w-3.5 h-3.5 text-neutral-300 group-hover:scale-110 transition-transform" />
             <span className="truncate max-w-[120px] text-[11px]">{post.taggedProduct.title}</span>
-            <span className="text-orange-400 font-bold text-[11px]">₦{post.taggedProduct.priceNaira.toLocaleString()}</span>
+            <span className="text-white font-bold text-[11px]">₦{post.taggedProduct.priceNaira.toLocaleString()}</span>
           </button>
         ) : (
           <div className="absolute bottom-3 left-3 z-10">
@@ -393,7 +393,7 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
             }}
             className="absolute bottom-3 right-3 z-20 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/80 transition-colors"
           >
-            {isMuted ? <VolumeX className="w-3.5 h-3.5 text-neutral-300" /> : <Volume2 className="w-3.5 h-3.5 text-orange-400" />}
+            {isMuted ? <VolumeX className="w-3.5 h-3.5 text-neutral-300" /> : <Volume2 className="w-3.5 h-3.5 text-white" />}
           </button>
         )}
       </div>
@@ -405,11 +405,11 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
             {/* Like */}
             <button
               onClick={handleLike}
-              className="flex items-center gap-1.5 text-white hover:text-orange-400 transition-colors group"
+              className="flex items-center gap-1.5 text-white transition-colors group"
             >
               <Heart
                 className={`w-6 h-6 transition-transform group-active:scale-125 ${
-                  liked ? 'text-orange-500 fill-orange-500' : 'text-neutral-200'
+                  liked ? 'text-[#ed4956] fill-[#ed4956]' : 'text-neutral-200'
                 }`}
               />
               <span className="text-xs font-bold">{formatCount(likeCount)}</span>
@@ -436,11 +436,11 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
           {/* Bookmark / Save */}
           <button
             onClick={handleSave}
-            className="text-neutral-200 hover:text-amber-400 transition-colors"
+            className="text-neutral-200 hover:text-white transition-colors"
           >
             <Bookmark
               className={`w-6 h-6 ${
-                saved ? 'text-amber-400 fill-amber-400' : 'text-neutral-200'
+                saved ? 'text-white fill-white' : 'text-neutral-200'
               }`}
             />
           </button>

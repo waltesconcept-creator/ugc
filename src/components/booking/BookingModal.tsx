@@ -103,16 +103,16 @@ const BookingModal: React.FC<BookingModalProps> = ({
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full lg:max-w-lg lg:mx-4 h-full lg:h-auto lg:max-h-[90vh] bg-neutral-900 lg:rounded-2xl border-t lg:border border-neutral-800 flex flex-col overflow-hidden z-10 animate-slide-up lg:animate-none">
+      <div className="relative w-full lg:max-w-lg lg:mx-4 h-full lg:h-auto lg:max-h-[90vh] bg-[#121212] lg:rounded-2xl border-t lg:border border-[#262626] flex flex-col overflow-hidden z-10 animate-slide-up lg:animate-none">
         {/* Header */}
-        <div className="shrink-0 flex items-center justify-between px-4 sm:px-6 py-4 border-b border-neutral-800">
+        <div className="shrink-0 flex items-center justify-between px-4 sm:px-6 py-4 border-b border-[#262626]">
           <div>
             <h2 className="text-base font-bold text-white">Book Creator</h2>
-            <p className="text-xs text-neutral-500 mt-0.5">{creatorName} · {service.title}</p>
+            <p className="text-xs text-neutral-400 mt-0.5">{creatorName} · {service.title}</p>
           </div>
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-neutral-800 flex items-center justify-center hover:bg-neutral-700 transition-colors min-w-[44px] min-h-[44px]"
+            className="w-8 h-8 rounded-full bg-[#181818] border border-[#262626] flex items-center justify-center hover:bg-[#222222] transition-colors"
           >
             <X className="w-4 h-4 text-neutral-400" />
           </button>
@@ -249,10 +249,10 @@ const BookingModal: React.FC<BookingModalProps> = ({
                     <button
                       key={p}
                       onClick={() => setTargetPlatform(p)}
-                      className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all min-h-[44px] ${
+                      className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all min-h-[44px] ${
                         targetPlatform === p
-                          ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30'
-                          : 'bg-neutral-800 text-neutral-400 border border-neutral-700 hover:text-white'
+                          ? 'bg-white text-black border border-white'
+                          : 'bg-[#181818] text-neutral-400 border border-[#262626] hover:text-white'
                       }`}
                     >
                       {p}
@@ -275,12 +275,12 @@ const BookingModal: React.FC<BookingModalProps> = ({
                         value={url}
                         onChange={(e) => updateReferenceUrl(idx, e.target.value)}
                         placeholder="https://example.com/reference"
-                        className="flex-1 px-4 py-2.5 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-orange-500/50 min-h-[44px]"
+                        className="flex-1 px-4 py-2.5 bg-[#181818] border border-[#262626] rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#0095f6] min-h-[44px]"
                       />
                       {referenceUrls.length > 1 && (
                         <button
                           onClick={() => removeReferenceUrl(idx)}
-                          className="w-11 h-11 rounded-xl bg-neutral-800 border border-neutral-700 flex items-center justify-center hover:bg-red-500/10 hover:border-red-500/30 transition-colors"
+                          className="w-11 h-11 rounded-xl bg-[#181818] border border-[#262626] flex items-center justify-center hover:bg-red-500/10 hover:border-red-500/30 transition-colors"
                         >
                           <Trash2 className="w-4 h-4 text-neutral-500" />
                         </button>
@@ -289,7 +289,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   ))}
                   <button
                     onClick={addReferenceUrl}
-                    className="flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 transition-colors py-1 min-h-[36px]"
+                    className="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-white transition-colors py-1 min-h-[36px]"
                   >
                     <Plus className="w-3 h-3" />
                     Add another reference
@@ -301,7 +301,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               <button
                 onClick={() => setStep('review')}
                 disabled={!isFormValid}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold text-sm shadow-lg shadow-orange-500/20 disabled:opacity-40 disabled:shadow-none min-h-[52px] flex items-center justify-center gap-2 transition-all"
+                className="w-full py-3.5 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold text-sm disabled:opacity-40 min-h-[50px] flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <ShoppingBag className="w-4 h-4" />
                 Review Booking · {formatPrice(service.priceCents, service.currency)}

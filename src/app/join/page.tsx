@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import { AuthPageContent } from '@/components/auth/AuthPageContent';
 
 export const metadata: Metadata = {
-  title: 'Join KRE8TOR — Global UGC Creator Network',
-  description: 'Create your UGC creator or brand profile on KRE8TOR and start collaborating.',
+  title: 'Join Creator — Social Commerce Platform for Creators & Brands',
+  description: 'Create your Creator account to share content, book UGC campaigns, and earn with affiliate commerce.',
 };
 
 export default function JoinPage() {

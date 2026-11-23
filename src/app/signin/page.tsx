@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import { AuthPageContent } from '@/components/auth/AuthPageContent';
 
 export const metadata: Metadata = {
-  title: 'Sign In — KRE8TOR Creator Network',
-  description: 'Sign in to your KRE8TOR creator or brand account.',
+  title: 'Sign In — Creator',
+  description: 'Sign in to your Creator account.',
 };
 
 export default function SignInPage() {

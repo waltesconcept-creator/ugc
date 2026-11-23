@@ -16,7 +16,8 @@ export async function POST(request: Request) {
       categories = ['Lifestyle'],
       bio = '',
       avatarUrl = '',
-      startingPrice = 50,
+      startingPrice = 30000,
+      password = '',
     } = body;
 
     if (!displayName || !username || !contactValue) {
@@ -98,6 +99,7 @@ export async function POST(request: Request) {
       id: userId,
       email: contactType === 'email' ? contactValue.trim().toLowerCase() : undefined,
       phone: contactType === 'phone' ? contactValue.trim() : undefined,
+      passwordHash: password ? password.trim() : undefined,
       role: role as 'creator' | 'business' | 'guest',
       profile: newProfile,
       details: role === 'creator' ? newDetails : undefined,

@@ -219,24 +219,24 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
       />
 
       {/* Modal Card */}
-      <div className="relative w-full max-w-lg bg-neutral-950 border border-neutral-800 rounded-3xl shadow-2xl overflow-hidden z-10 max-h-[92vh] flex flex-col animate-fade-in">
+      <div className="relative w-full max-w-lg bg-[#121212] border border-[#262626] rounded-2xl shadow-2xl overflow-hidden z-10 max-h-[92vh] flex flex-col animate-fade-in">
         {/* Header */}
-        <div className="p-4 border-b border-neutral-850 flex items-center justify-between">
+        <div className="p-4 border-b border-[#262626] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-md shadow-orange-500/30">
-              <Sparkles className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg bg-[#181818] border border-[#262626] flex items-center justify-center text-white">
+              <Film className="w-4 h-4 text-neutral-300" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white">Create & Upload Content</h2>
+              <h2 className="text-base font-bold text-white">Create Content</h2>
               <p className="text-[11px] text-neutral-400">
-                Publishing as <span className="text-orange-400 font-bold">@{author.username}</span>
+                Publishing as <span className="text-white font-semibold">@{author.username}</span>
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-neutral-900 text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-[#181818] border border-[#262626] text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -252,13 +252,13 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           )}
 
           {/* Post vs Story Selector */}
-          <div className="grid grid-cols-2 gap-2 bg-neutral-900 p-1 rounded-2xl border border-neutral-800">
+          <div className="grid grid-cols-2 gap-1.5 bg-[#181818] p-1 rounded-xl border border-[#262626]">
             <button
               type="button"
               onClick={() => setCreateType('post')}
-              className={`py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+              className={`py-2 text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 ${
                 createType === 'post'
-                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
+                  ? 'bg-white text-black font-bold'
                   : 'text-neutral-400 hover:text-white'
               }`}
             >
@@ -268,13 +268,13 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             <button
               type="button"
               onClick={() => setCreateType('story')}
-              className={`py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+              className={`py-2 text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 ${
                 createType === 'story'
-                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
+                  ? 'bg-white text-black font-bold'
                   : 'text-neutral-400 hover:text-white'
               }`}
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Film className="w-3.5 h-3.5" />
               <span>Creator Story</span>
             </button>
           </div>
@@ -284,10 +284,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             <button
               type="button"
               onClick={() => setSourceMode('upload')}
-              className={`p-2.5 rounded-2xl border text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+              className={`p-2.5 rounded-xl border text-xs font-semibold transition-colors flex items-center justify-center gap-2 ${
                 sourceMode === 'upload'
-                  ? 'border-orange-500 bg-orange-500/15 text-orange-400'
-                  : 'border-neutral-800 bg-neutral-900 text-neutral-400 hover:border-neutral-700'
+                  ? 'border-white bg-white text-black font-bold'
+                  : 'border-[#262626] bg-[#181818] text-neutral-400 hover:text-white'
               }`}
             >
               <Upload className="w-4 h-4" />
@@ -297,10 +297,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             <button
               type="button"
               onClick={() => setSourceMode('preset')}
-              className={`p-2.5 rounded-2xl border text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+              className={`p-2.5 rounded-xl border text-xs font-semibold transition-colors flex items-center justify-center gap-2 ${
                 sourceMode === 'preset'
-                  ? 'border-orange-500 bg-orange-500/15 text-orange-400'
-                  : 'border-neutral-800 bg-neutral-900 text-neutral-400 hover:border-neutral-700'
+                  ? 'border-white bg-white text-black font-bold'
+                  : 'border-[#262626] bg-[#181818] text-neutral-400 hover:text-white'
               }`}
             >
               <FolderOpen className="w-4 h-4" />
@@ -519,10 +519,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             <button
               type="submit"
               disabled={isUploading || (sourceMode === 'upload' && !selectedFile)}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white font-extrabold text-sm shadow-lg shadow-orange-500/30 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold text-sm disabled:opacity-50 transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               {isUploading ? (
-                <span>{statusMessage || 'Publishing to KRE8TOR...'}</span>
+                <span>{statusMessage || 'Publishing to Creator...'}</span>
               ) : (
                 <>
                   <Upload className="w-4 h-4" />

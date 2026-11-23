@@ -155,20 +155,20 @@ export const CreatorStudioModal: React.FC<CreatorStudioModalProps> = ({
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl bg-neutral-950 border-t sm:border border-neutral-800 rounded-t-3xl sm:rounded-3xl z-10 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-fade-in text-white">
+      <div className="relative w-full max-w-2xl bg-[#121212] border-t sm:border border-[#262626] rounded-t-3xl sm:rounded-2xl z-10 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-fade-in text-white">
         {/* Grab bar on mobile */}
-        <div className="w-12 h-1.5 bg-neutral-800 rounded-full mx-auto my-3 sm:hidden" />
+        <div className="w-12 h-1 bg-[#262626] rounded-full mx-auto my-3 sm:hidden" />
 
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-900 shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#262626] shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
-              <Briefcase className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-lg bg-[#181818] border border-[#262626] flex items-center justify-center text-white">
+              <Briefcase className="w-4 h-4 text-[#a8a8a8]" />
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                 Creator Studio
-                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20 font-bold">
+                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#181818] text-[#a8a8a8] border border-[#262626] font-semibold">
                   Ecosystem
                 </span>
               </h2>
@@ -177,14 +177,14 @@ export const CreatorStudioModal: React.FC<CreatorStudioModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-neutral-900 text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-[#181818] border border-[#262626] text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tabs Bar */}
-        <div className="flex border-b border-neutral-900 bg-neutral-900/40 px-3 shrink-0 overflow-x-auto no-scrollbar">
+        <div className="flex border-b border-[#262626] bg-[#141414] px-3 shrink-0 overflow-x-auto no-scrollbar">
           {[
             { id: 'wallet', label: 'Wallet & Payouts', icon: WalletIcon },
             { id: 'campaigns', label: 'Affiliate Market', icon: Percent },
@@ -197,9 +197,9 @@ export const CreatorStudioModal: React.FC<CreatorStudioModalProps> = ({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold whitespace-nowrap border-b-2 transition-all cursor-pointer ${
+                className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold whitespace-nowrap border-b-2 transition-colors cursor-pointer ${
                   active
-                    ? 'border-orange-500 text-orange-400 bg-orange-500/5'
+                    ? 'border-white text-white font-bold'
                     : 'border-transparent text-neutral-400 hover:text-neutral-200'
                 }`}
               >
@@ -216,19 +216,17 @@ export const CreatorStudioModal: React.FC<CreatorStudioModalProps> = ({
           {activeTab === 'wallet' && (
             <div className="space-y-5">
               {/* Wallet Summary Card */}
-              <div className="p-5 rounded-3xl bg-gradient-to-br from-neutral-900 via-neutral-900/90 to-neutral-950 border border-neutral-800 shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-
+              <div className="p-5 rounded-2xl bg-[#181818] border border-[#262626] shadow-xl relative overflow-hidden">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider">
+                    <span className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
                       Available Balance (Cleared)
                     </span>
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-white mt-1">
                       ₦{(wallet?.availableBalanceNaira ?? 295000).toLocaleString()}
                     </h3>
                     <div className="mt-2 flex items-center gap-3 text-xs">
-                      <span className="text-amber-400 flex items-center gap-1 font-medium">
+                      <span className="text-neutral-400 flex items-center gap-1 font-medium">
                         <Clock className="w-3.5 h-3.5" />
                         Pending Clearance: ₦{(wallet?.pendingBalanceNaira ?? 45000).toLocaleString()}
                       </span>
@@ -237,7 +235,7 @@ export const CreatorStudioModal: React.FC<CreatorStudioModalProps> = ({
 
                   <button
                     onClick={() => setWithdrawModalOpen(true)}
-                    className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-xs shadow-lg shadow-orange-500/20 active:scale-95 transition-all cursor-pointer self-start sm:self-auto"
+                    className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold text-xs transition-colors cursor-pointer self-start sm:self-auto"
                   >
                     <ArrowUpRight className="w-4 h-4" />
                     <span>Withdraw Funds</span>
@@ -245,16 +243,16 @@ export const CreatorStudioModal: React.FC<CreatorStudioModalProps> = ({
                 </div>
 
                 {/* Two Streams Breakdown */}
-                <div className="grid grid-cols-2 gap-3 mt-5 pt-4 border-t border-neutral-800">
-                  <div className="p-3 rounded-2xl bg-neutral-950/60 border border-neutral-850">
+                <div className="grid grid-cols-2 gap-3 mt-5 pt-4 border-t border-[#262626]">
+                  <div className="p-3 rounded-xl bg-[#121212] border border-[#262626]">
                     <p className="text-[10px] text-neutral-400 uppercase font-semibold">1. UGC Bookings</p>
                     <p className="text-sm font-bold text-white mt-0.5">
                       ₦{(wallet?.totalEarnedBookingsNaira ?? 420000).toLocaleString()}
                     </p>
                     <p className="text-[10px] text-neutral-500">Paid content creation</p>
                   </div>
-                  <div className="p-3 rounded-2xl bg-neutral-950/60 border border-neutral-850">
-                    <p className="text-[10px] text-orange-400 uppercase font-semibold">2. Affiliate Sales</p>
+                  <div className="p-3 rounded-xl bg-[#121212] border border-[#262626]">
+                    <p className="text-[10px] text-neutral-300 uppercase font-semibold">2. Affiliate Sales</p>
                     <p className="text-sm font-bold text-white mt-0.5">
                       ₦{(wallet?.totalEarnedAffiliateNaira ?? 258000).toLocaleString()}
                     </p>

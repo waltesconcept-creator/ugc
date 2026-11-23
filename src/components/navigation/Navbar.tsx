@@ -2,32 +2,26 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import type { UserRole } from '@/lib/types';
 import { Kre8torLogo } from '@/components/common/Kre8torLogo';
 import { useAuth } from '@/context/AuthContext';
+import { AccountSwitcherDrawer } from '@/components/auth/AccountSwitcherDrawer';
 import {
-  Video,
-  Compass,
   Plus,
   MessageCircle,
   User,
   ChevronDown,
-  Sparkles,
   Shield,
   Briefcase,
-  Palette,
-  Bell,
-  LogIn,
-  LogOut,
-  UserCheck,
-  X,
   Store,
   Home,
   Search,
   PlusSquare,
   Heart,
   Send,
+  LogOut,
+  Users,
+  ArrowRightLeft,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -42,18 +36,11 @@ interface NavbarProps {
   onOpenBusinessStudio?: () => void;
 }
 
-const ROLE_OPTIONS: { value: UserRole; label: string; icon: React.ReactNode }[] = [
-  { value: 'creator', label: 'Creator', icon: <Palette className="w-4 h-4 text-orange-400" /> },
-  { value: 'business', label: 'Business', icon: <Briefcase className="w-4 h-4 text-amber-400" /> },
-  { value: 'admin', label: 'Admin', icon: <Shield className="w-4 h-4 text-emerald-400" /> },
-  { value: 'guest', label: 'Guest', icon: <User className="w-4 h-4 text-neutral-400" /> },
-];
-
 const DESKTOP_TABS = [
-  { key: 'feed', label: 'Watch Feed' },
-  { key: 'explore', label: 'Explore Topics' },
-  { key: 'profile', label: 'Creator Portfolio' },
-  { key: 'projects', label: 'Project Tracker' },
+  { key: 'feed', label: 'Watch' },
+  { key: 'explore', label: 'Explore' },
+  { key: 'profile', label: 'Portfolio' },
+  { key: 'projects', label: 'Projects' },
   { key: 'messages', label: 'Messages' },
   { key: 'admin', label: 'Admin' },
 ];
@@ -66,7 +53,7 @@ const MOBILE_TABS = [
   { key: 'profile', label: 'Profile', icon: User },
 ];
 
-const Navbar: React.FC<NavbarProps> = ({
+export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
   currentRole,
@@ -77,47 +64,56 @@ const Navbar: React.FC<NavbarProps> = ({
   onOpenCreatorStudio,
   onOpenBusinessStudio,
 }) => {
-  const { currentUser, isAuthenticated, openAuth, logout } = useAuth();
-  const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
+  const { currentUser, isAuthenticated, openAuth, logout, switchRole } = useAuth();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [accountDrawerOpen, setAccountDrawerOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
-  const mobileDrawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setRoleDropdownOpen(false);
-      }
-      if (
-        userMenuRef.current &&
-        !userMenuRef.current.contains(e.target as Node) &&
-        (!mobileDrawerRef.current || !mobileDrawerRef.current.contains(e.target as Node))
-      ) {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node;
+      if (userMenuRef.current && !userMenuRef.current.contains(target)) {
         setUserMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
-  const currentRoleOption = ROLE_OPTIONS.find((r) => r.value === currentRole) || ROLE_OPTIONS[0];
+  const handleRoleToggle = async () => {
+    const nextRole = currentRole === 'creator' ? 'business' : 'creator';
+    setCurrentRole(nextRole);
+    if (switchRole) {
+      await switchRole(nextRole);
+    }
+    if (nextRole === 'business' && onOpenBusinessStudio) {
+      onOpenBusinessStudio();
+    } else if (nextRole === 'creator' && onOpenCreatorStudio) {
+      onOpenCreatorStudio();
+    }
+    setUserMenuOpen(false);
+  };
 
   return (
     <>
-      {/* ───── Top Header (all screens) ───── */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-neutral-950/95 backdrop-blur-md border-b border-neutral-850">
+      {/* ───── Top Header (All Screens) ───── */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-[#262626]">
         <div className="max-w-7xl mx-auto flex items-center justify-between h-14 px-3 sm:px-6">
-          {/* Brand Logo (KRE8TOR in Modern Futuristic Typography & Emblem) */}
+          {/* Brand Wordmark (Clean Creator Typography) */}
           <button
             onClick={() => setActiveTab('feed')}
-            className="flex items-center gap-2 shrink-0 group select-none text-left"
+            className="flex items-center gap-2 shrink-0 select-none text-left"
+            title="Creator Home"
           >
             <Kre8torLogo size="md" />
           </button>
 
-          {/* Desktop Nav Pills */}
-          <nav className="hidden lg:flex items-center gap-1 bg-neutral-900/90 rounded-full px-1.5 py-1 border border-neutral-800">
+          {/* Desktop Nav Tabs */}
+          <nav className="hidden lg:flex items-center gap-1 bg-[#121212] rounded-full px-1.5 py-1 border border-[#262626]">
             {DESKTOP_TABS.filter(
               (t) => t.key !== 'admin' || currentRole === 'admin'
             ).map((tab) => {
@@ -129,15 +125,15 @@ const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`relative px-4 py-1.5 text-xs font-bold rounded-full transition-all duration-200 ${
+                  className={`relative px-4 py-1.5 text-xs font-semibold rounded-full transition-colors ${
                     isActive
-                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/30'
-                      : 'text-neutral-400 hover:text-white hover:bg-neutral-800/60'
+                      ? 'bg-white text-black font-bold'
+                      : 'text-[#a8a8a8] hover:text-white hover:bg-[#1f1f1f]'
                   }`}
                 >
                   {tab.label}
                   {tab.key === 'messages' && unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-orange-500 text-[10px] font-extrabold text-white px-1 shadow">
+                    <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] flex items-center justify-center rounded-full bg-[#0095f6] text-[9px] font-bold text-white px-1">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
@@ -146,226 +142,227 @@ const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Right Side Actions: Notifications, Messages, Auth / User Profile, Role Simulator */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Activity / Heart icon (Instagram style) */}
+          {/* Right Header Controls */}
+          <div className="flex items-center gap-2">
+            {/* Notifications / Activity */}
             <button
               onClick={() => (onOpenNotifications ? onOpenNotifications() : setActiveTab('messages'))}
               title="Activity"
-              className="relative flex items-center justify-center w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors"
+              className="relative flex items-center justify-center w-9 h-9 rounded-full bg-[#121212] border border-[#262626] text-[#a8a8a8] hover:text-white hover:border-[#3a3a3a] transition-colors"
             >
-              <Heart className="w-4 h-4 text-neutral-300" />
+              <Heart className="w-4 h-4 text-[#cfcfcf]" />
               {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+                <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#0095f6]" />
               )}
             </button>
 
-            {/* Direct Messages Send icon (Instagram style) */}
+            {/* Direct Messages */}
             <button
               onClick={() => setActiveTab('messages')}
-              title="Direct Messages"
-              className="relative flex items-center justify-center w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors"
+              title="Messages"
+              className="relative flex items-center justify-center w-9 h-9 rounded-full bg-[#121212] border border-[#262626] text-[#a8a8a8] hover:text-white hover:border-[#3a3a3a] transition-colors"
             >
-              <Send className="w-4 h-4 text-neutral-300" />
+              <Send className="w-4 h-4 text-[#cfcfcf]" />
             </button>
 
-            {/* Real User Account Button or Sign Up Pill */}
+            {/* User Profile Avatar / Menu (Visible on BOTH Mobile & Desktop) */}
             {isAuthenticated && currentUser && currentUser.profile ? (
               <div ref={userMenuRef} className="relative">
                 <button
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2 p-1 pr-2.5 rounded-full bg-neutral-900 border border-neutral-800 hover:border-orange-500 transition-colors text-xs font-semibold"
+                  onClick={() => setUserMenuOpen((prev) => !prev)}
+                  className="flex items-center gap-1.5 p-1 pr-2 rounded-full bg-[#121212] border border-[#262626] hover:border-[#3a3a3a] transition-colors text-xs font-semibold"
+                  title="Account Menu"
                 >
                   <img
-                    src={currentUser.profile.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face'}
+                    src={currentUser.profile.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop'}
                     alt={currentUser.profile.displayName || 'User'}
-                    className="w-7 h-7 rounded-full object-cover border border-orange-500/50"
+                    className="w-7 h-7 rounded-full object-cover border border-[#262626]"
                   />
-                  <span className="text-white max-w-[80px] sm:max-w-[110px] truncate hidden sm:inline">
-                    {currentUser.profile.displayName || 'My Profile'}
+                  <span className="text-white max-w-[80px] sm:max-w-[110px] truncate hidden sm:inline text-xs font-medium">
+                    {currentUser.profile.displayName || 'Profile'}
                   </span>
-                  <ChevronDown className="w-3 h-3 text-neutral-400" />
+                  <ChevronDown className={`w-3.5 h-3.5 text-neutral-400 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
+                {/* Dropdown Menu (Accessible on Mobile and Desktop) */}
                 {userMenuOpen && (
-                  /* Desktop Dropdown (sm and above) */
-                  <div className="hidden sm:block absolute right-0 top-full mt-2 w-52 bg-neutral-950 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden py-1.5 z-[60] animate-fade-in text-xs">
-                    <div className="px-3 py-2 border-b border-neutral-850">
-                      <p className="font-bold text-white truncate">{currentUser.profile.displayName || 'Creator'}</p>
-                      <p className="text-[10px] text-orange-400 truncate">@{currentUser.profile.username || 'user'}</p>
+                  <div className="absolute right-0 top-full mt-2 w-56 bg-[#121212] border border-[#262626] rounded-2xl shadow-2xl overflow-hidden py-1.5 z-[100] animate-fade-in text-xs">
+                    {/* User Identity Header */}
+                    <div className="px-3.5 py-2.5 border-b border-[#262626] bg-[#181818]/50">
+                      <p className="font-bold text-white truncate text-xs">
+                        {currentUser.profile.displayName || 'Creator'}
+                      </p>
+                      <p className="text-[11px] text-[#a8a8a8] truncate">
+                        @{currentUser.profile.username || 'user'}
+                      </p>
+                      <span className="inline-block mt-1 text-[9px] font-semibold text-[#0095f6] bg-[#0095f6]/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        {currentUser.role || currentRole} Account
+                      </span>
                     </div>
+
+                    {/* View Profile */}
                     <button
                       onClick={() => {
                         setActiveTab('profile');
                         setUserMenuOpen(false);
                       }}
-                      className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-[#e0e0e0] hover:bg-[#1e1e1e] hover:text-white text-left font-medium transition-colors"
                     >
-                      <User className="w-3.5 h-3.5 text-neutral-400" />
-                      <span>My Profile & Rates</span>
+                      <User className="w-4 h-4 text-[#a8a8a8]" />
+                      <span>View Profile & Rates</span>
                     </button>
+
+                    {/* Creator Studio & Wallet */}
                     {onOpenCreatorStudio && (
                       <button
                         onClick={() => {
                           onOpenCreatorStudio();
                           setUserMenuOpen(false);
                         }}
-                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
+                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-[#e0e0e0] hover:bg-[#1e1e1e] hover:text-white text-left font-medium transition-colors"
                       >
-                        <Briefcase className="w-3.5 h-3.5 text-orange-400" />
+                        <Briefcase className="w-4 h-4 text-[#0095f6]" />
                         <span>Creator Studio & Wallet</span>
                       </button>
                     )}
+
+                    {/* Brand Studio & Products */}
                     {onOpenBusinessStudio && (
                       <button
                         onClick={() => {
                           onOpenBusinessStudio();
                           setUserMenuOpen(false);
                         }}
-                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
+                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-[#e0e0e0] hover:bg-[#1e1e1e] hover:text-white text-left font-medium transition-colors"
                       >
-                        <Store className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>Brand Studio & Products</span>
+                        <Store className="w-4 h-4 text-emerald-400" />
+                        <span>Brand Studio (Products)</span>
                       </button>
                     )}
+
+                    {/* 1-Tap Toggle Role (Creator <-> Business) */}
+                    <button
+                      onClick={handleRoleToggle}
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2 text-[#e0e0e0] hover:bg-[#1e1e1e] hover:text-white text-left font-medium transition-colors border-t border-[#262626]"
+                    >
+                      <ArrowRightLeft className="w-4 h-4 text-[#a8a8a8]" />
+                      <span>
+                        Switch to {currentRole === 'creator' ? 'Business' : 'Creator'}
+                      </span>
+                    </button>
+
+                    {/* Open Full Switch Accounts Drawer */}
                     <button
                       onClick={() => {
-                        if (onOpenCreate) onOpenCreate();
                         setUserMenuOpen(false);
+                        setAccountDrawerOpen(true);
                       }}
-                      className="w-full flex items-center gap-2.5 px-3.5 py-2 text-neutral-300 hover:bg-neutral-900 hover:text-white text-left font-medium"
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2 text-[#e0e0e0] hover:bg-[#1e1e1e] hover:text-white text-left font-medium transition-colors"
                     >
-                      <Plus className="w-3.5 h-3.5 text-orange-400" />
-                      <span>Upload Video / Post</span>
+                      <Users className="w-4 h-4 text-[#a8a8a8]" />
+                      <span>Switch Accounts...</span>
                     </button>
+
+                    {/* Sign Out */}
                     <button
                       onClick={() => {
                         logout();
                         setUserMenuOpen(false);
                       }}
-                      className="w-full flex items-center gap-2.5 px-3.5 py-2 text-rose-400 hover:bg-neutral-900 text-left font-medium border-t border-neutral-850"
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-rose-400 hover:bg-[#1e1e1e] text-left font-medium border-t border-[#262626] transition-colors"
                     >
-                      <LogOut className="w-3.5 h-3.5 text-rose-500" />
+                      <LogOut className="w-4 h-4 text-rose-500" />
                       <span>Sign Out</span>
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <Link
-                href="/join"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-              >
-                <LogIn className="w-3.5 h-3.5" />
-                <span>Join / Sign In</span>
-              </Link>
+              <div className="flex items-center gap-1.5">
+                <Link
+                  href="/login"
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#cfcfcf] hover:text-white transition-colors"
+                >
+                  Log In
+                </Link>
+                <Link
+                  href="/join"
+                  className="px-3.5 py-1.5 rounded-lg bg-[#0095f6] hover:bg-[#1877f2] text-white text-xs font-semibold transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </div>
             )}
 
-            {/* Role Switcher Pill */}
-            <div ref={dropdownRef} className="relative hidden sm:block">
-              <button
-                onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 hover:border-neutral-700 transition-colors text-xs font-medium"
-              >
-                {currentRoleOption.icon}
-                <span className="font-bold text-white capitalize text-[11px]">
-                  {currentRoleOption.label}
-                </span>
-                <ChevronDown
-                  className={`w-3 h-3 text-neutral-400 transition-transform duration-200 ${
-                    roleDropdownOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-
-              {roleDropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden py-1.5 z-[60] animate-fade-in text-xs">
-                  <div className="px-3 py-1 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
-                    Simulate Role:
-                  </div>
-                  {ROLE_OPTIONS.map((role) => (
-                    <button
-                      key={role.value}
-                      onClick={() => {
-                        setCurrentRole(role.value);
-                        setRoleDropdownOpen(false);
-                      }}
-                      className={`w-full flex items-center gap-2.5 px-3.5 py-2 text-xs font-semibold transition-colors ${
-                        currentRole === role.value
-                          ? 'bg-orange-500/15 text-orange-400 font-bold'
-                          : 'text-neutral-300 hover:bg-neutral-800'
-                      }`}
-                    >
-                      {role.icon}
-                      <span>{role.label}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Create UGC Post CTA (desktop) */}
+            {/* Desktop Upload Button */}
             <button
               onClick={() => (onOpenCreate ? onOpenCreate() : setActiveTab('create'))}
-              className="hidden lg:flex items-center gap-1.5 px-4 py-2 rounded-full bg-neutral-900 border border-orange-500/40 text-orange-400 text-xs font-bold hover:bg-orange-500 hover:text-white transition-all hover:scale-105 active:scale-95 shadow-sm"
+              className="hidden lg:flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#262626] hover:bg-[#333333] text-white text-xs font-semibold transition-colors border border-[#333333]"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Upload Content</span>
+              <Plus className="w-3.5 h-3.5" />
+              <span>Create</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* ───── Mobile Bottom Navigation Bar (Circular Plus in Center) ───── */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-neutral-950/95 backdrop-blur-lg border-t border-neutral-800/90 pb-[env(safe-area-inset-bottom)]">
-        <div className="flex items-center justify-around h-16 px-2">
+      {/* ───── Mobile Bottom Navigation Bar ───── */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-lg border-t border-[#262626] pb-[env(safe-area-inset-bottom)]">
+        <div className="flex items-center justify-around h-14 px-2">
           {MOBILE_TABS.map((tab) => {
             const Icon = tab.icon;
-            const isActive = activeTab === tab.key || (tab.key === 'profile' && activeTab === 'creator_profile') || (tab.key === 'create' && activeTab === 'creator_onboard');
+            const isActive =
+              activeTab === tab.key ||
+              (tab.key === 'profile' && activeTab === 'creator_profile') ||
+              (tab.key === 'create' && activeTab === 'creator_onboard');
             const isCreate = tab.key === 'create';
             const isMessages = tab.key === 'messages';
+            const isProfile = tab.key === 'profile';
 
             return (
               <button
                 key={tab.key}
-                onClick={() => (isCreate && onOpenCreate ? onOpenCreate() : setActiveTab(tab.key))}
-                className={`relative flex flex-col items-center justify-center min-w-[48px] min-h-[48px] rounded-2xl transition-all duration-200 ${
+                onClick={() => {
+                  if (isCreate) {
+                    if (onOpenCreate) onOpenCreate();
+                    else setActiveTab('create');
+                  } else {
+                    setActiveTab(tab.key);
+                  }
+                }}
+                className={`relative flex flex-col items-center justify-center min-w-[48px] min-h-[48px] transition-colors ${
                   isCreate
                     ? ''
                     : isActive
-                    ? 'text-orange-500'
-                    : 'text-neutral-500 hover:text-neutral-300'
+                    ? 'text-white'
+                    : 'text-[#737373] hover:text-[#a8a8a8]'
                 }`}
               >
                 {isCreate ? (
-                  /* Round circular elevated center plus button */
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/40 text-white transform -translate-y-2 border-2 border-neutral-950 hover:scale-110 active:scale-95 transition-all">
-                    <Plus className="w-6 h-6 stroke-[3] text-white" />
+                  /* Clean Elevated White Plus Button */
+                  <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center border-2 border-black hover:scale-105 active:scale-95 transition-all shadow-md">
+                    <Plus className="w-5 h-5 stroke-[2.5] text-black" />
                   </div>
                 ) : (
                   <>
                     <div className="relative">
-                      {tab.key === 'profile' && currentUser?.profile?.avatarUrl ? (
+                      {isProfile && currentUser?.profile?.avatarUrl ? (
                         <img
                           src={currentUser.profile.avatarUrl}
                           alt="Profile"
-                          className={`w-5 h-5 rounded-full object-cover border ${
-                            isActive ? 'border-orange-500 scale-110' : 'border-neutral-700'
+                          className={`w-6 h-6 rounded-full object-cover border ${
+                            isActive ? 'border-white scale-105' : 'border-[#333333]'
                           }`}
                         />
                       ) : (
-                        <Icon className="w-5 h-5" />
+                        <Icon className="w-6 h-6" />
                       )}
                       {isMessages && unreadCount > 0 && (
-                        <span className="absolute -top-1.5 -right-2 min-w-[16px] h-[16px] flex items-center justify-center rounded-full bg-orange-500 text-[9px] font-bold text-white px-0.5">
+                        <span className="absolute -top-1 -right-1.5 min-w-[14px] h-[14px] flex items-center justify-center rounded-full bg-[#0095f6] text-[8px] font-bold text-white px-0.5">
                           {unreadCount > 9 ? '9+' : unreadCount}
                         </span>
                       )}
                     </div>
-                    <span className="text-[10px] mt-0.5 font-medium">{tab.label}</span>
-                    {isActive && (
-                      <div className="absolute -bottom-1 w-1 h-1 rounded-full bg-orange-500" />
-                    )}
                   </>
                 )}
               </button>
@@ -374,104 +371,19 @@ const Navbar: React.FC<NavbarProps> = ({
         </div>
       </nav>
 
-      {/* ───── Mobile User Profile Drawer (Rendered at Root Viewport to Avoid Header backdrop-filter Clipping) ───── */}
-      {userMenuOpen && currentUser && currentUser.profile && (
-        <div className="sm:hidden fixed inset-0 z-[120] flex items-end justify-center">
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm animate-fade-in"
-            onClick={() => setUserMenuOpen(false)}
-          />
-          {/* Bottom Drawer */}
-          <div ref={mobileDrawerRef} className="relative w-full max-w-md bg-neutral-900 border-t border-neutral-800 rounded-t-3xl p-5 pb-9 z-10 shadow-2xl animate-fade-in">
-            {/* Drag Handle */}
-            <div className="w-12 h-1.5 bg-neutral-700 rounded-full mx-auto mb-4" />
+      {/* ───── Account Switcher Drawer (Mobile & Desktop) ───── */}
+      <AccountSwitcherDrawer
+        isOpen={accountDrawerOpen}
+        onClose={() => setAccountDrawerOpen(false)}
+        onViewProfile={() => setActiveTab('profile')}
+        onOpenCreatorStudio={onOpenCreatorStudio}
+        onOpenBusinessStudio={onOpenBusinessStudio}
+      />
 
-            <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-neutral-800">
-              <div className="flex items-center gap-3 overflow-hidden">
-                <img
-                  src={currentUser.profile.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face'}
-                  alt=""
-                  className="w-12 h-12 rounded-full object-cover border-2 border-orange-500 shrink-0"
-                />
-                <div className="overflow-hidden">
-                  <p className="text-sm font-bold text-white truncate">{currentUser.profile.displayName || 'Creator'}</p>
-                  <p className="text-xs text-orange-400 truncate">@{currentUser.profile.username || 'user'}</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setUserMenuOpen(false)}
-                className="w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="space-y-2">
-              <button
-                onClick={() => {
-                  setActiveTab('profile');
-                  setUserMenuOpen(false);
-                }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-800/80 hover:bg-neutral-800 text-white text-xs font-semibold transition-colors"
-              >
-                <User className="w-4 h-4 text-orange-400" />
-                <span>My Profile & Packages</span>
-              </button>
-              {onOpenCreatorStudio && (
-                <button
-                  onClick={() => {
-                    onOpenCreatorStudio();
-                    setUserMenuOpen(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-orange-500/10 hover:bg-orange-500/20 text-orange-300 border border-orange-500/20 text-xs font-semibold transition-colors"
-                >
-                  <Briefcase className="w-4 h-4 text-orange-400" />
-                  <span>Creator Studio & Wallet</span>
-                </button>
-              )}
-              {onOpenBusinessStudio && (
-                <button
-                  onClick={() => {
-                    onOpenBusinessStudio();
-                    setUserMenuOpen(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-800/80 hover:bg-neutral-800 text-white text-xs font-semibold transition-colors"
-                >
-                  <Store className="w-4 h-4 text-emerald-400" />
-                  <span>Brand Studio (Products)</span>
-                </button>
-              )}
-              <button
-                onClick={() => {
-                  if (onOpenCreate) onOpenCreate();
-                  setUserMenuOpen(false);
-                }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-800/80 hover:bg-neutral-800 text-white text-xs font-semibold transition-colors"
-              >
-                <Plus className="w-4 h-4 text-orange-400" />
-                <span>Upload Video / Post</span>
-              </button>
-              <button
-                onClick={() => {
-                  logout();
-                  setUserMenuOpen(false);
-                }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold transition-colors mt-2"
-              >
-                <LogOut className="w-4 h-4 text-rose-500" />
-                <span>Sign Out</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Spacer for fixed top header */}
+      {/* Spacer for Fixed Header */}
       <div className="h-14" />
     </>
   );
 };
 
-export { Navbar };
 export default Navbar;

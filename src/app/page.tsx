@@ -189,7 +189,7 @@ export default function Home() {
     MOCK_CREATORS[0]?.profile?.id;
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white flex flex-col font-sans select-none selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen bg-black text-white flex flex-col font-sans select-none selection:bg-[#0095f6] selection:text-white">
       {/* Top Navigation Bar with Role Simulator & Notifications */}
       <Navbar
         activeTab={activeTab}
@@ -229,19 +229,19 @@ export default function Home() {
           <div className="flex-1 flex flex-col w-full">
             {/* 1. If viewing another creator's profile: show clean "Back to Feed" banner */}
             {viewingOtherCreatorId && (
-              <div className="w-full bg-neutral-900/90 border-b border-neutral-800 px-4 py-2.5 flex items-center justify-between sticky top-14 z-20 backdrop-blur-md">
+              <div className="w-full bg-[#121212] border-b border-[#262626] px-4 py-2.5 flex items-center justify-between sticky top-14 z-20 backdrop-blur-md">
                 <button
                   onClick={() => {
                     setViewingOtherCreatorId(null);
                     setActiveTab('feed');
                   }}
-                  className="flex items-center gap-2 text-xs font-bold text-neutral-300 hover:text-white group"
+                  className="flex items-center gap-2 text-xs font-semibold text-neutral-300 hover:text-white group"
                 >
-                  <ArrowLeft className="w-4 h-4 text-orange-400 group-hover:-translate-x-0.5 transition-transform" />
+                  <ArrowLeft className="w-4 h-4 text-white group-hover:-translate-x-0.5 transition-transform" />
                   <span>Back to Feed</span>
                 </button>
 
-                <span className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider">
+                <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider">
                   Creator Profile
                 </span>
               </div>
@@ -249,11 +249,10 @@ export default function Home() {
 
             {/* 2. If NOT logged in and on the Profile tab: show clean Creator Sign Up invitation */}
             {!currentUser && !viewingOtherCreatorId && (
-              <div className="bg-gradient-to-r from-orange-500/15 via-neutral-900 to-amber-500/15 border-b border-orange-500/30 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 sticky top-14 z-20 backdrop-blur-md">
+              <div className="bg-[#121212] border-b border-[#262626] p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 sticky top-14 z-20 backdrop-blur-md">
                 <div className="text-center sm:text-left">
                   <h4 className="text-sm font-bold text-white flex items-center gap-1.5 justify-center sm:justify-start">
-                    <Sparkles className="w-4 h-4 text-orange-400" />
-                    <span>Launch Your Creator Profile on KRE8TOR</span>
+                    <span>Build Your Creator Profile on Creator</span>
                   </h4>
                   <p className="text-xs text-neutral-400 mt-0.5">
                     Sign up with your phone number or email to showcase your portfolio and receive brand bookings.
@@ -262,13 +261,13 @@ export default function Home() {
                 <div className="flex gap-2 w-full sm:w-auto">
                   <Link
                     href="/join"
-                    className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all text-center cursor-pointer"
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-[#0095f6] hover:bg-[#1877f2] text-white text-xs font-semibold transition-colors text-center cursor-pointer"
                   >
                     Sign Up Free
                   </Link>
                   <Link
                     href="/login"
-                    className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 text-xs font-bold transition-all text-center cursor-pointer"
+                    className="flex-1 sm:flex-none px-3.5 py-2 rounded-lg bg-[#262626] hover:bg-[#333333] text-white text-xs font-semibold border border-[#333333] transition-colors text-center cursor-pointer"
                   >
                     Sign In
                   </Link>

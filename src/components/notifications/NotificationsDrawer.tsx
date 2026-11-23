@@ -43,7 +43,7 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({
   const getIcon = (type: AppNotification['type']) => {
     switch (type) {
       case 'like':
-        return <Heart className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />;
+        return <Heart className="w-3.5 h-3.5 text-[#ed4956] fill-[#ed4956]" />;
       case 'comment':
         return <MessageCircle className="w-3.5 h-3.5 text-blue-400" />;
       case 'booking':
@@ -51,9 +51,9 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({
       case 'deliverable':
         return <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />;
       case 'follow':
-        return <UserPlus className="w-3.5 h-3.5 text-purple-400" />;
+        return <UserPlus className="w-3.5 h-3.5 text-[#0095f6]" />;
       default:
-        return <Sparkles className="w-3.5 h-3.5 text-orange-400" />;
+        return <Bell className="w-3.5 h-3.5 text-neutral-400" />;
     }
   };
 
@@ -66,12 +66,12 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({
       />
 
       {/* Drawer Container */}
-      <div className="relative w-full max-w-md bg-neutral-950 border-l border-neutral-800 h-full flex flex-col z-10 shadow-2xl animate-fade-in">
+      <div className="relative w-full max-w-md bg-[#121212] border-l border-[#262626] h-full flex flex-col z-10 shadow-2xl animate-fade-in">
         {/* Header */}
-        <div className="p-4 border-b border-neutral-800 flex items-center justify-between">
+        <div className="p-4 border-b border-[#262626] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-orange-500/15 flex items-center justify-center text-orange-400">
-              <Bell className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-full bg-[#181818] border border-[#262626] flex items-center justify-center text-white">
+              <Bell className="w-4 h-4 text-neutral-300" />
             </div>
             <div>
               <h2 className="text-base font-bold text-white">Notifications</h2>
@@ -83,13 +83,13 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({
             <button
               onClick={onMarkAllRead}
               title="Mark all as read"
-              className="text-xs text-orange-400 hover:text-orange-300 font-semibold px-2 py-1 rounded hover:bg-neutral-900 transition-colors"
+              className="text-xs text-[#0095f6] hover:text-[#1877f2] font-semibold px-2 py-1 rounded transition-colors"
             >
               Mark read
             </button>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-neutral-900 text-neutral-400 hover:text-white flex items-center justify-center"
+              className="w-8 h-8 rounded-full bg-[#181818] border border-[#262626] text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -97,7 +97,7 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({
         </div>
 
         {/* Filter Pills */}
-        <div className="px-4 py-2.5 border-b border-neutral-800/80 flex gap-2">
+        <div className="px-4 py-2.5 border-b border-[#262626] flex gap-2">
           {[
             { id: 'all' as const, label: 'All Activity' },
             { id: 'bookings' as const, label: 'Bookings & Pay' },
@@ -106,10 +106,10 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({
             <button
               key={tab.id}
               onClick={() => setFilter(tab.id)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+              className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
                 filter === tab.id
-                  ? 'bg-orange-500 text-white shadow-sm'
-                  : 'bg-neutral-900 text-neutral-400 hover:text-white'
+                  ? 'bg-white text-black font-bold'
+                  : 'bg-[#181818] text-neutral-400 border border-[#262626] hover:text-white'
               }`}
             >
               {tab.label}

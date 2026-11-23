@@ -123,19 +123,19 @@ export const BusinessStudioModal: React.FC<BusinessStudioModalProps> = ({
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-2xl bg-neutral-950 border-t sm:border border-neutral-800 rounded-t-3xl sm:rounded-3xl z-10 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-fade-in text-white">
-        <div className="w-12 h-1.5 bg-neutral-800 rounded-full mx-auto my-3 sm:hidden" />
+      <div className="relative w-full max-w-2xl bg-[#121212] border-t sm:border border-[#262626] rounded-t-3xl sm:rounded-2xl z-10 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-fade-in text-white">
+        <div className="w-12 h-1 bg-[#262626] rounded-full mx-auto my-3 sm:hidden" />
 
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-900 shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#262626] shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
-              <Store className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-lg bg-[#181818] border border-[#262626] flex items-center justify-center text-white">
+              <Store className="w-4 h-4 text-emerald-400" />
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                 Business Studio
-                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
+                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
                   Brand Merchant
                 </span>
               </h2>
@@ -144,14 +144,14 @@ export const BusinessStudioModal: React.FC<BusinessStudioModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-neutral-900 text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-[#181818] border border-[#262626] text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tabs Bar */}
-        <div className="flex border-b border-neutral-900 bg-neutral-900/40 px-3 shrink-0">
+        <div className="flex border-b border-[#262626] bg-[#141414] px-3 shrink-0">
           {[
             { id: 'products', label: 'My Products', icon: Package },
             { id: 'campaigns', label: 'Affiliate Campaigns', icon: Percent },
@@ -163,9 +163,9 @@ export const BusinessStudioModal: React.FC<BusinessStudioModalProps> = ({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold whitespace-nowrap border-b-2 transition-all cursor-pointer ${
+                className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold whitespace-nowrap border-b-2 transition-colors cursor-pointer ${
                   active
-                    ? 'border-orange-500 text-orange-400 bg-orange-500/5'
+                    ? 'border-white text-white font-bold'
                     : 'border-transparent text-neutral-400 hover:text-neutral-200'
                 }`}
               >
@@ -188,7 +188,7 @@ export const BusinessStudioModal: React.FC<BusinessStudioModalProps> = ({
                 </div>
                 <button
                   onClick={() => setAddProductOpen(true)}
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#0095f6] hover:bg-[#1877f2] text-white text-xs font-semibold transition-colors active:scale-95 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>List New Product</span>
@@ -199,10 +199,10 @@ export const BusinessStudioModal: React.FC<BusinessStudioModalProps> = ({
               {addProductOpen && (
                 <form
                   onSubmit={handleAddProduct}
-                  className="p-4 rounded-2xl bg-neutral-900 border border-orange-500/30 space-y-3 animate-fade-in"
+                  className="p-4 rounded-xl bg-[#181818] border border-[#262626] space-y-3 animate-fade-in"
                 >
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
-                    <span className="text-xs font-bold text-orange-400">Add Product to Shop</span>
+                  <div className="flex items-center justify-between pb-2 border-b border-[#262626]">
+                    <span className="text-xs font-semibold text-white">Add Product to Shop</span>
                     <button
                       type="button"
                       onClick={() => setAddProductOpen(false)}

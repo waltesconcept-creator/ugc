@@ -24,16 +24,12 @@ export const StoryTray: React.FC<StoryTrayProps> = ({
 
   return (
     <>
-      <div className="w-full bg-neutral-950/95 border-b border-neutral-850 px-3 sm:px-4 py-1.5 overflow-hidden">
+      <div className="w-full bg-black border-b border-[#262626] px-3 sm:px-4 py-2 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           {/* Header row */}
           <div className="flex items-center justify-between mb-1.5 px-1">
-            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-              Stories & BTS
-            </span>
-            <span className="text-[9px] text-orange-400 font-semibold cursor-pointer hover:underline">
-              Daily Updates
+            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+              Stories
             </span>
           </div>
 
@@ -42,10 +38,10 @@ export const StoryTray: React.FC<StoryTrayProps> = ({
             {/* 1. Add Story Box */}
             <div
               onClick={onCreateStory}
-              className="group relative w-[58px] h-[82px] shrink-0 rounded-xl overflow-hidden bg-neutral-900 border border-dashed border-neutral-700 hover:border-orange-500 cursor-pointer transition-all flex flex-col items-center justify-between p-1.5 shadow-sm"
+              className="group relative w-[58px] h-[82px] shrink-0 rounded-xl overflow-hidden bg-[#121212] border border-dashed border-[#333333] hover:border-neutral-400 cursor-pointer transition-colors flex flex-col items-center justify-between p-1.5 shadow-sm"
             >
               <div className="w-full flex justify-end">
-                <span className="text-[8px] px-1 rounded bg-orange-500/20 text-orange-400 font-extrabold leading-none py-0.5">YOU</span>
+                <span className="text-[8px] px-1 rounded bg-[#262626] text-neutral-300 font-bold leading-none py-0.5">YOU</span>
               </div>
 
               <div className="relative">
@@ -54,15 +50,15 @@ export const StoryTray: React.FC<StoryTrayProps> = ({
                     <img
                       src={currentUser.profile.avatarUrl}
                       alt=""
-                      className="w-6 h-6 rounded-full object-cover border border-orange-500"
+                      className="w-6 h-6 rounded-full object-cover border border-[#262626]"
                     />
-                    <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-orange-500 text-white flex items-center justify-center text-[8px] font-bold shadow">
+                    <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-[#0095f6] text-white flex items-center justify-center text-[8px] font-bold shadow">
                       +
                     </div>
                   </div>
                 ) : (
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white flex items-center justify-center shadow-md shadow-orange-500/30 group-hover:scale-110 transition-transform">
-                    <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                  <div className="w-6 h-6 rounded-full bg-[#0095f6] text-white flex items-center justify-center shadow transition-transform">
+                    <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
                   </div>
                 )}
               </div>
@@ -77,14 +73,14 @@ export const StoryTray: React.FC<StoryTrayProps> = ({
               <div
                 key={story.id}
                 onClick={() => setSelectedStoryIndex(idx)}
-                className={`group relative w-[58px] h-[82px] shrink-0 rounded-xl overflow-hidden cursor-pointer transition-all transform hover:scale-[1.03] active:scale-95 shadow-md ${
+                className={`group relative w-[58px] h-[82px] shrink-0 rounded-xl overflow-hidden cursor-pointer transition-transform hover:scale-[1.02] active:scale-95 shadow-md ${
                   story.hasUnseenStory
-                    ? 'p-[1.5px] bg-gradient-to-tr from-orange-500 via-amber-400 to-orange-600 shadow-orange-500/20'
-                    : 'border border-neutral-800'
+                    ? 'p-[1.5px] bg-[#0095f6]'
+                    : 'border border-[#262626]'
                 }`}
               >
                 {/* Inner Card Container */}
-                <div className="relative w-full h-full rounded-[10px] overflow-hidden bg-neutral-900">
+                <div className="relative w-full h-full rounded-[10px] overflow-hidden bg-black">
                   {/* Background Story Preview */}
                   <img
                     src={story.thumbnailUrl}
@@ -100,7 +96,7 @@ export const StoryTray: React.FC<StoryTrayProps> = ({
                     <img
                       src={story.creatorAvatar}
                       alt={story.creatorName}
-                      className="w-5 h-5 rounded-md object-cover ring-1 ring-orange-500 shadow-sm"
+                      className="w-5 h-5 rounded-md object-cover ring-1 ring-white/50 shadow-sm"
                     />
                   </div>
 

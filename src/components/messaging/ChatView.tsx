@@ -158,7 +158,7 @@ const ChatView: React.FC<ChatViewProps> = ({ onOpenProject, activeCreatorId }) =
                 <div className="flex items-center justify-between gap-2 mt-0.5">
                   <p className="text-xs text-neutral-400 truncate">{conv.lastMessage}</p>
                   {conv.unreadCount > 0 && (
-                    <span className="shrink-0 min-w-[20px] h-5 flex items-center justify-center rounded-full bg-orange-500 text-[10px] font-bold text-white px-1">
+                    <span className="shrink-0 min-w-[20px] h-5 flex items-center justify-center rounded-full bg-[#0095f6] text-[10px] font-bold text-white px-1">
                       {conv.unreadCount}
                     </span>
                   )}
@@ -240,8 +240,8 @@ const ChatView: React.FC<ChatViewProps> = ({ onOpenProject, activeCreatorId }) =
                   <div
                     className={`px-3.5 py-2.5 text-[13px] leading-relaxed ${
                       isMe
-                        ? 'bg-gradient-to-br from-orange-500 to-amber-500 text-white rounded-2xl rounded-br-md shadow-md shadow-orange-500/20'
-                        : 'bg-neutral-800 text-neutral-200 rounded-2xl rounded-bl-md border border-neutral-700/50'
+                        ? 'bg-[#0095f6] text-white rounded-2xl rounded-br-sm'
+                        : 'bg-[#262626] text-white rounded-2xl rounded-bl-sm border border-[#333333]'
                     }`}
                   >
                     {msg.content}
@@ -287,7 +287,7 @@ const ChatView: React.FC<ChatViewProps> = ({ onOpenProject, activeCreatorId }) =
             <button
               onClick={handleSend}
               disabled={!messageInput.trim()}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20 disabled:opacity-40 disabled:shadow-none transition-all min-w-[44px] min-h-[44px]"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-[#0095f6] hover:bg-[#1877f2] text-white disabled:opacity-40 transition-colors min-w-[44px] min-h-[44px]"
             >
               <Send className="w-4 h-4 ml-0.5" />
             </button>
