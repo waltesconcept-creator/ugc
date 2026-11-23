@@ -10,6 +10,7 @@ import { LeaveReviewModal } from './LeaveReviewModal';
 import { CreatorStudioModal } from '../studio/CreatorStudioModal';
 import { BusinessStudioModal } from '../studio/BusinessStudioModal';
 import { ProductDrawer } from '../commerce/ProductDrawer';
+import { AccountSwitcherDrawer } from '../auth/AccountSwitcherDrawer';
 import {
   BadgeCheck,
   MapPin,
@@ -43,6 +44,8 @@ import {
   Store,
   Grid3X3,
   Film,
+  Settings,
+  Menu,
 } from 'lucide-react';
 
 interface CreatorProfileViewProps {
@@ -68,7 +71,7 @@ const StarRating: React.FC<{ rating: number; size?: string }> = ({ rating, size 
     {[1, 2, 3, 4, 5].map((s) => (
       <Star
         key={s}
-        className={`${size} ${s <= Math.round(rating) ? 'text-amber-400 fill-amber-400' : 'text-neutral-700'}`}
+        className={`${size} ${s <= Math.round(rating) ? 'text-white fill-white' : 'text-neutral-700'}`}
       />
     ))}
   </div>
@@ -92,6 +95,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
   const [isBusinessStudioOpen, setIsBusinessStudioOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviewLinkCopied, setReviewLinkCopied] = useState(false);
+  const [isAccountDrawerOpen, setIsAccountDrawerOpen] = useState(false);
   const [dynamicReviews, setDynamicReviews] = useState<Review[]>([]);
 
   const creatorData = useMemo(() => {
@@ -247,7 +251,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
               <div>
                 <p className="text-base sm:text-lg font-black text-white flex items-center justify-center gap-1">
                   <span>{details.completedProjectsCount || 51}</span>
-                  <span className="text-amber-400 text-xs">★{details.ratingAvg || 4.9}</span>
+                  <span className="text-neutral-300 text-xs">★{details.ratingAvg || 4.9}</span>
                 </p>
                 <p className="text-[11px] text-neutral-400">UGC Jobs</p>
               </div>
@@ -362,6 +366,13 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                 >
                   <Store className="w-3.5 h-3.5" />
                   <span className="text-[11px]">Brand</span>
+                </button>
+                <button
+                  onClick={() => setIsAccountDrawerOpen(true)}
+                  className="px-3 py-2 rounded-lg bg-[#262626] hover:bg-[#333333] text-neutral-300 hover:text-white text-xs font-semibold border border-[#333333] transition-colors flex items-center justify-center"
+                  title="Account Menu, Role Switcher & Sign Out"
+                >
+                  <Settings className="w-3.5 h-3.5" />
                 </button>
               </>
             ) : (
@@ -479,7 +490,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                       )}
                       {/* Shoppable product bag indicator */}
                       {post.taggedProduct && (
-                        <div className="absolute top-2 left-2 p-1 rounded-full bg-black/60 backdrop-blur-sm text-orange-400">
+                        <div className="absolute top-2 left-2 p-1 rounded-full bg-black/60 backdrop-blur-sm text-white">
                           <ShoppingBag className="w-3 h-3" />
                         </div>
                       )}
@@ -515,7 +526,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                     <div
                       key={post.id}
                       onClick={() => onSelectPost(post)}
-                      className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800/60 hover:border-orange-500/40 transition-all cursor-pointer shadow-md"
+                      className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800/60 hover:border-[#333333] transition-all cursor-pointer shadow-md"
                     >
                       <img
                         src={post.thumbnailUrl}
@@ -529,12 +540,12 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                           {formatCount(post.viewsCount)}
                         </span>
                         <span className="flex items-center gap-1 text-[11px] text-white/90">
-                          <Heart className="w-3 h-3 text-rose-500 fill-rose-500" />
+                          <Heart className="w-3 h-3 text-[#ed4956] fill-[#ed4956]" />
                           {formatCount(post.likesCount)}
                         </span>
                       </div>
                       {post.taggedProduct && (
-                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[10px] text-orange-400 font-semibold border border-orange-500/30 flex items-center gap-1">
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[10px] text-[#0095f6] font-semibold border border-[#0095f6]/30 flex items-center gap-1">
                           <ShoppingBag className="w-2.5 h-2.5" />
                           <span>Shop Tag</span>
                         </div>
@@ -636,7 +647,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                     <div
                       key={prod.id}
                       onClick={() => setSelectedProductForDrawer(prod)}
-                      className="bg-neutral-900 rounded-2xl border border-neutral-800 p-3 flex gap-3 cursor-pointer hover:border-orange-500/40 transition-colors group"
+                      className="bg-neutral-900 rounded-2xl border border-neutral-800 p-3 flex gap-3 cursor-pointer hover:border-[#333333] transition-colors group"
                     >
                       <img
                         src={prod.mediaUrls[0] || 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&h=600&fit=crop'}
@@ -645,11 +656,11 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                       />
                       <div className="flex-1 min-w-0">
                         <span className="text-[10px] text-neutral-400 font-medium">{prod.businessName}</span>
-                        <h4 className="text-xs font-bold text-white truncate group-hover:text-orange-400 transition-colors">
+                        <h4 className="text-xs font-bold text-white truncate group-hover:text-[#0095f6] transition-colors">
                           {prod.title}
                         </h4>
                         <div className="flex items-center justify-between mt-1.5">
-                          <span className="text-xs font-black text-orange-400">
+                          <span className="text-xs font-black text-white">
                             ₦{prod.priceNaira.toLocaleString()}
                           </span>
                           <span className="text-[10px] font-bold text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/25">
@@ -682,7 +693,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                       <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-3">
                         <div className="flex items-center gap-1.5 mb-1">
-                          <Star className="w-3.5 h-3.5 text-amber-400" />
+                          <Star className="w-3.5 h-3.5 text-white" />
                           <span className="text-[10px] text-neutral-400 font-medium">Client Rating</span>
                         </div>
                         <p className="text-base font-bold text-white">
@@ -706,7 +717,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
 
                       <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-3">
                         <div className="flex items-center gap-1.5 mb-1">
-                          <DollarSign className="w-3.5 h-3.5 text-orange-400" />
+                          <DollarSign className="w-3.5 h-3.5 text-white" />
                           <span className="text-[10px] text-neutral-400 font-medium">Starting at</span>
                         </div>
                         <p className="text-base font-bold text-white">{formatPrice(details.startingPriceCents || 5000)}</p>
@@ -724,15 +735,15 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                     </div>
 
                     {/* Verified Reputation Breakdown Banner */}
-                    <div className="bg-gradient-to-r from-orange-500/10 via-neutral-900 to-amber-500/10 border border-orange-500/25 rounded-2xl p-3.5">
+                    <div className="bg-[#181818] border border-[#262626] rounded-2xl p-3.5">
                       <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
                         <div className="flex items-center gap-2">
-                          <BadgeCheck className="w-4 h-4 text-orange-400 fill-orange-400/20 shrink-0" />
+                          <BadgeCheck className="w-4 h-4 text-[#0095f6] fill-[#0095f6]/20 shrink-0" />
                           <span className="text-xs font-bold text-white tracking-wide">
                             Verified Creator Reputation Engine
                           </span>
                         </div>
-                        <span className="text-[10px] font-semibold text-orange-400 px-2.5 py-0.5 rounded-full bg-orange-500/15 border border-orange-500/30 whitespace-nowrap">
+                        <span className="text-[10px] font-semibold text-[#0095f6] px-2.5 py-0.5 rounded-full bg-[#0095f6]/10 border border-[#0095f6]/20 whitespace-nowrap">
                           100% Escrow Verified Reviews
                         </span>
                       </div>
@@ -744,7 +755,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                             <span className="text-white font-bold">{quality.toFixed(1)} / 5.0</span>
                           </div>
                           <div className="h-1.5 w-full bg-neutral-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-orange-500 rounded-full" style={{ width: `${(quality / 5) * 100}%` }} />
+                            <div className="h-full bg-[#0095f6] rounded-full" style={{ width: `${(quality / 5) * 100}%` }} />
                           </div>
                         </div>
 
@@ -754,7 +765,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                             <span className="text-white font-bold">{comm.toFixed(1)} / 5.0</span>
                           </div>
                           <div className="h-1.5 w-full bg-neutral-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-amber-400 rounded-full" style={{ width: `${(comm / 5) * 100}%` }} />
+                            <div className="h-full bg-white rounded-full" style={{ width: `${(comm / 5) * 100}%` }} />
                           </div>
                         </div>
 
@@ -789,15 +800,15 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                   {currentUser && (currentUser.id === profile.id || currentUser.profile?.id === profile.id) ? (
                     <button
                       onClick={handleCopyReviewLink}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-800 border border-neutral-700 text-neutral-200 hover:text-white text-xs font-semibold hover:border-orange-500 transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-800 border border-neutral-700 text-neutral-200 hover:text-white text-xs font-semibold hover:border-[#0095f6] transition-colors"
                     >
-                      <Share2 className="w-3.5 h-3.5 text-orange-400" />
+                      <Share2 className="w-3.5 h-3.5 text-white" />
                       <span>{reviewLinkCopied ? '✓ Review Link Copied!' : 'Share Review Request Link'}</span>
                     </button>
                   ) : (
                     <button
                       onClick={() => setIsReviewModalOpen(true)}
-                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 active:scale-95 transition-all"
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white text-xs font-semibold active:scale-95 transition-all"
                     >
                       <Star className="w-3.5 h-3.5 fill-white" />
                       <span>Write Client Review</span>
@@ -815,7 +826,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                   </p>
                   <button
                     onClick={() => setIsReviewModalOpen(true)}
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all"
+                    className="px-4 py-2 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white text-xs font-semibold hover:scale-105 active:scale-95 transition-all"
                   >
                     ★ Leave 1st Verified Review
                   </button>
@@ -849,9 +860,9 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                           return (
                             <div key={s} className="flex items-center gap-2 text-xs">
                               <span className="text-neutral-500 w-2">{s}</span>
-                              <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                              <Star className="w-3 h-3 text-white fill-white" />
                               <div className="flex-1 h-1.5 bg-neutral-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-amber-400 rounded-full" style={{ width: `${pct}%` }} />
+                                <div className="h-full bg-white rounded-full" style={{ width: `${pct}%` }} />
                               </div>
                               <span className="text-neutral-600 w-6 text-right">{count}</span>
                             </div>
@@ -939,7 +950,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
               <X className="w-4 h-4" />
             </button>
 
-            <div className="w-56 h-56 sm:w-64 sm:h-64 rounded-2xl overflow-hidden ring-4 ring-orange-500/30 shadow-2xl mb-4">
+            <div className="w-56 h-56 sm:w-64 sm:h-64 rounded-2xl overflow-hidden ring-2 ring-[#0095f6]/40 shadow-2xl mb-4">
               <img
                 src={profile.avatarUrl}
                 alt={profile.displayName}
@@ -970,6 +981,15 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
         isOpen={isBusinessStudioOpen}
         onClose={() => setIsBusinessStudioOpen(false)}
         businessName={profile.displayName || 'My Brand'}
+      />
+
+      {/* Account Switcher & Sign Out Drawer */}
+      <AccountSwitcherDrawer
+        isOpen={isAccountDrawerOpen}
+        onClose={() => setIsAccountDrawerOpen(false)}
+        onViewProfile={() => setIsAccountDrawerOpen(false)}
+        onOpenCreatorStudio={() => setIsCreatorStudioOpen(true)}
+        onOpenBusinessStudio={() => setIsBusinessStudioOpen(true)}
       />
 
       {/* Shoppable Product Drawer */}

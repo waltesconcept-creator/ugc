@@ -121,7 +121,7 @@ const ChatView: React.FC<ChatViewProps> = ({ onOpenProject, activeCreatorId }) =
             placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500/50 transition-colors"
+            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] transition-colors"
           />
         </div>
       </div>
@@ -278,7 +278,7 @@ const ChatView: React.FC<ChatViewProps> = ({ onOpenProject, activeCreatorId }) =
                 onChange={(e) => setMessageInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Type a message..."
-                className="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500/50 transition-colors pr-10 min-h-[44px]"
+                className="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] transition-colors pr-10 min-h-[44px]"
               />
               <button className="absolute right-3 top-1/2 -translate-y-1/2">
                 <Smile className="w-4 h-4 text-neutral-500" />

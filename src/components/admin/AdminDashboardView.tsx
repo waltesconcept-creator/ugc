@@ -43,12 +43,12 @@ export const AdminDashboardView: React.FC = () => {
         {/* Top Admin Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-neutral-800 gap-3">
           <div>
-            <div className="flex items-center gap-2 text-orange-400 text-xs font-bold uppercase tracking-wider mb-1">
+            <div className="flex items-center gap-2 text-[#0095f6] text-xs font-bold uppercase tracking-wider mb-1">
               <ShieldCheck className="w-4 h-4" />
               Secure Administrative Suite
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-              KRE8TOR Control Center
+              Creator Control Center
             </h1>
           </div>
 
@@ -66,7 +66,7 @@ export const AdminDashboardView: React.FC = () => {
             onClick={() => setActiveTab('overview')}
             className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               activeTab === 'overview'
-                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/20'
+                ? 'bg-[#0095f6] text-white'
                 : 'bg-neutral-900 text-neutral-400 hover:text-white'
             }`}
           >
@@ -78,7 +78,7 @@ export const AdminDashboardView: React.FC = () => {
             onClick={() => setActiveTab('content')}
             className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               activeTab === 'content'
-                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/20'
+                ? 'bg-[#0095f6] text-white'
                 : 'bg-neutral-900 text-neutral-400 hover:text-white'
             }`}
           >
@@ -90,7 +90,7 @@ export const AdminDashboardView: React.FC = () => {
             onClick={() => setActiveTab('creators')}
             className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               activeTab === 'creators'
-                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/20'
+                ? 'bg-[#0095f6] text-white'
                 : 'bg-neutral-900 text-neutral-400 hover:text-white'
             }`}
           >
@@ -102,7 +102,7 @@ export const AdminDashboardView: React.FC = () => {
             onClick={() => setActiveTab('categories')}
             className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               activeTab === 'categories'
-                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/20'
+                ? 'bg-[#0095f6] text-white'
                 : 'bg-neutral-900 text-neutral-400 hover:text-white'
             }`}
           >
@@ -114,11 +114,11 @@ export const AdminDashboardView: React.FC = () => {
             onClick={() => setActiveTab('reports')}
             className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               activeTab === 'reports'
-                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/20'
+                ? 'bg-[#0095f6] text-white'
                 : 'bg-neutral-900 text-neutral-400 hover:text-white'
             }`}
           >
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+            <AlertTriangle className="w-3.5 h-3.5 text-neutral-400" />
             Reports Queue (0)
           </button>
         </div>
@@ -191,7 +191,7 @@ export const AdminDashboardView: React.FC = () => {
                       <div className="flex items-center gap-2 text-neutral-400 text-[11px] mt-1">
                         <span>@{post.creator.username}</span>
                         <span>•</span>
-                        <span className="text-orange-400 font-medium">{post.category}</span>
+                        <span className="text-[#0095f6] font-medium">{post.category}</span>
                         <span>•</span>
                         <span>{post.contentFormat}</span>
                       </div>
@@ -203,7 +203,7 @@ export const AdminDashboardView: React.FC = () => {
                       onClick={() => toggleFeaturePost(post.id)}
                       className={`px-3 py-1.5 rounded-lg font-semibold text-xs transition-colors ${
                         post.isPortfolioPinned
-                          ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40'
+                          ? 'bg-[#0095f6]/10 text-[#0095f6] border border-[#0095f6]/30'
                           : 'bg-neutral-800 text-neutral-400 hover:text-white'
                       }`}
                     >
@@ -269,7 +269,7 @@ export const AdminDashboardView: React.FC = () => {
           <div className="space-y-4 animate-fade-in text-xs">
             <div className="flex items-center justify-between">
               <h2 className="font-bold text-sm text-white">Platform Taxonomy & Niches</h2>
-              <button className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-xs shadow-md shadow-orange-500/20">
+              <button className="px-3.5 py-1.5 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold text-xs transition-colors cursor-pointer">
                 + Add New Category
               </button>
             </div>
@@ -279,7 +279,7 @@ export const AdminDashboardView: React.FC = () => {
                 <div key={cat.id} className="p-4 rounded-xl bg-neutral-900 border border-neutral-800">
                   <h4 className="font-bold text-white text-sm">{cat.name}</h4>
                   <p className="text-neutral-400 text-[11px] mt-1">{cat.description}</p>
-                  <span className="text-[10px] text-orange-400 font-semibold mt-2 block">
+                  <span className="text-[10px] text-[#0095f6] font-semibold mt-2 block">
                     {cat.videoCount} active videos
                   </span>
                 </div>

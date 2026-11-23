@@ -213,7 +213,7 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
         </button>
 
         <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-xs font-bold text-white shadow-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#0095f6] animate-pulse" />
           <span>Watch Feed</span>
         </div>
 
@@ -222,7 +222,7 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
           className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white flex items-center justify-center hover:bg-black/80 transition-colors"
           title={isMuted ? 'Unmute' : 'Mute'}
         >
-          {isMuted ? <VolumeX className="w-4 h-4 text-neutral-300" /> : <Volume2 className="w-4 h-4 text-orange-400" />}
+          {isMuted ? <VolumeX className="w-4 h-4 text-neutral-300" /> : <Volume2 className="w-4 h-4 text-white" />}
         </button>
       </div>
 
@@ -254,7 +254,7 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
         {/* Double tap heart burst */}
         {showHeartBurst && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
-            <Heart className="w-28 h-28 text-orange-500 fill-orange-500 animate-ping opacity-90 drop-shadow-2xl" />
+            <Heart className="w-28 h-28 text-[#ed4956] fill-[#ed4956] animate-ping opacity-90 drop-shadow-2xl" />
           </div>
         )}
 
@@ -272,14 +272,14 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
       <div className="hidden sm:flex absolute right-6 top-1/2 -translate-y-1/2 flex-col gap-3 z-40">
         <button
           onClick={goPrev}
-          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-orange-500 hover:border-orange-500 transition-colors"
+          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-[#0095f6] hover:border-[#0095f6] transition-colors"
           title="Previous post (Up)"
         >
           <ChevronUp className="w-5 h-5" />
         </button>
         <button
           onClick={goNext}
-          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-orange-500 hover:border-orange-500 transition-colors"
+          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-[#0095f6] hover:border-[#0095f6] transition-colors"
           title="Next post (Down)"
         >
           <ChevronDown className="w-5 h-5" />
@@ -296,18 +296,18 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
               onClose();
               onOpenProfile(currentPost.creatorId);
             }}
-            className="inline-flex items-center gap-2.5 p-1 pr-3 rounded-full bg-black/60 backdrop-blur-md border border-white/10 hover:border-orange-500 transition-colors cursor-pointer group"
+            className="inline-flex items-center gap-2.5 p-1 pr-3 rounded-full bg-black/60 backdrop-blur-md border border-white/10 hover:border-[#0095f6] transition-colors cursor-pointer group"
           >
             <img
               src={currentPost.creator.avatarUrl}
               alt={currentPost.creator.displayName}
-              className="w-8 h-8 rounded-full object-cover border border-orange-500"
+              className="w-8 h-8 rounded-full object-cover border border-[#262626]"
             />
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold text-white group-hover:text-orange-400 transition-colors">
+              <span className="text-xs font-bold text-white group-hover:text-[#0095f6] transition-colors">
                 {currentPost.creator.displayName}
               </span>
-              <BadgeCheck className="w-3.5 h-3.5 text-orange-400 fill-orange-400/20" />
+              <BadgeCheck className="w-3.5 h-3.5 text-[#0095f6] fill-[#0095f6]/20" />
               <span className="text-[11px] text-neutral-400">@{currentPost.creator.username}</span>
             </div>
           </div>
@@ -323,7 +323,7 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
                   e.stopPropagation();
                   setIsCaptionExpanded(!isCaptionExpanded);
                 }}
-                className="text-[10px] text-orange-400 font-bold hover:underline mt-1 block"
+                className="text-[10px] text-[#0095f6] font-semibold hover:underline mt-1 block"
               >
                 {isCaptionExpanded ? 'Show less' : '...more'}
               </button>
@@ -335,7 +335,7 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
             <span className="text-[10px] font-semibold text-neutral-300 px-2.5 py-0.5 rounded-full bg-black/60 border border-white/10">
               {currentPost.category}
             </span>
-            <span className="text-[10px] font-semibold text-orange-400 px-2.5 py-0.5 rounded-full bg-orange-500/15 border border-orange-500/30">
+            <span className="text-[10px] font-semibold text-white px-2.5 py-0.5 rounded-full bg-[#181818] border border-[#262626]">
               {currentPost.contentFormat}
             </span>
           </div>
@@ -354,10 +354,10 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
         >
           <div className={`w-11 h-11 rounded-full flex items-center justify-center backdrop-blur-md border transition-all ${
             liked
-              ? 'bg-rose-500/20 border-rose-500/40 text-rose-500 scale-110'
-              : 'bg-black/50 border-white/10 text-white hover:text-rose-400'
+              ? 'bg-[#ed4956]/20 border-[#ed4956]/40 text-[#ed4956] scale-110'
+              : 'bg-black/50 border-white/10 text-white hover:text-[#ed4956]'
           }`}>
-            <Heart className={`w-5 h-5 ${liked ? 'fill-rose-500' : ''}`} />
+            <Heart className={`w-5 h-5 ${liked ? 'fill-[#ed4956]' : ''}`} />
           </div>
           <span className="text-[10px] font-bold drop-shadow">{likeCount}</span>
         </button>
@@ -370,7 +370,7 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
           }}
           className="flex flex-col items-center gap-1 text-white group"
         >
-          <div className="w-11 h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:text-orange-400 transition-colors">
+          <div className="w-11 h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:text-white transition-colors">
             <MessageCircle className="w-5 h-5" />
           </div>
           <span className="text-[10px] font-bold drop-shadow">{currentPost.commentsCount}</span>
@@ -386,10 +386,10 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
         >
           <div className={`w-11 h-11 rounded-full flex items-center justify-center backdrop-blur-md border transition-all ${
             saved
-              ? 'bg-amber-500/20 border-amber-500/40 text-amber-400'
-              : 'bg-black/50 border-white/10 text-white hover:text-amber-400'
+              ? 'bg-white/20 border-white/40 text-white'
+              : 'bg-black/50 border-white/10 text-white hover:text-white'
           }`}>
-            <Bookmark className={`w-5 h-5 ${saved ? 'fill-amber-400' : ''}`} />
+            <Bookmark className={`w-5 h-5 ${saved ? 'fill-white' : ''}`} />
           </div>
           <span className="text-[10px] font-bold drop-shadow">{saveCount}</span>
         </button>
@@ -402,7 +402,7 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
           }}
           className="flex flex-col items-center gap-1 text-white group"
         >
-          <div className="w-11 h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:text-orange-400 transition-colors">
+          <div className="w-11 h-11 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:text-white transition-colors">
             <Share2 className="w-5 h-5" />
           </div>
           <span className="text-[10px] font-bold drop-shadow">Share</span>
@@ -411,7 +411,7 @@ export const ImmersiveMediaViewer: React.FC<ImmersiveMediaViewerProps> = ({
 
       {/* Copy link toast feedback */}
       {copiedToast && (
-        <div className="absolute top-20 inset-x-0 mx-auto w-max px-4 py-2 rounded-full bg-orange-500 text-white text-xs font-bold shadow-xl animate-fade-in z-50">
+        <div className="absolute top-20 inset-x-0 mx-auto w-max px-4 py-2 rounded-full bg-[#0095f6] text-white text-xs font-semibold shadow-xl animate-fade-in z-50">
           ✓ Link copied to clipboard!
         </div>
       )}

@@ -39,11 +39,11 @@ function formatPrice(cents: number, currency: string = 'USD'): string {
 }
 
 const STATUS_CONFIG: Record<BookingStatus, { label: string; color: string; bgColor: string; icon: React.ReactNode }> = {
-  pending: { label: 'Pending', color: 'text-yellow-400', bgColor: 'bg-yellow-400/10 border-yellow-400/20', icon: <Clock className="w-3.5 h-3.5" /> },
-  awaiting_acceptance: { label: 'Awaiting', color: 'text-amber-400', bgColor: 'bg-amber-400/10 border-amber-400/20', icon: <Clock className="w-3.5 h-3.5" /> },
+  pending: { label: 'Pending', color: 'text-neutral-300', bgColor: 'bg-neutral-800 border-neutral-700', icon: <Clock className="w-3.5 h-3.5" /> },
+  awaiting_acceptance: { label: 'Awaiting', color: 'text-neutral-300', bgColor: 'bg-neutral-800 border-neutral-700', icon: <Clock className="w-3.5 h-3.5" /> },
   in_progress: { label: 'In Progress', color: 'text-blue-400', bgColor: 'bg-blue-400/10 border-blue-400/20', icon: <Loader2 className="w-3.5 h-3.5" /> },
   submitted: { label: 'Review', color: 'text-purple-400', bgColor: 'bg-purple-400/10 border-purple-400/20', icon: <Eye className="w-3.5 h-3.5" /> },
-  revision_requested: { label: 'Revision', color: 'text-orange-400', bgColor: 'bg-orange-400/10 border-orange-400/20', icon: <RotateCcw className="w-3.5 h-3.5" /> },
+  revision_requested: { label: 'Revision', color: 'text-[#0095f6]', bgColor: 'bg-[#0095f6]/10 border-[#0095f6]/20', icon: <RotateCcw className="w-3.5 h-3.5" /> },
   approved: { label: 'Approved', color: 'text-emerald-400', bgColor: 'bg-emerald-400/10 border-emerald-400/20', icon: <ThumbsUp className="w-3.5 h-3.5" /> },
   completed: { label: 'Completed', color: 'text-emerald-400', bgColor: 'bg-emerald-400/10 border-emerald-400/20', icon: <CheckCircle className="w-3.5 h-3.5" /> },
   cancelled: { label: 'Cancelled', color: 'text-red-400', bgColor: 'bg-red-400/10 border-red-400/20', icon: <XCircle className="w-3.5 h-3.5" /> },
@@ -203,7 +203,7 @@ const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
                               <div key={ms.key} className="flex flex-col items-center text-center">
                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 ${
                                   isCurrent
-                                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20'
+                                    ? 'bg-[#0095f6] text-white'
                                     : isCompleted
                                     ? 'bg-emerald-500/20 text-emerald-400'
                                     : 'bg-neutral-800 text-neutral-600'
@@ -280,7 +280,7 @@ const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
                             </button>
                             <button
                               onClick={() => setRevisionModalId(booking.id)}
-                              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-orange-500/10 text-orange-400 text-xs font-medium border border-orange-500/20 hover:bg-orange-500/20 transition-colors min-h-[44px]"
+                              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#0095f6]/10 text-[#0095f6] text-xs font-medium border border-[#0095f6]/20 hover:bg-[#0095f6]/20 transition-colors min-h-[44px]"
                             >
                               <RotateCcw className="w-3.5 h-3.5" />
                               Request Revision
@@ -316,12 +316,12 @@ const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
               onChange={(e) => setRevisionNotes(e.target.value)}
               placeholder="Describe what changes you need..."
               rows={4}
-              className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-orange-500/50 resize-none mb-4"
+              className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#0095f6] resize-none mb-4"
             />
             <button
               onClick={() => handleRevisionSubmit(revisionModalId)}
               disabled={!revisionNotes.trim()}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold text-sm shadow-lg disabled:opacity-40 min-h-[48px] flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold text-sm disabled:opacity-40 min-h-[48px] flex items-center justify-center gap-2 transition-colors cursor-pointer"
             >
               <Send className="w-4 h-4" />
               Submit Revision Request

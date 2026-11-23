@@ -62,7 +62,7 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold text-sm text-white">Comments</span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 font-bold">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-[#181818] border border-[#262626] text-neutral-300 font-semibold">
                 {comments.length}
               </span>
             </div>
@@ -102,12 +102,12 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
                         {comm.authorName}
                       </span>
                       {comm.authorRole === 'business' && (
-                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-orange-500/20 text-orange-400 font-bold border border-orange-500/30">
+                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20">
                           Brand
                         </span>
                       )}
                       {comm.authorRole === 'creator' && (
-                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30">
+                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#0095f6]/10 text-[#0095f6] font-semibold border border-[#0095f6]/20">
                           Creator
                         </span>
                       )}
@@ -123,11 +123,11 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
                 {/* Like comment button */}
                 <button
                   onClick={() => handleToggleLike(comm.id)}
-                  className="flex flex-col items-center gap-0.5 text-neutral-400 hover:text-orange-500 pt-1 shrink-0"
+                  className="flex flex-col items-center gap-0.5 text-neutral-400 hover:text-[#ed4956] pt-1 shrink-0"
                 >
                   <Heart
                     className={`w-3.5 h-3.5 ${
-                      isLiked ? 'fill-orange-500 text-orange-500' : 'text-neutral-500'
+                      isLiked ? 'fill-[#ed4956] text-[#ed4956]' : 'text-neutral-500'
                     }`}
                   />
                   <span className="text-[10px] text-neutral-500 font-medium">
@@ -149,12 +149,12 @@ export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder={`Add a public comment as ${currentRole}...`}
-            className="flex-1 bg-neutral-900 border border-neutral-700/80 rounded-xl px-3.5 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-orange-500 transition-colors"
+            className="flex-1 bg-neutral-900 border border-neutral-700/80 rounded-xl px-3.5 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#0095f6] transition-colors"
           />
           <button
             type="submit"
             disabled={!inputText.trim()}
-            className="p-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white disabled:opacity-40 shadow-md shadow-orange-500/25 transition-all"
+            className="p-2.5 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white disabled:opacity-40 transition-colors"
           >
             <Send className="w-3.5 h-3.5" />
           </button>

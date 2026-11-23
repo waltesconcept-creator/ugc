@@ -94,7 +94,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
           {stories.map((s, idx) => (
             <div key={s.id} className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-75"
+                className="h-full bg-white transition-all duration-75"
                 style={{
                   width:
                     idx < currentIndex
@@ -117,7 +117,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
             }}
             className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <div className="w-9 h-9 rounded-xl p-0.5 bg-gradient-to-tr from-orange-500 to-amber-400 shadow-md">
+            <div className="w-9 h-9 rounded-xl p-0.5 bg-[#0095f6] shadow-md">
               <img
                 src={story.creatorAvatar}
                 alt={story.creatorName}
@@ -126,10 +126,10 @@ export const StoryModal: React.FC<StoryModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-xs text-white group-hover:text-orange-400 transition-colors">
+                <span className="font-bold text-xs text-white group-hover:text-[#0095f6] transition-colors">
                   @{story.creatorUsername}
                 </span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-orange-500/20 text-orange-300 font-semibold border border-orange-500/30">
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#0095f6]/20 text-[#0095f6] font-semibold border border-[#0095f6]/30">
                   UGC
                 </span>
               </div>
@@ -142,7 +142,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
               onClick={() => setIsMuted(!isMuted)}
               className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md text-white flex items-center justify-center hover:bg-black/70"
             >
-              {isMuted ? <VolumeX className="w-4 h-4 text-neutral-300" /> : <Volume2 className="w-4 h-4 text-orange-400" />}
+              {isMuted ? <VolumeX className="w-4 h-4 text-neutral-300" /> : <Volume2 className="w-4 h-4 text-white" />}
             </button>
             <button
               onClick={onClose}
@@ -197,7 +197,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
               }}
               className="flex-1 py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
             >
-              <MessageCircle className="w-3.5 h-3.5 text-orange-400" />
+              <MessageCircle className="w-3.5 h-3.5 text-white" />
               Reply to Story
             </button>
             <button
@@ -205,7 +205,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
                 onClose();
                 onOpenProfile(story.creatorId);
               }}
-              className="py-2.5 px-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-xs shadow-md shadow-orange-500/30 flex items-center gap-1.5"
+              className="py-2.5 px-4 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <User className="w-3.5 h-3.5" />
               Profile

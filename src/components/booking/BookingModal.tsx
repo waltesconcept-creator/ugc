@@ -171,7 +171,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-sm font-semibold shadow-lg shadow-orange-500/20 disabled:opacity-50 min-h-[48px] flex items-center justify-center gap-2"
+                    className="flex-1 py-3 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white text-sm font-semibold disabled:opacity-50 min-h-[48px] flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
                     {isSubmitting ? (
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -191,7 +191,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               <div className="bg-neutral-800/50 rounded-xl p-4 border border-neutral-700">
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="px-2 py-0.5 rounded-full bg-orange-500/10 text-[10px] font-medium text-orange-400 border border-orange-500/20">
+                    <span className="px-2 py-0.5 rounded-full bg-[#0095f6]/10 text-[10px] font-medium text-[#0095f6] border border-[#0095f6]/20">
                       {service.formatTag}
                     </span>
                     <h3 className="text-sm font-semibold text-white mt-2">{service.title}</h3>
@@ -218,7 +218,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   value={briefTitle}
                   onChange={(e) => setBriefTitle(e.target.value)}
                   placeholder="e.g., Product Demo for Spring Collection"
-                  className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-colors min-h-[48px]"
+                  className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#0095f6] focus:ring-1 focus:ring-[#0095f6]/20 transition-colors min-h-[48px]"
                 />
               </div>
 
@@ -233,7 +233,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   onChange={(e) => setBriefDescription(e.target.value)}
                   placeholder="Describe what you need, key messages, tone of voice, specific requirements..."
                   rows={4}
-                  className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-colors resize-none"
+                  className="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#0095f6] focus:ring-1 focus:ring-[#0095f6]/20 transition-colors resize-none"
                 />
                 <p className="text-[10px] text-neutral-600 mt-1">Minimum 10 characters</p>
               </div>

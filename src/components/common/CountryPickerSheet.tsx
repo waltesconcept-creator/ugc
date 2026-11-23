@@ -72,7 +72,7 @@ export const CountryPickerSheet: React.FC<CountryPickerSheetProps> = ({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Type to search (e.g. Nigeria, US, UK, Ghana, Kenya)..."
-              className="w-full py-2.5 pl-9 pr-8 bg-neutral-950 border border-neutral-800 rounded-xl text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 transition-colors"
+              className="w-full py-2.5 pl-9 pr-8 bg-neutral-950 border border-neutral-800 rounded-xl text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] transition-colors"
             />
             {search && (
               <button

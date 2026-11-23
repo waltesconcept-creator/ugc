@@ -36,11 +36,11 @@ const StarInput: React.FC<{
             key={s}
             type="button"
             onClick={() => onChange(s)}
-            className="p-1 text-amber-400 hover:scale-110 active:scale-95 transition-transform"
+            className="p-1 text-white hover:scale-110 active:scale-95 transition-transform"
           >
             <Star
               className={`w-5 h-5 ${
-                s <= rating ? 'fill-amber-400 text-amber-400' : 'text-neutral-700'
+                s <= rating ? 'fill-white text-white' : 'text-neutral-700'
               }`}
             />
           </button>
@@ -141,7 +141,7 @@ export const LeaveReviewModal: React.FC<LeaveReviewModalProps> = ({
             <img
               src={creatorAvatar}
               alt={creatorName}
-              className="w-10 h-10 rounded-xl object-cover ring-2 ring-orange-500/40"
+              className="w-10 h-10 rounded-xl object-cover ring-2 ring-[#0095f6]/40"
             />
             <div>
               <h2 className="text-sm font-bold text-white">Review {creatorName}</h2>
@@ -186,7 +186,7 @@ export const LeaveReviewModal: React.FC<LeaveReviewModalProps> = ({
               value={reviewerName}
               onChange={(e) => setReviewerName(e.target.value)}
               placeholder="e.g. Nova Brand / Alex Rivers"
-              className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs"
+              className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] text-xs"
             />
           </div>
 
@@ -200,13 +200,13 @@ export const LeaveReviewModal: React.FC<LeaveReviewModalProps> = ({
               value={projectTitle}
               onChange={(e) => setProjectTitle(e.target.value)}
               placeholder="e.g. 30s TikTok Ad, Instagram Unboxing Video"
-              className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs"
+              className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] text-xs"
             />
           </div>
 
           {/* Rating Breakdown */}
           <div className="bg-neutral-900/80 rounded-2xl border border-neutral-800/80 p-3.5 space-y-1">
-            <div className="text-[11px] font-bold text-orange-400 uppercase tracking-wider mb-1">
+            <div className="text-[11px] font-bold text-white uppercase tracking-wider mb-1">
               Performance Scores
             </div>
 
@@ -243,7 +243,7 @@ export const LeaveReviewModal: React.FC<LeaveReviewModalProps> = ({
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
               placeholder="Describe your experience: video quality, script adherence, audience engagement, conversion results..."
-              className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs resize-none leading-relaxed"
+              className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] text-xs resize-none leading-relaxed"
             />
           </div>
 
@@ -251,10 +251,10 @@ export const LeaveReviewModal: React.FC<LeaveReviewModalProps> = ({
             <button
               type="submit"
               disabled={submitting || success}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white font-extrabold text-xs shadow-lg shadow-orange-500/30 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold text-xs active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               {submitting ? (
-                <span>Publishing review to blockchain & database...</span>
+                <span>Publishing review...</span>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4" />

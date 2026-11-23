@@ -296,6 +296,11 @@ export interface CreatorApplication {
   creatorId: string;
   creatorName: string;
   creatorAvatar: string;
+  creatorCategory?: string;
+  creatorFollowers?: string;
+  productTitle?: string;
+  shippingAddress?: string;
+  trackingCode?: string;
   status: 'pending' | 'approved' | 'rejected';
   sampleRequested: boolean;
   sampleStatus?: 'none' | 'processing' | 'shipped' | 'delivered';

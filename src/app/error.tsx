@@ -12,7 +12,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('KRE8TOR app error boundary caught:', error);
+    console.error('Creator app error boundary caught:', error);
   }, [error]);
 
   const handleResetSession = () => {
@@ -23,13 +23,13 @@ export default function GlobalError({
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white flex flex-col items-center justify-center p-6 text-center">
+    <div className="min-h-screen bg-[#000000] text-white flex flex-col items-center justify-center p-6 text-center">
       <div className="mb-6">
         <Kre8torLogo size="lg" />
       </div>
 
-      <div className="max-w-md w-full bg-neutral-900 border border-neutral-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-4">
-        <div className="w-12 h-12 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 flex items-center justify-center mx-auto text-xl font-bold">
+      <div className="max-w-md w-full bg-[#121212] border border-[#262626] rounded-2xl p-6 sm:p-8 shadow-2xl space-y-4">
+        <div className="w-12 h-12 rounded-full bg-[#1a1a1a] border border-[#333333] text-white flex items-center justify-center mx-auto text-xl font-bold">
           !
         </div>
 
@@ -41,7 +41,7 @@ export default function GlobalError({
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <button
             onClick={() => reset()}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-lg shadow-orange-500/20 active:scale-95 transition-transform"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white text-xs font-semibold shadow-md active:scale-95 transition-all"
           >
             <RotateCw className="w-4 h-4" />
             <span>Try Again</span>
@@ -49,10 +49,10 @@ export default function GlobalError({
 
           <button
             onClick={handleResetSession}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-semibold border border-neutral-700 active:scale-95 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#1e1e1e] hover:bg-[#262626] text-neutral-300 text-xs font-semibold border border-[#333333] active:scale-95 transition-colors"
           >
             <Home className="w-4 h-4" />
-            <span>Reload KRE8TOR</span>
+            <span>Reload Creator</span>
           </button>
         </div>
       </div>

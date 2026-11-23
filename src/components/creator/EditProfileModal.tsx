@@ -179,9 +179,9 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
       {/* Modal Dialog */}
       <div className="relative w-full max-w-lg bg-neutral-950 border border-neutral-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] z-10 animate-fade-in">
         {/* Header */}
-        <div className="px-5 py-4 border-b border-neutral-850 flex items-center justify-between bg-neutral-900/60">
+        <div className="px-5 py-4 border-b border-[#262626] flex items-center justify-between bg-[#121212]">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400">
+            <div className="w-8 h-8 rounded-full bg-[#181818] border border-[#262626] flex items-center justify-center text-[#0095f6]">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
@@ -220,7 +220,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500"
+              className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6]"
             />
           </div>
 
@@ -234,7 +234,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell brands what makes your UGC videos stand out..."
-              className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 resize-none leading-relaxed"
+              className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] resize-none leading-relaxed"
             />
           </div>
 
@@ -249,7 +249,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                 value={locationCity}
                 onChange={(e) => setLocationCity(e.target.value)}
                 placeholder="e.g. Lagos, Abuja, London"
-                className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500"
+                className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6]"
               />
             </div>
 
@@ -260,13 +260,13 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
               <button
                 type="button"
                 onClick={() => setIsCountryPickerOpen(true)}
-                className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white flex items-center justify-between hover:border-orange-500 transition-colors"
+                className="w-full py-2.5 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white flex items-center justify-between hover:border-[#0095f6] transition-colors"
               >
                 <div className="flex items-center gap-2 truncate">
                   <span className="text-base">{country.flag}</span>
                   <span className="truncate">{country.name}</span>
                 </div>
-                <span className="text-[10px] text-orange-400 font-bold shrink-0">Change</span>
+                <span className="text-[10px] text-[#0095f6] font-semibold shrink-0">Change</span>
               </button>
             </div>
           </div>
@@ -277,14 +277,14 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
               Starting Rate ($ USD per video)
             </label>
             <div className="relative">
-              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-400" />
+              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white" />
               <input
                 type="number"
                 min={10}
                 max={10000}
                 value={startingRate}
                 onChange={(e) => setStartingRate(e.target.value)}
-                className="w-full py-2.5 pl-9 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white font-bold text-sm focus:outline-none focus:border-orange-500"
+                className="w-full py-2.5 pl-9 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white font-bold text-sm focus:outline-none focus:border-[#0095f6]"
               />
             </div>
           </div>
@@ -295,7 +295,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
               <label className="text-[11px] font-bold text-neutral-300 uppercase tracking-wider">
                 Social Accounts & External Links
               </label>
-              <span className="text-[10px] text-orange-400 font-semibold">Tapped directly from your profile</span>
+              <span className="text-[10px] text-neutral-400 font-medium">Tapped directly from your profile</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div>
@@ -307,7 +307,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                     value={tiktokHandle}
                     onChange={(e) => setTiktokHandle(e.target.value.replace(/^@/, ''))}
                     placeholder="yourtiktok"
-                    className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs"
+                    className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] text-xs"
                   />
                 </div>
               </div>
@@ -320,7 +320,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                     value={instagramHandle}
                     onChange={(e) => setInstagramHandle(e.target.value.replace(/^@/, ''))}
                     placeholder="yourinstagram"
-                    className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs"
+                    className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] text-xs"
                   />
                 </div>
               </div>
@@ -333,7 +333,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                     value={youtubeHandle}
                     onChange={(e) => setYoutubeHandle(e.target.value.replace(/^@/, ''))}
                     placeholder="youryoutube"
-                    className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs"
+                    className="w-full py-2 pl-7 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] text-xs"
                   />
                 </div>
               </div>
@@ -344,7 +344,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                   value={website}
                   onChange={(e) => setWebsite(e.target.value)}
                   placeholder="https://myportfolio.com"
-                  className="w-full py-2 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 text-xs"
+                  className="w-full py-2 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] text-xs"
                 />
               </div>
             </div>
@@ -365,7 +365,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                     onClick={() => toggleCategory(cat)}
                     className={`px-3 py-1.5 rounded-full text-[11px] font-medium transition-all ${
                       isSelected
-                        ? 'bg-orange-500 text-white font-bold shadow-sm'
+                        ? 'bg-[#0095f6] text-white font-semibold'
                         : 'bg-neutral-900 text-neutral-400 border border-neutral-800 hover:text-white'
                     }`}
                   >
@@ -381,7 +381,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
           <div className="border-t border-neutral-850 pt-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-orange-400" />
+                <Layers className="w-3.5 h-3.5 text-white" />
                 <span className="text-[11px] font-bold text-neutral-300 uppercase tracking-wider">
                   Service Packages ({services.length})
                 </span>
@@ -389,7 +389,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
               <button
                 type="button"
                 onClick={() => setShowAddPackage(!showAddPackage)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-orange-500/15 border border-orange-500/30 text-orange-400 text-[10px] font-bold hover:bg-orange-500 hover:text-white transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#181818] border border-[#262626] text-white text-[10px] font-semibold hover:bg-[#222222] transition-colors"
               >
                 <Plus className="w-3 h-3" />
                 <span>Add Package</span>
@@ -405,14 +405,14 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                   placeholder="e.g. 60s Unboxing + 3 Hook Variations"
                   value={newPkgTitle}
                   onChange={(e) => setNewPkgTitle(e.target.value)}
-                  className="w-full py-2 px-2.5 bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 text-xs focus:outline-none focus:border-orange-500"
+                  className="w-full py-2 px-2.5 bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 text-xs focus:outline-none focus:border-[#0095f6]"
                 />
                 <input
                   type="text"
                   placeholder="Description of what the brand receives..."
                   value={newPkgDesc}
                   onChange={(e) => setNewPkgDesc(e.target.value)}
-                  className="w-full py-2 px-2.5 bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 text-xs focus:outline-none focus:border-orange-500"
+                  className="w-full py-2 px-2.5 bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 text-xs focus:outline-none focus:border-[#0095f6]"
                 />
                 <div className="grid grid-cols-2 gap-2">
                   <div>
@@ -445,7 +445,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                   <button
                     type="button"
                     onClick={handleAddPackage}
-                    className="px-3 py-1.5 rounded-xl bg-orange-500 text-white font-bold text-xs"
+                    className="px-3 py-1.5 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold text-xs"
                   >
                     Add to Portfolio
                   </button>
@@ -463,7 +463,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                   <div className="flex-1 min-w-0 pr-3">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-white truncate">{pkg.title}</span>
-                      <span className="text-orange-400 font-extrabold font-mono">
+                      <span className="text-white font-bold font-mono">
                         ${Math.round(pkg.priceCents / 100)}
                       </span>
                     </div>
@@ -496,7 +496,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
             <button
               type="submit"
               disabled={saving}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-xs shadow-lg shadow-orange-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full py-3.5 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold text-xs active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
               <span>{saving ? 'Saving changes...' : 'Save Profile & Rates'}</span>

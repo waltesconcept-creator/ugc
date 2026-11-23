@@ -162,7 +162,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
             />
             {/* Tag badge for photo */}
             <div className="absolute top-16 left-4 z-10 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center gap-1.5 text-[10px] text-white">
-              <Camera className="w-3 h-3 text-orange-400" />
+              <Camera className="w-3 h-3 text-white" />
               <span>UGC Photo Showcase</span>
             </div>
           </div>
@@ -305,7 +305,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
               }}
               className="flex items-center justify-center w-10 h-10 rounded-full bg-black/50 backdrop-blur-md text-white hover:bg-black/70 transition-colors"
             >
-              {isMuted ? <VolumeX className="w-4 h-4 text-neutral-300" /> : <Volume2 className="w-4 h-4 text-orange-400" />}
+              {isMuted ? <VolumeX className="w-4 h-4 text-neutral-300" /> : <Volume2 className="w-4 h-4 text-white" />}
             </button>
           )}
         </div>

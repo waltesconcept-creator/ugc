@@ -427,7 +427,11 @@ export async function createCampaign(campaign: AffiliateCampaign): Promise<Affil
 }
 
 // ── Creator Applications & Affiliate Links ──
-export async function getCreatorApplications(creatorId?: string, campaignId?: string): Promise<CreatorApplication[]> {
+export async function getCreatorApplications(
+  creatorId?: string,
+  campaignId?: string,
+  businessId?: string
+): Promise<CreatorApplication[]> {
   const db = await getDb();
   let apps = db.applications || [];
   if (creatorId) {
@@ -436,7 +440,59 @@ export async function getCreatorApplications(creatorId?: string, campaignId?: st
   if (campaignId) {
     apps = apps.filter((a) => a.campaignId === campaignId);
   }
+  if (businessId) {
+    const businessCampaignIds = new Set(
+      (db.campaigns || []).filter((c) => c.businessId === businessId).map((c) => c.id)
+    );
+    apps = apps.filter((a) => businessCampaignIds.has(a.campaignId));
+  }
   return apps;
+}
+
+export async function updateApplicationStatus(
+  applicationId: string,
+  status: 'approved' | 'rejected',
+  notes?: string
+): Promise<CreatorApplication | null> {
+  const db = await getDb();
+  const app = (db.applications || []).find((a) => a.id === applicationId);
+  if (!app) return null;
+
+  app.status = status;
+  if (status === 'approved') {
+    app.sampleStatus = 'shipped';
+    app.trackingCode = `DHL-NG-${Math.floor(100000 + Math.random() * 900000)}`;
+    if (!app.affiliateCode) {
+      app.affiliateCode = `REF-${app.creatorName.replace(/[^a-zA-Z]/g, '').slice(0, 4).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`;
+    }
+    // Generate affiliate link
+    if (!db.affiliateLinks) db.affiliateLinks = [];
+    const campaign = (db.campaigns || []).find((c) => c.id === app.campaignId);
+    if (campaign) {
+      campaign.totalCreatorsCount = (campaign.totalCreatorsCount || 0) + 1;
+      const existingLink = db.affiliateLinks.find(
+        (l) => l.creatorId === app.creatorId && l.campaignId === campaign.id
+      );
+      if (!existingLink) {
+        db.affiliateLinks.push({
+          id: `link-${Date.now()}`,
+          code: app.affiliateCode,
+          campaignId: campaign.id,
+          productId: campaign.productId,
+          creatorId: app.creatorId,
+          totalClicks: 0,
+          totalOrders: 0,
+          totalCommissionNaira: 0,
+          createdAt: new Date().toISOString(),
+        });
+      }
+    }
+  } else {
+    if (notes) app.notes = notes;
+  }
+
+  await saveDb(db);
+  return app;
 }
 
 export async function applyToCampaign(application: CreatorApplication): Promise<CreatorApplication> {

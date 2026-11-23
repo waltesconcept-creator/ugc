@@ -70,19 +70,26 @@ export const Navbar: React.FC<NavbarProps> = ({
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+    const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node;
       if (userMenuRef.current && !userMenuRef.current.contains(target)) {
         setUserMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
     };
   }, []);
+
+  const handleProfileButtonClick = () => {
+    // On mobile viewports (< 640px), open the mobile-optimized Account Drawer directly for flawless touch UX
+    if (typeof window !== 'undefined' && window.innerWidth < 640) {
+      setAccountDrawerOpen(true);
+    } else {
+      setUserMenuOpen((prev) => !prev);
+    }
+  };
 
   const handleRoleToggle = async () => {
     const nextRole = currentRole === 'creator' ? 'business' : 'creator';
@@ -169,7 +176,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {isAuthenticated && currentUser && currentUser.profile ? (
               <div ref={userMenuRef} className="relative">
                 <button
-                  onClick={() => setUserMenuOpen((prev) => !prev)}
+                  onClick={handleProfileButtonClick}
                   className="flex items-center gap-1.5 p-1 pr-2 rounded-full bg-[#121212] border border-[#262626] hover:border-[#3a3a3a] transition-colors text-xs font-semibold"
                   title="Account Menu"
                 >
@@ -186,7 +193,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 {/* Dropdown Menu (Accessible on Mobile and Desktop) */}
                 {userMenuOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-56 bg-[#121212] border border-[#262626] rounded-2xl shadow-2xl overflow-hidden py-1.5 z-[100] animate-fade-in text-xs">
+                  <>
+                    {/* Transparent Full-Screen Dismissal Backdrop */}
+                    <div
+                      className="fixed inset-0 z-[95]"
+                      onClick={() => setUserMenuOpen(false)}
+                    />
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-[#121212] border border-[#262626] rounded-2xl shadow-2xl overflow-hidden py-1.5 z-[100] animate-fade-in text-xs">
                     {/* User Identity Header */}
                     <div className="px-3.5 py-2.5 border-b border-[#262626] bg-[#181818]/50">
                       <p className="font-bold text-white truncate text-xs">
@@ -275,8 +288,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <span>Sign Out</span>
                     </button>
                   </div>
-                )}
-              </div>
+                </>
+              )}
+            </div>
             ) : (
               <div className="flex items-center gap-1.5">
                 <Link
@@ -326,6 +340,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                   if (isCreate) {
                     if (onOpenCreate) onOpenCreate();
                     else setActiveTab('create');
+                  } else if (isProfile) {
+                    // If user is already on profile, tapping it opens the account switcher drawer
+                    if (activeTab === 'profile' || activeTab === 'creator_profile') {
+                      setAccountDrawerOpen(true);
+                    } else {
+                      setActiveTab(tab.key);
+                    }
                   } else {
                     setActiveTab(tab.key);
                   }

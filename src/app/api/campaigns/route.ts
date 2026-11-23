@@ -4,6 +4,7 @@ import {
   createCampaign,
   applyToCampaign,
   getCreatorApplications,
+  updateApplicationStatus,
   getProductById,
 } from '@/lib/server-db';
 import type { AffiliateCampaign, CreatorApplication } from '@/lib/types';
@@ -15,7 +16,13 @@ export async function GET(request: Request) {
     const creatorId = searchParams.get('creatorId') || undefined;
 
     const campaigns = await getCampaigns(businessId);
-    const applications = creatorId ? await getCreatorApplications(creatorId) : [];
+    let applications: CreatorApplication[] = [];
+
+    if (businessId) {
+      applications = await getCreatorApplications(undefined, undefined, businessId);
+    } else if (creatorId) {
+      applications = await getCreatorApplications(creatorId);
+    }
 
     return NextResponse.json({
       success: true,
@@ -67,7 +74,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, campaign: saved });
     }
 
-    // Action B: Creator applies to promote campaign
+    // Action B: Creator applies to promote campaign / request sample
     if (action === 'apply') {
       if (!body.campaignId || !body.creatorId) {
         return NextResponse.json(
@@ -82,16 +89,41 @@ export async function POST(request: Request) {
         creatorId: body.creatorId,
         creatorName: body.creatorName || 'Creator',
         creatorAvatar: body.creatorAvatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop',
-        status: 'approved', // instant approval for demo/MVP
-        sampleRequested: Boolean(body.sampleRequested),
-        sampleStatus: body.sampleRequested ? 'processing' : 'none',
+        creatorCategory: body.creatorCategory || 'Beauty & Lifestyle',
+        creatorFollowers: body.creatorFollowers || '18.4K',
+        productTitle: body.productTitle || '',
+        shippingAddress: body.shippingAddress || 'Lagos, Nigeria',
+        status: body.autoApprove ? 'approved' : 'pending',
+        sampleRequested: Boolean(body.sampleRequested ?? true),
+        sampleStatus: body.autoApprove ? 'shipped' : 'processing',
         affiliateCode: `REF-${body.creatorName?.replace(/[^a-zA-Z]/g, '').slice(0, 4).toUpperCase() || 'CREATOR'}-${Math.floor(100 + Math.random() * 900)}`,
         appliedAt: new Date().toISOString(),
-        notes: body.notes || '',
+        notes: body.notes || 'Excited to review and promote this product in high-converting UGC reels!',
       };
 
       const savedApp = await applyToCampaign(application);
       return NextResponse.json({ success: true, application: savedApp });
+    }
+
+    // Action C: Business approves creator application & ships sample
+    if (action === 'approve_application') {
+      if (!body.applicationId) {
+        return NextResponse.json({ success: false, error: 'applicationId is required' }, { status: 400 });
+      }
+      const updated = await updateApplicationStatus(body.applicationId, 'approved');
+      if (!updated) {
+        return NextResponse.json({ success: false, error: 'Application not found' }, { status: 404 });
+      }
+      return NextResponse.json({ success: true, application: updated });
+    }
+
+    // Action D: Business rejects creator application
+    if (action === 'reject_application') {
+      if (!body.applicationId) {
+        return NextResponse.json({ success: false, error: 'applicationId is required' }, { status: 400 });
+      }
+      const updated = await updateApplicationStatus(body.applicationId, 'rejected', body.notes);
+      return NextResponse.json({ success: true, application: updated });
     }
 
     return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });

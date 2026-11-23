@@ -107,7 +107,7 @@ export const AccountSwitcherDrawer: React.FC<AccountSwitcherDrawerProps> = ({
               </div>
             </div>
 
-            {/* Actions: View Profile & 1-Tap Role Toggle */}
+            {/* Actions: View Profile, Studio & 1-Tap Role Toggle */}
             <div className="mt-3 pt-3 border-t border-[#262626] space-y-1.5">
               {onViewProfile && (
                 <button
@@ -115,33 +115,63 @@ export const AccountSwitcherDrawer: React.FC<AccountSwitcherDrawerProps> = ({
                     onViewProfile();
                     onClose();
                   }}
-                  className="w-full py-2 px-3 rounded-lg bg-[#222222] hover:bg-[#2c2c2c] text-white text-xs font-semibold flex items-center justify-between transition-colors"
+                  className="w-full py-2.5 px-3 rounded-xl bg-[#1e1e1e] hover:bg-[#282828] text-white text-xs font-semibold flex items-center justify-between transition-colors"
                 >
-                  <div className="flex items-center gap-2">
-                    <User className="w-3.5 h-3.5 text-neutral-300" />
+                  <div className="flex items-center gap-2.5">
+                    <User className="w-4 h-4 text-neutral-300" />
                     <span>View Profile & Rates</span>
                   </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+                  <ChevronRight className="w-4 h-4 text-neutral-400" />
+                </button>
+              )}
+              {onOpenCreatorStudio && (
+                <button
+                  onClick={() => {
+                    onOpenCreatorStudio();
+                    onClose();
+                  }}
+                  className="w-full py-2.5 px-3 rounded-xl bg-[#1e1e1e] hover:bg-[#282828] text-white text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Briefcase className="w-4 h-4 text-[#0095f6]" />
+                    <span>Creator Studio & Wallet</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-neutral-400" />
+                </button>
+              )}
+              {onOpenBusinessStudio && (
+                <button
+                  onClick={() => {
+                    onOpenBusinessStudio();
+                    onClose();
+                  }}
+                  className="w-full py-2.5 px-3 rounded-xl bg-[#1e1e1e] hover:bg-[#282828] text-white text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Store className="w-4 h-4 text-emerald-400" />
+                    <span>Brand Studio (Products & Samples)</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-neutral-400" />
                 </button>
               )}
               <button
                 onClick={handleRoleToggle}
-                className="w-full py-2 px-3 rounded-lg bg-[#262626] hover:bg-[#333333] text-white text-xs font-semibold flex items-center justify-between transition-colors"
+                className="w-full py-2.5 px-3 rounded-xl bg-[#262626] hover:bg-[#333333] text-white text-xs font-semibold flex items-center justify-between transition-colors"
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   {currentRole === 'creator' ? (
                     <>
-                      <Store className="w-3.5 h-3.5 text-emerald-400" />
+                      <Store className="w-4 h-4 text-emerald-400" />
                       <span>Switch to Business Account</span>
                     </>
                   ) : (
                     <>
-                      <Briefcase className="w-3.5 h-3.5 text-[#0095f6]" />
+                      <Briefcase className="w-4 h-4 text-[#0095f6]" />
                       <span>Switch to Creator Account</span>
                     </>
                   )}
                 </div>
-                <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+                <ChevronRight className="w-4 h-4 text-neutral-400" />
               </button>
             </div>
           </div>

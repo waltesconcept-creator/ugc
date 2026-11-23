@@ -47,7 +47,7 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({
       case 'comment':
         return <MessageCircle className="w-3.5 h-3.5 text-blue-400" />;
       case 'booking':
-        return <Briefcase className="w-3.5 h-3.5 text-amber-400" />;
+        return <Briefcase className="w-3.5 h-3.5 text-white" />;
       case 'deliverable':
         return <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />;
       case 'follow':
@@ -134,7 +134,7 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({
                 className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
                   notif.isRead
                     ? 'bg-neutral-900/60 border-neutral-850 hover:border-neutral-700'
-                    : 'bg-gradient-to-r from-orange-500/10 to-neutral-900 border-orange-500/30 hover:border-orange-500/60'
+                    : 'bg-[#181818] border border-[#0095f6]/40 hover:border-[#0095f6]'
                 }`}
               >
                 {/* Actor Avatar with Type Badge */}

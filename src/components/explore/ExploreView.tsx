@@ -287,7 +287,7 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSelectPost, onOpenProfile }
                     <p className="text-[11px] text-neutral-400 truncate">@{c.profile.username}</p>
                     <div className="flex items-center gap-2 mt-1 text-[10px]">
                       <span className="text-neutral-300 font-semibold flex items-center gap-0.5">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {c.details.ratingAvg || 4.9}
+                        <Star className="w-3 h-3 fill-white text-white" /> {c.details.ratingAvg || 4.9}
                       </span>
                       <span className="text-neutral-600">&bull;</span>
                       <span className="text-neutral-400">{c.details.categories?.[0] || 'UGC'}</span>
@@ -323,7 +323,7 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSelectPost, onOpenProfile }
                 <button
                   key={post.id}
                   onClick={() => onSelectPost(post)}
-                  className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800/50 hover:border-orange-500/30 transition-all duration-300"
+                  className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800/50 hover:border-[#333333] transition-all duration-300"
                 >
                   {/* Thumbnail */}
                   <img
@@ -420,9 +420,9 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSelectPost, onOpenProfile }
                     <button
                       key={fmt}
                       onClick={() => setSelectedFormat(fmt)}
-                      className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all min-h-[44px] ${
+                      className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all min-h-[44px] ${
                         selectedFormat === fmt
-                          ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30'
+                          ? 'bg-[#0095f6]/10 text-[#0095f6] border border-[#0095f6]/20'
                           : 'bg-neutral-800 text-neutral-400 border border-neutral-700'
                       }`}
                     >
@@ -440,9 +440,9 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSelectPost, onOpenProfile }
                     <button
                       key={s}
                       onClick={() => setSortBy(s)}
-                      className={`px-3.5 py-2 rounded-xl text-xs font-medium capitalize transition-all min-h-[44px] ${
+                      className={`px-3.5 py-2 rounded-xl text-xs font-semibold capitalize transition-all min-h-[44px] ${
                         sortBy === s
-                          ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30'
+                          ? 'bg-[#0095f6]/10 text-[#0095f6] border border-[#0095f6]/20'
                           : 'bg-neutral-800 text-neutral-400 border border-neutral-700'
                       }`}
                     >
@@ -458,7 +458,7 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSelectPost, onOpenProfile }
               {/* Apply */}
               <button
                 onClick={() => setShowFilterDrawer(false)}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold text-sm shadow-lg shadow-orange-500/20 min-h-[48px]"
+                className="w-full py-3 rounded-xl bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold text-sm min-h-[48px] transition-colors cursor-pointer"
               >
                 Apply Filters
               </button>

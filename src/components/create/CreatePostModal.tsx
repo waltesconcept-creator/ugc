@@ -322,12 +322,12 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               {!selectedFile ? (
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full py-8 border-2 border-dashed border-neutral-700 hover:border-orange-500 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all bg-neutral-900/60 group"
+                  className="w-full py-8 border-2 border-dashed border-neutral-700 hover:border-[#0095f6] rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all bg-neutral-900/60 group"
                 >
-                  <div className="w-12 h-12 rounded-full bg-neutral-800 group-hover:bg-orange-500/20 group-hover:text-orange-400 text-neutral-400 flex items-center justify-center transition-colors mb-2">
+                  <div className="w-12 h-12 rounded-full bg-neutral-800 group-hover:bg-[#0095f6]/20 group-hover:text-[#0095f6] text-neutral-400 flex items-center justify-center transition-colors mb-2">
                     <Upload className="w-6 h-6" />
                   </div>
-                  <span className="text-xs font-bold text-white group-hover:text-orange-400">
+                  <span className="text-xs font-bold text-white group-hover:text-[#0095f6]">
                     Tap to select video or picture from your phone
                   </span>
                   <span className="text-[10px] text-neutral-500 mt-1">
@@ -357,7 +357,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 mb-1">
-                        <span className="px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 text-[10px] font-bold uppercase">
+                        <span className="px-2 py-0.5 rounded-full bg-[#0095f6]/20 text-[#0095f6] text-[10px] font-bold uppercase">
                           {mediaType}
                         </span>
                         <span className="text-[11px] text-neutral-400 truncate">
@@ -371,7 +371,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                           setSelectedFile(null);
                           setFilePreviewUrl('');
                         }}
-                        className="text-[11px] text-orange-400 hover:underline mt-1 font-semibold block"
+                        className="text-[11px] text-[#0095f6] hover:underline mt-1 font-semibold block"
                       >
                         Change file
                       </button>
@@ -398,13 +398,13 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                     }}
                     className={`relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer border-2 transition-all ${
                       selectedThumbnailUrl === thumb
-                        ? 'border-orange-500 scale-[1.02] shadow-lg shadow-orange-500/30'
+                        ? 'border-[#0095f6] scale-[1.02]'
                         : 'border-neutral-800 opacity-70 hover:opacity-100'
                     }`}
                   >
                     <img src={thumb} alt="" className="w-full h-full object-cover" />
                     {selectedThumbnailUrl === thumb && (
-                      <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center">
+                      <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-[#0095f6] text-white flex items-center justify-center">
                         <Check className="w-3 h-3 stroke-[3]" />
                       </div>
                     )}
@@ -424,7 +424,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
               placeholder="Tell brands what makes this UGC piece convert (hook, angle, product problem & solution)..."
-              className="w-full p-3 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 transition-colors"
+              className="w-full p-3 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#0095f6] transition-colors"
             />
           </div>
 
@@ -438,7 +438,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full p-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 cursor-pointer"
+                  className="w-full p-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-white focus:outline-none focus:border-[#0095f6] cursor-pointer"
                 >
                   {MOCK_CATEGORIES.map((c) => (
                     <option key={c.id} value={c.name}>
@@ -455,7 +455,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 <select
                   value={contentFormat}
                   onChange={(e) => setContentFormat(e.target.value)}
-                  className="w-full p-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 cursor-pointer"
+                  className="w-full p-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-white focus:outline-none focus:border-[#0095f6] cursor-pointer"
                 >
                   {FORMAT_OPTIONS.map((f) => (
                     <option key={f} value={f}>
@@ -470,14 +470,14 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           {/* Shoppable Affiliate Product Tagging */}
           {createType === 'post' && (
             <div>
-              <label className="text-[11px] font-bold text-orange-400 flex items-center gap-1.5 mb-1.5 uppercase tracking-wider">
-                <ShoppingBag className="w-3.5 h-3.5" />
+              <label className="text-[11px] font-bold text-white flex items-center gap-1.5 mb-1.5 uppercase tracking-wider">
+                <ShoppingBag className="w-3.5 h-3.5 text-[#0095f6]" />
                 <span>Tag an Affiliate Product (Optional):</span>
               </label>
               <select
                 value={selectedProductId}
                 onChange={(e) => setSelectedProductId(e.target.value)}
-                className="w-full p-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 cursor-pointer"
+                className="w-full p-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-white focus:outline-none focus:border-[#0095f6] cursor-pointer"
               >
                 <option value="">None (Pure Lifestyle / Showcase Content)</option>
                 {MOCK_PRODUCTS.map((prod) => (
@@ -500,7 +500,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             >
               <div
                 className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${
-                  isPortfolioPinned ? 'bg-orange-500 text-white' : 'border border-neutral-700'
+                  isPortfolioPinned ? 'bg-[#0095f6] text-white' : 'border border-neutral-700'
                 }`}
               >
                 {isPortfolioPinned && <Check className="w-3.5 h-3.5 stroke-[3]" />}
