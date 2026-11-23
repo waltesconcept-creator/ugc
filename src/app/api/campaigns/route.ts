@@ -6,6 +6,7 @@ import {
   getCreatorApplications,
   updateApplicationStatus,
   getProductById,
+  getDb,
 } from '@/lib/server-db';
 import type { AffiliateCampaign, CreatorApplication } from '@/lib/types';
 
@@ -95,7 +96,7 @@ export async function POST(request: Request) {
         shippingAddress: body.shippingAddress || 'Lagos, Nigeria',
         status: body.autoApprove ? 'approved' : 'pending',
         sampleRequested: Boolean(body.sampleRequested ?? true),
-        sampleStatus: body.autoApprove ? 'shipped' : 'processing',
+        sampleStatus: body.autoApprove ? 'shipped' : (body.sampleRequested !== false ? 'requested' : 'none'),
         affiliateCode: `REF-${body.creatorName?.replace(/[^a-zA-Z]/g, '').slice(0, 4).toUpperCase() || 'CREATOR'}-${Math.floor(100 + Math.random() * 900)}`,
         appliedAt: new Date().toISOString(),
         notes: body.notes || 'Excited to review and promote this product in high-converting UGC reels!',
@@ -114,7 +115,14 @@ export async function POST(request: Request) {
       if (!updated) {
         return NextResponse.json({ success: false, error: 'Application not found' }, { status: 404 });
       }
-      return NextResponse.json({ success: true, application: updated });
+
+      const db = await getDb();
+      const link = (db.affiliateLinks || []).find((l) => l.creatorId === updated.creatorId);
+      return NextResponse.json({
+        success: true,
+        application: updated,
+        affiliateLink: link || { code: updated.affiliateCode, creatorId: updated.creatorId },
+      });
     }
 
     // Action D: Business rejects creator application

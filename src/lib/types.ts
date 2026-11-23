@@ -303,7 +303,7 @@ export interface CreatorApplication {
   trackingCode?: string;
   status: 'pending' | 'approved' | 'rejected';
   sampleRequested: boolean;
-  sampleStatus?: 'none' | 'processing' | 'shipped' | 'delivered';
+  sampleStatus?: 'none' | 'requested' | 'processing' | 'shipped' | 'delivered';
   affiliateCode?: string;
   appliedAt: string;
   notes?: string;
