@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="subtleBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#333333" />
+      <stop offset="100%" stop-color="#181818" />
+    </linearGradient>
+  </defs>
+
+  <!-- Deep Matte Black Background -->
+  <rect width="512" height="512" rx="128" fill="#000000" />
+  <rect x="4" y="4" width="504" height="504" rx="124" fill="none" stroke="url(#subtleBorder)" stroke-width="4" />
+
+  <!-- Elegant Pure White Serif 'C' for Creator -->
+  <text 
+    x="256" 
+    y="350" 
+    text-anchor="middle" 
+    font-family="Georgia, Cambria, 'Times New Roman', Times, serif" 
+    font-size="340" 
+    font-style="italic" 
+    font-weight="900" 
+    fill="#ffffff" 
+    letter-spacing="-10"
+  >C</text>
+</svg>

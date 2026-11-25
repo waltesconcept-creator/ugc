@@ -56,7 +56,8 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({
       ? product.affiliateCode
       : `REF-${(creatorName || 'CREATOR').slice(0, 4).toUpperCase()}-99`;
 
-  const referralUrl = `https://ugc-b3pl.onrender.com/r/${affiliateCode}`;
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://ugc-b3pl.onrender.com';
+  const referralUrl = `${origin}/r/${affiliateCode}`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(referralUrl).catch(() => {});

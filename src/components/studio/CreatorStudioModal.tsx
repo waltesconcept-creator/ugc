@@ -77,7 +77,8 @@ export const CreatorStudioModal: React.FC<CreatorStudioModalProps> = ({
   if (!isOpen) return null;
 
   const handleCopy = (code: string) => {
-    const url = `https://ugc-b3pl.onrender.com/r/${code}`;
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://ugc-b3pl.onrender.com';
+    const url = `${origin}/r/${code}`;
     navigator.clipboard.writeText(url).catch(() => {});
     setCopiedCode(code);
     setTimeout(() => setCopiedCode(null), 2500);

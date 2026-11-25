@@ -63,7 +63,7 @@ async function runTestSuite() {
   // ────────────────────────────────────────────────────────────────
   // PERSONA 1: THE CREATOR (Browse Affiliate Market & Apply for Sample)
   // ────────────────────────────────────────────────────────────────
-  console.log('🎨 [PERSONA: CREATOR] Applying for Free Sample in TikTok Shop Market');
+  console.log('🎨 [PERSONA: CREATOR] Applying for Free Sample in Creator Affiliate & Sample Market');
   const testCreatorId = `creator-test-${Date.now()}`;
   const applyRes = await fetch(`${BASE_URL}/api/campaigns`, {
     method: 'POST',
@@ -77,7 +77,7 @@ async function runTestSuite() {
       creatorCategory: 'Beauty & Skincare',
       creatorFollowers: 32000,
       productTitle: createdProduct.title,
-      pitch: 'I have 32k engaged TikTok followers looking for luxury organic skincare. I will produce 2 high-conversion UGC videos.',
+      pitch: 'I have 32k engaged followers looking for luxury organic skincare. I will produce 2 high-conversion UGC videos.',
       sampleRequested: true,
       shippingAddress: '15 Admiralty Way, Lekki Phase 1, Lagos State',
     }),

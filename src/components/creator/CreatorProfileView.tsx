@@ -283,7 +283,7 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
               )}
             </div>
 
-            {/* Clickable Social Media Links (Instagram, TikTok, YouTube, Website) */}
+            {/* Clickable Social Media Links & Portfolio Handles */}
             <div className="flex flex-wrap gap-1.5 pt-2">
               {details.instagramHandle && (
                 <a
@@ -298,16 +298,12 @@ const CreatorProfileView: React.FC<CreatorProfileViewProps> = ({
                 </a>
               )}
               {details.tiktokHandle && (
-                <a
-                  href={`https://tiktok.com/@${details.tiktokHandle.replace('@', '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#181818] border border-[#262626] text-[11px] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-colors"
+                <div
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#181818] border border-[#262626] text-[11px] text-neutral-300"
                 >
                   <Play className="w-3 h-3 text-neutral-400" />
                   <span>@{details.tiktokHandle.replace('@', '')}</span>
-                  <ExternalLink className="w-2.5 h-2.5 text-neutral-500" />
-                </a>
+                </div>
               )}
               {profile.website && (
                 <a

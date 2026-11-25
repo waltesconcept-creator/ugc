@@ -2139,6 +2139,26 @@
   ],
   "products": [
     {
+      "id": "prod-1795636516651",
+      "businessId": "biz-test-1795636516610",
+      "businessName": "Ziva Luxury Botanicals",
+      "businessLogo": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop",
+      "title": "Hibiscus & Moringa Rejuvenating Glow Elixir",
+      "description": "Handcrafted antioxidant serum made with certified organic Nigerian botanicals.",
+      "priceNaira": 22000,
+      "compareAtPriceNaira": 28000,
+      "mediaUrls": [
+        "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&h=600&fit=crop"
+      ],
+      "category": "Beauty",
+      "stockCount": 120,
+      "isAvailable": true,
+      "sampleAvailable": true,
+      "deliveryInfo": "Express nationwide dispatch within 48 hours",
+      "commissionPercent": 20,
+      "createdAt": "2026-11-25T19:55:16.651Z"
+    },
+    {
       "id": "prod-1795464999932",
       "businessId": "biz-test-1795464999893",
       "businessName": "Ziva Luxury Botanicals",
@@ -2378,6 +2398,24 @@
   ],
   "applications": [
     {
+      "id": "app-1795636516705",
+      "campaignId": "camp-beauty-1",
+      "creatorId": "creator-test-1795636516677",
+      "creatorName": "Adaora Eze",
+      "creatorAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop",
+      "creatorCategory": "Beauty & Skincare",
+      "creatorFollowers": 32000,
+      "productTitle": "Hibiscus & Moringa Rejuvenating Glow Elixir",
+      "shippingAddress": "15 Admiralty Way, Lekki Phase 1, Lagos State",
+      "status": "approved",
+      "sampleRequested": true,
+      "sampleStatus": "shipped",
+      "affiliateCode": "REF-ADAO-292",
+      "appliedAt": "2026-11-25T19:55:16.705Z",
+      "notes": "Excited to review and promote this product in high-converting UGC reels!",
+      "trackingCode": "DHL-NG-119420"
+    },
+    {
       "id": "app-1795464999994",
       "campaignId": "camp-beauty-1",
       "creatorId": "creator-test-1795464999962",
@@ -2463,6 +2501,25 @@
     }
   ],
   "orders": [
+    {
+      "id": "ord-1795636516848",
+      "productId": "prod-1795636516651",
+      "productTitle": "Hibiscus & Moringa Rejuvenating Glow Elixir",
+      "businessId": "biz-test-1795636516610",
+      "businessName": "Ziva Luxury Botanicals",
+      "customerName": "Kemi Balogun",
+      "customerPhone": "+2348023456789",
+      "customerAddress": "Lekki Phase 1, Lagos",
+      "creatorId": "creator-test-1795636516677",
+      "creatorName": "Adaora Eze",
+      "affiliateCode": "REF-ADAO-292",
+      "unitPriceNaira": 22000,
+      "quantity": 1,
+      "totalAmountNaira": 22000,
+      "commissionEarnedNaira": 4400,
+      "status": "fulfilled",
+      "createdAt": "2026-11-25T19:55:16.848Z"
+    },
     {
       "id": "ord-1795465000111",
       "productId": "prod-1795464999932",
@@ -2572,9 +2629,29 @@
       "totalEarnedBookingsNaira": 0,
       "totalEarnedAffiliateNaira": 4400,
       "totalWithdrawnNaira": 0
+    },
+    "creator-test-1795636516677": {
+      "userId": "creator-test-1795636516677",
+      "currency": "NGN",
+      "availableBalanceNaira": 0,
+      "pendingBalanceNaira": 4400,
+      "totalEarnedBookingsNaira": 0,
+      "totalEarnedAffiliateNaira": 4400,
+      "totalWithdrawnNaira": 0
     }
   },
   "walletTransactions": [
+    {
+      "id": "tx-1795636517034",
+      "userId": "creator-test-1795636516677",
+      "type": "affiliate_commission",
+      "amountNaira": 4400,
+      "title": "Affiliate Commission: Hibiscus & Moringa Rejuvenating Glow Elixir",
+      "description": "Sale generated via affiliate code REF-ADAO-292",
+      "status": "pending",
+      "referenceId": "ord-1795636516848",
+      "createdAt": "2026-11-25T19:55:17.034Z"
+    },
     {
       "id": "tx-1795465000116",
       "userId": "creator-test-1795464999962",
@@ -2658,6 +2735,22 @@
   ],
   "version": 3,
   "reviews": [
+    {
+      "id": "rev-1795636517563-z58g",
+      "creatorId": "creator-test-1795636516677",
+      "bookingId": "sample-collab-1",
+      "projectTitle": "Hibiscus Glow Serum Video",
+      "reviewerName": "Kemi Balogun",
+      "reviewerAvatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop",
+      "reviewerRole": "Verified Customer & Brand Partner",
+      "overallRating": 5,
+      "ratingQuality": 5,
+      "ratingCommunication": 5,
+      "ratingTimeliness": 5,
+      "reviewText": "Adaora delivered incredible content! Product sales went through the roof within 24 hours of her reel posting.",
+      "isVerifiedBooking": true,
+      "createdAt": "2026-11-25T19:55:17.563Z"
+    },
     {
       "id": "rev-1795465000361-lsv7",
       "creatorId": "creator-test-1795464999962",

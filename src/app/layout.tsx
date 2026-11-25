@@ -26,8 +26,8 @@ export const metadata: Metadata = {
     title: "Creator",
   },
   icons: {
-    icon: "/kre8tor-icon.svg",
-    apple: "/kre8tor-icon.svg",
+    icon: "/creator-icon.svg",
+    apple: "/creator-icon.svg",
   },
   openGraph: {
     title: "Creator — Social Commerce Platform for Creators & Brands",
